@@ -107,5 +107,21 @@
     ></script>
 
     <script src="{{ 'custom.js' | asset_url }}" defer></script>
+
+    {% comment %} Cart page redirect script {% endcomment %}
+    {% if template contains 'cart' %}
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Redirect to home and open cart drawer
+        const cartDrawer = document.querySelector('cart-drawer-component');
+        if (cartDrawer) {
+          // Open the cart drawer first
+          cartDrawer.open();
+          // Then redirect to home page
+          window.location.href = '/';
+        }
+      });
+    </script>
+    {% endif %}
   </body>
 </html>
