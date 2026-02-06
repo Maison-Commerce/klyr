@@ -32,69 +32,48 @@
   <div id="seconds" class="timer-box">00s</div>
 </div>
 
-<script>
-  const TZ_OFFSET_MINUTES = -5 * 60; // GMT-5
-
-  function pad2(n) {
-    return n < 10 ? "0" + n : "" + n;
-  }
-
-  function getNowInGMTminus5() {
-    const now = new Date();
-    const utcMs = now.getTime() + now.getTimezoneOffset() * 60 * 1000;
-    return new Date(utcMs + TZ_OFFSET_MINUTES * 60 * 1000);
-  }
-
-  function getNextDeadlineMs() {
-    const nowTz = getNowInGMTminus5();
-    
-    // Set to end of today (23:59:59.999)
-    const deadlineTz = new Date(nowTz.getTime());
-    deadlineTz.setUTCHours(23, 59, 59, 999);
-    
-    // If we've already passed it, move to end of tomorrow
-    if (nowTz.getTime() >= deadlineTz.getTime()) {
-      deadlineTz.setUTCDate(deadlineTz.getUTCDate() + 1);
-    }
-    
-    // Convert back to real UTC milliseconds
-    return deadlineTz.getTime() - TZ_OFFSET_MINUTES * 60 * 1000;
-  }
-
-  let deadlineMs = getNextDeadlineMs();
-
-  function setAll(d, h, m, s) {
-    const elD = document.getElementById("days");
-    const elH = document.getElementById("hours");
-    const elM = document.getElementById("minutes");
-    const elS = document.getElementById("seconds");
-    if (elD) elD.innerHTML = pad2(d) + "d";
-    if (elH) elH.innerHTML = pad2(h) + "h";
-    if (elM) elM.innerHTML = pad2(m) + "m";
-    if (elS) elS.innerHTML = pad2(s) + "s";
-  }
-
-  function updateTimer() {
-    const now = Date.now();
-    let t = deadlineMs - now;
-
-    // When timer hits zero or goes negative, get next deadline
-    if (t <= 1000) { // Reset when less than 1 second remaining
-      deadlineMs = getNextDeadlineMs();
-      t = deadlineMs - now;
+ <script>
+    function getNextMidnightGMTMinus5() {
+      // Get current time in GMT-5
+      const now = new Date();
+      const gmtMinus5 = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+      
+      // Set to next midnight (start of next day)
+      const nextMidnight = new Date(gmtMinus5);
+      nextMidnight.setHours(24, 0, 0, 0);
+      
+      return nextMidnight.getTime();
     }
 
-    const days = Math.floor(t / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((t % (1000 * 60)) / 1000);
+    function updateTimer() {
+      const now = new Date();
+      const gmtMinus5Now = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+      const targetTime = getNextMidnightGMTMinus5();
+      
+      const difference = targetTime - gmtMinus5Now.getTime();
 
-    setAll(days, hours, minutes, seconds);
-  }
+      if (difference <= 0) {
+        // Timer reached zero, restart from 23:59:59
+        updateTimer();
+        return;
+      }
 
-  updateTimer();
-  setInterval(updateTimer, 1000);
-</script>
+      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+      document.getElementById('days').textContent = String(days).padStart(2, '0') + 'd';
+      document.getElementById('hours').textContent = String(hours).padStart(2, '0') + 'h';
+      document.getElementById('minutes').textContent = String(minutes).padStart(2, '0') + 'm';
+      document.getElementById('seconds').textContent = String(seconds).padStart(2, '0') + 's';
+    }
+
+    // Update every second
+    updateTimer();
+    setInterval(updateTimer, 1000);
+  </script>
+
 
 
 
