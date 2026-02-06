@@ -1,7 +1,0 @@
-
-{% comment %} free-tandrops-threshold {% endcomment %}
-{% assign free_tandrops_thresholds = shop.metafields.custom.free_tandrops_thresholds.value %}
-{% assign country = localization.country.iso_code %}
-{% assign free_tandrops_thresholds = free_tandrops_thresholds[country] | default: free_tandrops_thresholds["EU"] %}
-
-{{ free_tandrops_thresholds | money_without_trailing_zeros}}
