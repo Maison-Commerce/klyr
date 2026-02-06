@@ -1,0 +1,513 @@
+{% assign often_title = block.settings.title_1 %}
+{% assign bundle_title = block.settings.title_2 %}
+
+{% assign often_product_1 = block.settings.often_product_1 | default: product_resource.metafields.custom.often_bought.value %}
+{% assign often_product_2 = block.settings.often_product_2 %}
+
+{% assign bundle_product_1 = block.settings.bundle_product_1 %}
+{% assign bundle_product_2 = block.settings.bundle_product_2 %}
+
+{% assign often_atc_text_1 = block.settings.atc_text_1 %}
+{% assign often_atc_text_2 = block.settings.atc_text_2 %}
+
+{% if often_product_1 != blank or often_product_2 != blank or bundle_product_1 != blank or bundle_product_2 != blank %}
+  <script
+    src="{{ 'custom-often-bought.js'| asset_url }}"
+    defer="defer"
+  ></script>
+  
+  <style>
+    custom-often-bought {
+      display: flex;
+      flex-direction: column;
+      row-gap: 24px;
+      padding-block: 16px;
+    }
+    [data-tabs] .custom-often-bought-header {
+      display: flex;
+      flex-wrap: wrap;
+      column-gap: 16px;
+    }
+    /* Title style 1 */
+    [data-tabs] .custom-often-bought-title {
+      height: 20px;
+      border-bottom: 1px solid transparent;
+      cursor: pointer;
+    }
+    [data-tabs] .custom-often-bought-title.active,
+    [data-tabs] .custom-often-bought-title:hover {
+      border-color: #231c19;
+    }
+
+    /* Title style 2 */
+    /* [data-tabs] .custom-often-bought-title {
+      height: 20px;
+      cursor: pointer;
+      position: relative;
+    }
+    [data-tabs] .custom-often-bought-title::after {
+      position: absolute;
+      content: "";
+      display: block;
+      height: 1px;
+      width: 100%;
+      left: 0;
+      bottom: 0;
+      background-color: var(--textPrimaryColor);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-6px);
+      -webkit-transition: all .3s linear;
+      transition: all .2s linear;
+    }
+    .custom-often-bought-title:hover:after, 
+    .custom-often-bought-title.active:after {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+    } */
+
+    /* Panel style 1 */
+    .custom-often-bought-panel {
+      display: none;
+      transform: translateY(15px);
+    }
+    .custom-often-bought-panel.active {
+      display: block;
+      animation: tabFadeInUp 600ms cubic-bezier(0, 0, 0.3, 1) forwards;
+    }
+    [data-tabs] .custom-often-bought-panel.active {
+      display: flex;
+      flex-direction: column;
+      row-gap: 16px;
+    }
+    @keyframes tabFadeInUp {
+      0% {
+        transform: translateY(15px);
+        opacity: .01;
+      }
+      100% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    
+    /* Panet style 2 */
+    /* .custom-often-bought-panel {
+      display: none;
+      animation: tabFadeIn 0.25s ease;
+    }
+    .custom-often-bought-panel.active {
+      display: block;
+    }
+    [data-tabs] .custom-often-bought-panel.active {
+      display: flex;
+      flex-direction: column;
+      row-gap: 16px;
+    }
+    @keyframes tabFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    } */
+    
+    .custom-often-bought-product {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      column-gap: 24px;
+    }
+    .custom-often-bought-url {
+      display: block;
+    }
+    .custom-often-bought-url img {
+      aspect-ratio: 1;
+      object-fit: cover;
+      object-position: bottom;
+    }
+    .custom-often-bought-product-details {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      row-gap: 8px;
+    }
+    .custom-often-bought-product-title {
+      font-family: var(--swiss721BTLight);
+      padding-top: 2px;
+    }
+    .custom-ofter-bought-product-price-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      column-gap: 8px;
+    }
+    .custom-often-bought-product-price,
+    .custom-often-bought-product-compare-price {
+      font-family: var(--swiss721BTMedium);
+    }
+    .custom-often-bought-product-price {
+      color: var(--textPrimaryColor);
+    }
+    .custom-often-bought-product-price.has-compare-price {
+      color: var(--redColor);
+    }
+    .custom-often-bought-product-compare-price {
+      color: var(--textPrimaryColor);
+      opacity: .5;
+    }
+    .custom-often-bought-atc-button {
+      margin-top: auto;
+      font-weight: 500;
+      width: 100%;
+      border: 1px solid;
+      padding: 26px;
+      cursor: pointer;
+      color: #231c19;
+      border-color: #231c19;
+    }
+    span.atc-button-text {
+      font-family: var(--swiss721BTMedium);
+    }
+  
+    @media screen and (max-width: 1023px) {
+      custom-often-bought {
+        row-gap: 24px;
+      }
+      .custom-often-bought-product {
+        grid-template-columns: 100px 1fr;
+        column-gap: 16px;
+      }
+      .custom-often-bought-atc-button {
+        padding: 21px;
+      }
+    }
+  </style>
+  
+  <custom-often-bought 
+    class="product__block product-block__often-bought-with" 
+    id="often-bought-with"
+    {% if bundle_product_1 != blank or bundle_product_2 != blank %}
+      data-tabs 
+    {% endif %}
+    {{ block.shopify_attributes }}
+  >
+    {% if often_title != blank or bundle_title != blank %}
+      <div class="custom-often-bought-header">
+        <h3 class="custom-often-bought-title font-base active" role="tab" aria-selected="true" data-tab-btn="1">{{ often_title }}</h3>
+        {% if bundle_title != blank and bundle_product_1 != blank %}
+          <h3 class="custom-often-bought-title font-base" role="tab" aria-selected="false" data-tab-btn="2">{{ bundle_title }}</h3>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="custom-often-bought-content">
+      <div class="custom-often-bought-panel active" role="tabpanel" data-tab-panel="1">
+        {% for i in (1..2) %}
+          {% assign product_id = "often_product_" | append: i %}
+          {% if forloop.first %}
+            {% assign often_product = block.settings[product_id] | default: product_resource.metafields.custom.often_bought.value %}
+          {% else %}
+            {% assign often_product = block.settings[product_id] %}
+          {% endif %}
+          {% assign badge_id = "often_badge_" | append: i %}
+          {% assign often_qty_id = "often_qty_" | append: i %}
+          {% assign often_qty = block.settings[often_qty_id] %}
+          
+          {% if often_product != blank %}
+            <div class="custom-often-bought-product">
+              <div class="custom-often-bought-product-image">
+                <a class="custom-often-bought-url" href="{{ often_product.url }}">
+                  {% assign preview_image = often_product.metafields.custom.preview_image | default: often_product.featured_image %}
+                  {% if preview_image %}
+                    <img src="{{ preview_image | image_url: width: 300 }}" width="auto" height="auto" alt="{{ often_product.title }}">
+                  {% endif %}
+                </a>
+              </div>
+              <div class="custom-often-bought-product-details">
+                <h4 class="custom-often-bought-product-title font-base">
+                  <a href="{{ often_product.url }}" class="link">{{ often_product.title }}</a>
+                </h4>
+                <div class="custom-ofter-bought-product-price-wrapper">
+                  <p class="custom-often-bought-product-price font-base{% if often_product.selected_or_first_available_variant.compare_at_price > often_product.selected_or_first_available_variant.price or often_qty > 1 %} has-compare-price{% endif %}">
+                    {{ often_product.selected_or_first_available_variant.price | money_without_trailing_zeros }} {{ cart.currency.iso_code }}
+                  </p>
+
+                  {% if often_qty > 1 %}
+
+                    <p class="custom-often-bought-product-compare-price compare-at-price font-base">{{ often_product.selected_or_first_available_variant.price | times: often_qty | money_without_trailing_zeros }}</p>
+
+                    {% liquid
+                      assign discount_amount = often_product.selected_or_first_available_variant.price | times: often_qty | minus: often_product.selected_or_first_available_variant.price
+                      assign save_percentage = discount_amount | times: 100.0 | divided_by: often_product.selected_or_first_available_variant.price | times: often_qty | round
+                    %}
+                    {% if block.settings[badge_id] == blank %}
+                      <span class="product-badge-active bg-red-dark">Save {{ save_percentage }}%</span>
+                    {% endif %}
+
+                  {% elsif often_product.selected_or_first_available_variant.compare_at_price > often_product.selected_or_first_available_variant.price %}
+
+                    <p class="custom-often-bought-product-compare-price compare-at-price font-base">{{ often_product.selected_or_first_available_variant.compare_at_price | money_without_trailing_zeros }}</p>
+                    {% liquid
+                      assign discount_amount = often_product.selected_or_first_available_variant.compare_at_price | minus: often_product.selected_or_first_available_variant.price
+                      assign save_percentage = discount_amount | times: 100.0 | divided_by: often_product.selected_or_first_available_variant.compare_at_price | round
+                    %}
+                    {% if block.settings[badge_id] == blank %}
+                      <span class="product-badge-active bg-red-dark">Save {{ save_percentage }}%</span>
+                    {% endif %}
+
+                  {% endif %}
+
+                  {% if block.settings[badge_id] != blank %}
+                    <span class="product-badge-active bg-red-dark">{{ block.settings[badge_id] }}</span>
+                  {% endif %}
+                </div>
+                <button 
+                  type="submit" 
+                  class="custom-often-bought-atc-button has__spinner"
+                  {% unless often_product.available %}
+                    disabled
+                  {% elsif often_product.has_only_default_variant == false %}
+                    data-upsell-opener
+                    data-product-handle="{{ often_product.handle }}"
+                  {% else %}
+                    data-add-to-cart
+                  {% endunless %}
+                  data-variant-id="{{ often_product.selected_or_first_available_variant.id }}"
+                  data-quantity="{{ often_qty }}"
+                >
+                  <div class="loading-overlay loader-hidden">
+                    <div class="loading-overlay__spinner">
+                      <svg
+                        aria-hidden="true"
+                        focusable="false"
+                        class="spinner"
+                        viewBox="0 0 66 66"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+                      </svg>
+                    </div>
+                  </div>
+                  <span class="atc-button-text font-base" data-atc-text="{{ often_atc_text_1 }}">
+                    {{ often_atc_text_1 }}
+                  </span>
+                </button>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      {% if bundle_product_1 != blank or bundle_product_2 != blank %}
+        <div class="custom-often-bought-panel" role="tabpanel" data-tab-panel="2">
+          {% for i in (1..2) %}
+            {% assign product_id = "bundle_product_" | append: i %}
+            {% assign bundle_product = block.settings[product_id] %}
+            {% assign badge_id = "bundle_badge_" | append: i %}
+            {% assign bundle_qty_id = "bundle_qty_" | append: i %}
+            {% assign bundle_qty = block.settings[bundle_qty_id] %}
+            
+            {% if bundle_product != blank %}
+              <div class="custom-often-bought-product">
+                <div class="custom-often-bought-product-image">
+                  <a class="custom-often-bought-url" href="{{ bundle_product.url }}">
+                    {% assign preview_image = bundle_product.metafields.custom.preview_image | default: bundle_product.featured_image %}
+                    {% if preview_image %}
+                      <img src="{{ preview_image | image_url: width: 300 }}" width="auto" height="auto" alt="{{ bundle_product.title }}">
+                    {% endif %}
+                  </a>
+                </div>
+                <div class="custom-often-bought-product-details">
+                  <h4 class="custom-often-bought-product-title font-base">
+                    <a href="{{ bundle_product.url }}" class="link">{{ bundle_product.title }}</a>
+                  </h4>
+                  <div class="custom-ofter-bought-product-price-wrapper">
+                    <p class="custom-often-bought-product-price font-base{% if bundle_product.selected_or_first_available_variant.compare_at_price > bundle_product.selected_or_first_available_variant.price or bundle_qty %} has-compare-price{% endif %}">
+                      {{ bundle_product.selected_or_first_available_variant.price | money_without_trailing_zeros }} {{ cart.currency.iso_code }}
+                    </p>
+
+                    {% if bundle_qty > 1 %}
+
+                      <p class="custom-often-bought-product-compare-price compare-at-price font-base">{{ bundle_product.selected_or_first_available_variant.price | times: bundle_qty | money_without_trailing_zeros }}</p>
+                      {% liquid
+                        assign discount_amount = bundle_product.selected_or_first_available_variant.price | times: bundle_qty | minus: bundle_product.selected_or_first_available_variant.price
+                        assign save_percentage = discount_amount | times: 100.0 | divided_by: bundle_product.selected_or_first_available_variant.price | times: bundle_qty | round
+                      %}
+                      {% if block.settings[badge_id] == blank %}
+                        <span class="product-badge-active bg-red-dark">Save {{ save_percentage }}%</span>
+                      {% endif %}
+
+                    {% elsif bundle_product.selected_or_first_available_variant.compare_at_price > bundle_product.selected_or_first_available_variant.price %}
+
+                      <p class="custom-often-bought-product-compare-price compare-at-price font-base">{{ bundle_product.selected_or_first_available_variant.compare_at_price | money_without_trailing_zeros }}</p>
+                      {% liquid
+                        assign discount_amount = bundle_product.selected_or_first_available_variant.compare_at_price | minus: bundle_product.selected_or_first_available_variant.price
+                        assign save_percentage = discount_amount | times: 100.0 | divided_by: bundle_product.selected_or_first_available_variant.compare_at_price | round
+                      %}
+                      {% if block.settings[badge_id] == blank %}
+                        <span class="product-badge-active bg-red-dark">Save {{ save_percentage }}%</span>
+                      {% endif %}
+
+                    {% endif %}
+
+                    {% if block.settings[badge_id] != blank %}
+                      <span class="product-badge-active bg-red-dark">{{ block.settings[badge_id] }}</span>
+                    {% endif %}
+                  </div>
+                  <button 
+                    type="submit" 
+                    class="custom-often-bought-atc-button has__spinner"
+                    {% unless bundle_product.available %}
+                      disabled
+                    {% elsif bundle_product.has_only_default_variant == false %}
+                      data-upsell-opener
+                      data-product-handle="{{ bundle_product.handle }}"
+                    {% else %}
+                      data-add-to-cart
+                    {% endunless %}
+                    data-variant-id="{{ bundle_product.selected_or_first_available_variant.id }}"
+                    data-quantity="{{ bundle_qty }}"
+                  >
+                    <div class="loading-overlay loader-hidden">
+                      <div class="loading-overlay__spinner">
+                        <svg
+                          aria-hidden="true"
+                          focusable="false"
+                          class="spinner"
+                          viewBox="0 0 66 66"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+                        </svg>
+                      </div>
+                    </div>
+                    <span class="atc-button-text font-base" data-atc-text="{{ often_atc_text_2 }}">
+                      {{ often_atc_text_2 }}
+                    </span>
+                  </button>
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  
+    {% comment %} If bundle product is exist {% endcomment %}
+    {% comment %} {% if bundle_prd != blank %}
+      <div class="custom-often-bought-product">
+        <div class="custom-often-bought-product-image">
+          <a class="custom-often-bought-url" href="{{ bundle_prd.url }}">
+            {% assign preview_image = bundle_prd.metafields.custom.preview_image | default: bundle_prd.featured_image %}
+            {% if preview_image %}
+              <img src="{{ preview_image | image_url: width: 300 }}" width="auto" height="auto" alt="{{ bundle_prd.title }}">
+            {% endif %}
+          </a>
+        </div>
+        <div class="custom-often-bought-product-details">
+          <h4 class="custom-often-bought-product-title font-base">
+            <a href="{{ bundle_prd.url }}" class="link">{{ bundle_prd.title }}</a>
+          </h4>
+          <div class="custom-ofter-bought-product-price-wrapper">
+            <p class="custom-often-bought-product-price font-base{% if bundle_prd.selected_or_first_available_variant.compare_at_price > bundle_prd.selected_or_first_available_variant.price %} has-compare-price{% endif %}">{{ bundle_prd.selected_or_first_available_variant.price | money_without_trailing_zeros }} {{ cart.currency.iso_code }}</p>
+            {% if bundle_prd.selected_or_first_available_variant.compare_at_price > bundle_prd.selected_or_first_available_variant.price %}
+              <p class="custom-often-bought-product-compare-price compare-at-price font-base">{{ bundle_prd.selected_or_first_available_variant.compare_at_price | money_without_trailing_zeros }}</p>
+              {% liquid
+                assign discount_amount = bundle_prd.selected_or_first_available_variant.compare_at_price | minus: bundle_prd.selected_or_first_available_variant.price
+                assign save_percentage = discount_amount | times: 100.0 | divided_by: bundle_prd.selected_or_first_available_variant.compare_at_price | round
+              %}
+              <span class="product-badge-active bg-red-dark">Save {{ save_percentage }}%</span>
+            {% endif %}
+          </div>
+          <button 
+            type="submit" 
+            class="custom-often-bought-atc-button has__spinner"
+            {% unless bundle_prd.available %}
+              disabled
+            {% elsif bundle_prd.has_only_default_variant == false %}
+              data-upsell-opener
+              data-product-handle="{{ bundle_prd.handle }}"
+            {% else %}
+              data-add-to-cart
+            {% endunless %}
+            data-variant-id="{{ bundle_prd.selected_or_first_available_variant.id }}"
+          >
+            <div class="loading-overlay loader-hidden">
+              <div class="loading-overlay__spinner">
+                <svg
+                  aria-hidden="true"
+                  focusable="false"
+                  class="spinner"
+                  viewBox="0 0 66 66"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+                </svg>
+              </div>
+            </div>
+            <span class="atc-button-text font-base" data-atc-text="{{ atc_text }}">
+              {{ atc_text }}
+            </span>
+          </button>
+        </div>
+      </div>
+    {% endif %} {% endcomment %}
+  
+    {% comment %} {% if prd != blank %}
+      <div class="custom-often-bought-product">
+        <div class="custom-often-bought-product-image">
+          <a class="custom-often-bought-url" href="{{ prd.url }}">
+            {% assign preview_image = prd.metafields.custom.preview_image | default: prd.featured_image %}
+            {% if preview_image %}
+              <img src="{{ preview_image | image_url: width: 300 }}" width="auto" height="auto" alt="{{ prd.title }}">
+            {% endif %}
+          </a>
+        </div>
+        <div class="custom-often-bought-product-details">
+          <h4 class="custom-often-bought-product-title font-base">
+            <a href="{{ prd.url }}" class="link">{{ prd.title }}</a>
+          </h4>
+          <div class="custom-ofter-bought-product-price-wrapper">
+            <p class="custom-often-bought-product-price font-base{% if prd.selected_or_first_available_variant.compare_at_price > prd.selected_or_first_available_variant.price %} has-compare-price{% endif %}">{{ prd.selected_or_first_available_variant.price | money_without_trailing_zeros }} {{ cart.currency.iso_code }}</p>
+            {% if prd.selected_or_first_available_variant.compare_at_price > prd.selected_or_first_available_variant.price %}
+              <p class="custom-often-bought-product-compare-price compare-at-price font-base">{{ prd.selected_or_first_available_variant.compare_at_price | money_without_trailing_zeros }}</p>
+              {% liquid
+                assign discount_amount = prd.selected_or_first_available_variant.compare_at_price | minus: prd.selected_or_first_available_variant.price
+                assign save_percentage = discount_amount | times: 100.0 | divided_by: prd.selected_or_first_available_variant.compare_at_price | round
+              %}
+              <span class="product-badge-active bg-red-dark">Save {{ save_percentage }}%</span>
+            {% endif %}
+          </div>
+          <button 
+            type="submit" 
+            class="custom-often-bought-atc-button has__spinner"
+            {% unless prd.available %}
+              disabled
+            {% elsif prd.has_only_default_variant == false %}
+              data-upsell-opener
+              data-product-handle="{{ prd.handle }}"
+            {% else %}
+              data-add-to-cart
+            {% endunless %}
+            data-variant-id="{{ prd.selected_or_first_available_variant.id }}"
+          >
+            <div class="loading-overlay loader-hidden">
+              <div class="loading-overlay__spinner">
+                <svg
+                  aria-hidden="true"
+                  focusable="false"
+                  class="spinner"
+                  viewBox="0 0 66 66"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+                </svg>
+              </div>
+            </div>
+            <span class="atc-button-text font-base" data-atc-text="{{ atc_text }}">
+              {{ atc_text }}
+            </span>
+          </button>
+        </div>
+      </div>
+    {% endif %} {% endcomment %}
+  </custom-often-bought>  
+{% endif %}

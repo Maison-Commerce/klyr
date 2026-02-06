@@ -1,0 +1,289 @@
+{% comment %} {%- doc -%}
+  Renders a custom quantity bundle, used to display the quantity bundles.
+
+  @param {object} product - The product object.
+  @param {object} block - The block object.
+{%- enddoc -%}
+
+{% liquid 
+  assign product = closest.product
+  assign price = product.price 
+
+  assign bundle_1_price = price | times: block.settings.qty_1 
+  assign discount_1_amount = bundle_1_price | times: block.settings.dis_percentage_1 | divided_by: 100 
+  assign bundle_1_discounted_price = bundle_1_price | minus: discount_1_amount 
+
+  assign bundle_2_price = price | times: block.settings.qty_2 
+  assign discount_2_amount = price | times: block.settings.dis_percentage_2 | divided_by: 100 
+  assign bundle_2_discounted_price = price | minus: discount_2_amount 
+
+  assign bundle_3_price = price | times: block.settings.qty_3 
+  assign discount_3_amount = price | times: block.settings.dis_percentage_3 | divided_by: 100 
+  assign bundle_3_discounted_price = price | minus: discount_3_amount
+%}
+
+<div 
+  class="product__block product-block__custom-quantity-bundle" 
+  id="product-quantity-choice"
+  {{ block.shopify_attributes }}
+>
+  <div class="bundle-card__wrapper{% if block.settings.full_width == blank %} full-width{% endif %}">
+    
+    {% if block.settings.qty_3 != blank %}
+      <label class="single-bundle-card" data-option="three" for="qty_choice_3">
+        {% if block.settings.most_popular != blank %}
+          <span class="bundle-card__badge">{{ block.settings.most_popular }}</span>
+        {% endif %}
+        <input class="sr-only" id="qty_choice_3" type="radio" name="qty_choice" value="{{ block.settings.qty_3 }}" checked>
+        <div class="sbc_top d-flex align-items-center">
+          <span class="product-count pe-2">{{ block.settings.label_3 }}</span>
+          {% if block.settings.save_text_3 != blank %}
+            <span class="product-badge-active bg-red-dark">{{ block.settings.save_text_3 }}</span>
+          {% endif %}
+        </div>
+        <div class="single-bundle__prices d-flex align-items-center">
+          <div class="sbc_bottom d-flex align-items-center">
+            <p class="regular-price price">{{ bundle_3_price | money_without_trailing_zeros }}</p>
+            <p class="product-price">{{ bundle_3_discounted_price | money_without_trailing_zeros }}</p>
+          </div>
+          <span class="font-small par_unit">/ Per Unit</span>
+        </div>
+      </label>
+    {% endif %}
+
+    {% if block.settings.qty_2 != blank %}
+      <label class="single-bundle-card" data-option="two" for="qty_choice_2">
+        <input class="sr-only" id="qty_choice_2" type="radio" name="qty_choice" value="{{ block.settings.qty_2 }}"{% if block.settings.qty_3 == blank %} checked{% endif %} />
+        <div class="sbc_top d-flex align-items-center">
+          <span class="product-count pe-2">{{ block.settings.label_2 }}</span>
+          <span class="product-badge-active bg-red-dark">{{ block.settings.save_text_2 }}</span>
+        </div>
+        <div class="single-bundle__prices d-flex align-items-center">
+          <div class="sbc_bottom d-flex align-items-center">
+            <p class="regular-price price">{{ bundle_2_price | money_without_trailing_zeros }}</p>
+            <p class="product-price">{{ bundle_2_discounted_price | money_without_trailing_zeros }} </p>
+          </div>
+          <span class="font-small par_unit">/ Per Unit</span>
+        </div>
+      </label>
+    {% endif %}
+    
+    {% if block.settings.qty_1 != blank %}
+      <label class="single-bundle-card" data-option="one" for="qty_choice_1">
+        <input class="sr-only" id="qty_choice_1" type="radio" name="qty_choice" value="{{ block.settings.qty_1 }}">
+        <div class="sbc_top d-flex align-items-center">
+          <span class="product-count pe-2">{{ block.settings.label_1 }}</span>
+          {% if block.settings.save_text_1 != blank %}
+            <span class="product-badge-active bg-red-dark">{{ block.settings.save_text_1 }}</span>
+          {% endif %}
+        </div>
+        <div class="single-bundle__prices d-flex align-items-center">
+          <div class="sbc_bottom d-flex align-items-center">
+            {% if bundle_1_price > bundle_1_discounted_price %}
+              <p class="regular-price price">{{ bundle_1_price | money_without_trailing_zeros }} </p>
+              <p class="product-price">{{ bundle_1_discounted_price | money_without_trailing_zeros }} </p>
+            {% else %}
+              <span class="price">{{ bundle_1_price | money_without_trailing_zeros }} </span>
+            {% endif %}
+          </div>
+          <span class="font-small par_unit">/ Per Unit</span>
+        </div>
+      </label>
+    {% endif %}
+
+  </div>
+</div> {% endcomment %}
+
+
+{% comment %} 
+
+VERSION 2
+
+
+{%- doc -%}
+  Renders a custom quantity bundle, used to display the quantity bundles.
+
+  @param {object} product - The product object.
+  @param {object} block - The block object.
+{%- enddoc -%}
+
+{% liquid 
+  assign product = closest.product
+  assign price = product.price 
+
+  assign bundle_1_price = price | times: block.settings.qty_1 
+  assign discount_1_amount = bundle_1_price | times: block.settings.dis_percentage_1 | divided_by: 100 
+  assign bundle_1_discounted_price = bundle_1_price | minus: discount_1_amount 
+
+  assign bundle_2_price = price | times: block.settings.qty_2 
+  assign discount_2_amount = bundle_2_price | times: block.settings.dis_percentage_2 | divided_by: 100 
+  assign bundle_2_discounted_price = bundle_2_price | minus: discount_2_amount 
+
+  assign bundle_3_price = price | times: block.settings.qty_3 
+  assign discount_3_amount = bundle_3_price | times: block.settings.dis_percentage_3 | divided_by: 100 
+  assign bundle_3_discounted_price = bundle_3_price | minus: discount_3_amount
+%}
+
+<div 
+  class="product__block product-block__custom-quantity-bundle" 
+  id="product-quantity-choice"
+  {{ block.shopify_attributes }}
+>
+  <div class="bundle-card__wrapper{% if block.settings.full_width == blank %} full-width{% endif %}">
+    
+    {% if block.settings.qty_3 != blank %}
+      <label class="single-bundle-card" data-option="three" for="qty_choice_3">
+        {% if block.settings.most_popular != blank %}
+          <span class="bundle-card__badge">{{ block.settings.most_popular }}</span>
+        {% endif %}
+        <input class="sr-only" id="qty_choice_3" type="radio" name="qty_choice" value="{{ block.settings.qty_3 }}" checked>
+        <div class="sbc_top d-flex align-items-center">
+          <span class="product-count pe-2">{{ block.settings.label_3 }}</span>
+          {% if block.settings.save_text_3 != blank %}
+            <span class="product-badge-active bg-red-dark">{{ block.settings.save_text_3 }}</span>
+          {% endif %}
+        </div>
+        <div class="single-bundle__prices d-flex align-items-center">
+          <div class="sbc_bottom d-flex align-items-center">
+            <p class="regular-price price">{{ bundle_3_price | money_without_trailing_zeros }}</p>
+            <p class="product-price">{{ bundle_3_discounted_price | money_without_trailing_zeros }}</p>
+          </div>
+        </div>
+      </label>
+    {% endif %}
+
+    {% if block.settings.qty_2 != blank %}
+      <label class="single-bundle-card" data-option="two" for="qty_choice_2">
+        <input class="sr-only" id="qty_choice_2" type="radio" name="qty_choice" value="{{ block.settings.qty_2 }}"{% if block.settings.qty_3 == blank %} checked{% endif %} />
+        <div class="sbc_top d-flex align-items-center">
+          <span class="product-count pe-2">{{ block.settings.label_2 }}</span>
+          <span class="product-badge-active bg-red-dark">{{ block.settings.save_text_2 }}</span>
+        </div>
+        <div class="single-bundle__prices d-flex align-items-center">
+          <div class="sbc_bottom d-flex align-items-center">
+            <p class="regular-price price">{{ bundle_2_price | money_without_trailing_zeros }}</p>
+            <p class="product-price">{{ bundle_2_discounted_price | money_without_trailing_zeros }} </p>
+          </div>
+        </div>
+      </label>
+    {% endif %}
+    
+    {% if block.settings.qty_1 != blank %}
+      <label class="single-bundle-card" data-option="one" for="qty_choice_1">
+        <input class="sr-only" id="qty_choice_1" type="radio" name="qty_choice" value="{{ block.settings.qty_1 }}">
+        <div class="sbc_top d-flex align-items-center">
+          <span class="product-count pe-2">{{ block.settings.label_1 }}</span>
+          {% if block.settings.save_text_1 != blank %}
+            <span class="product-badge-active bg-red-dark">{{ block.settings.save_text_1 }}</span>
+          {% endif %}
+        </div>
+        <div class="single-bundle__prices d-flex align-items-center">
+          <div class="sbc_bottom d-flex align-items-center">
+            {% if bundle_1_price > bundle_1_discounted_price %}
+              <p class="regular-price price">{{ bundle_1_price | money_without_trailing_zeros }} </p>
+              <p class="product-price">{{ bundle_1_discounted_price | money_without_trailing_zeros }} </p>
+            {% else %}
+              <span class="price">{{ bundle_1_price | money_without_trailing_zeros }} </span>
+            {% endif %}
+          </div>
+          {% comment %} <span class="font-small par_unit">/ Per Unit</span> {% endcomment %}
+        </div>
+      </label>
+    {% endif %}
+
+  </div>
+</div> {% endcomment %}
+
+
+{%- doc -%}
+  Renders a custom quantity bundle, used to display the quantity bundles.
+
+  @param {object} product - The product object.
+  @param {object} block - The block object.
+{%- enddoc -%}
+
+{% liquid 
+  assign product = closest.product
+  assign price = product.price 
+
+  assign bundle_1_price = price | times: block.settings.qty_1 
+  assign discount_1_amount = bundle_1_price | times: block.settings.dis_percentage_1 | divided_by: 100 
+  assign bundle_1_discounted_price = bundle_1_price | minus: discount_1_amount 
+
+  assign bundle_2_price = price | times: block.settings.qty_2 
+  assign discount_2_amount = bundle_2_price | times: block.settings.dis_percentage_2 | divided_by: 100 
+  assign bundle_2_discounted_price = bundle_2_price | minus: discount_2_amount 
+
+  assign bundle_3_price = price | times: block.settings.qty_3 
+  assign discount_3_amount = bundle_3_price | times: block.settings.dis_percentage_3 | divided_by: 100 
+  assign bundle_3_discounted_price = bundle_3_price | minus: discount_3_amount
+%}
+
+<div 
+  class="product__block product-block__custom-quantity-bundle" 
+  id="product-quantity-choice"
+  {{ block.shopify_attributes }}
+>
+  <div class="bundle-card__wrapper{% if block.settings.full_width == blank %} full-width{% endif %}">
+    
+    {% if block.settings.qty_1 != blank %}
+      <label class="single-bundle-card" data-option="one" for="qty_choice_1">
+        <input class="sr-only" id="qty_choice_1" type="radio" name="qty_choice" value="{{ block.settings.qty_1 }}">
+        <div class="sbc_top d-flex align-items-center">
+          <span class="product-count pe-2">{{ block.settings.label_1 }}</span>
+          {% if block.settings.save_text_1 != blank %}
+            <span class="product-badge-active bg-red-dark">{{ block.settings.save_text_1 }}</span>
+          {% endif %}
+        </div>
+        <div class="single-bundle__prices d-flex align-items-center">
+          <div class="sbc_bottom d-flex align-items-center">
+            {% if bundle_1_price > bundle_1_discounted_price %}
+              <p class="regular-price price">{{ bundle_1_price | money_without_trailing_zeros }} </p>
+              <p class="product-price">{{ bundle_1_discounted_price | money_without_trailing_zeros }} </p>
+            {% else %}
+              <span class="price">{{ bundle_1_price | money_without_trailing_zeros }} </span>
+            {% endif %}
+          </div>
+        </div>
+      </label>
+    {% endif %}
+
+    {% if block.settings.qty_2 != blank %}
+      <label class="single-bundle-card" data-option="two" for="qty_choice_2">
+        {% if block.settings.most_popular != blank %}
+          <span class="bundle-card__badge">{{ block.settings.most_popular }}</span>
+        {% endif %}
+        <input class="sr-only" id="qty_choice_2" type="radio" name="qty_choice" value="{{ block.settings.qty_2 }}" checked />
+        <div class="sbc_top d-flex align-items-center">
+          <span class="product-count pe-2">{{ block.settings.label_2 }}</span>
+          <span class="product-badge-active bg-red-dark">{{ block.settings.save_text_2 }}</span>
+        </div>
+        <div class="single-bundle__prices d-flex align-items-center">
+          <div class="sbc_bottom d-flex align-items-center">
+            <p class="regular-price price">{{ bundle_2_price | money_without_trailing_zeros }}</p>
+            <p class="product-price">{{ bundle_2_discounted_price | money_without_trailing_zeros }} </p>
+          </div>
+        </div>
+      </label>
+    {% endif %}
+
+    {% if block.settings.qty_3 != blank %}
+      <label class="single-bundle-card" data-option="three" for="qty_choice_3">
+        <input class="sr-only" id="qty_choice_3" type="radio" name="qty_choice" value="{{ block.settings.qty_3 }}">
+        <div class="sbc_top d-flex align-items-center">
+          <span class="product-count pe-2">{{ block.settings.label_3 }}</span>
+          {% if block.settings.save_text_3 != blank %}
+            <span class="product-badge-active bg-red-dark">{{ block.settings.save_text_3 }}</span>
+          {% endif %}
+        </div>
+        <div class="single-bundle__prices d-flex align-items-center">
+          <div class="sbc_bottom d-flex align-items-center">
+            <p class="regular-price price">{{ bundle_3_price | money_without_trailing_zeros }}</p>
+            <p class="product-price">{{ bundle_3_discounted_price | money_without_trailing_zeros }}</p>
+          </div>
+        </div>
+      </label>
+    {% endif %}
+
+  </div>
+</div>

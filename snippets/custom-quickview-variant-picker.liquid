@@ -1,0 +1,134 @@
+{%- doc -%}
+  Renders the account popover for desktop users, which appears when clicking the account icon. It contains links for account actions like login, logout, and viewing account details.
+
+  @param {object} [section] - The section
+  @param {object} [product_resource] - The product
+
+  @param {string} [data_att] - The variant picker type, e.g component-variant-picker, quickview-variant-picker
+
+  render 'custom-quickview-variant-picker'
+{%- enddoc -%}
+
+{% unless product_resource.has_only_default_variant %}
+  <div
+    class="custom-variant-picker quickview-variant-picker"
+    {% if data_att %}
+    {{ data_att }}
+    {% else %}
+    quickview-variant-picker
+    {% endif %}
+    data-section-id="{{ section.id }}"
+  >
+    {% liquid
+      assign concealing_gel = false
+      if product_resource.handle == 'concealing-cream'
+        assign concealing_gel = true
+      endif
+      assign block_id = 'quickview12345'
+    %}
+    <form class="new-variant-picker__form">
+      {%- for product_option in product_resource.options_with_values -%}
+        {%- liquid
+          assign swatch_count = product_option.values | map: 'swatch' | compact | size
+          assign variant_style = 'buttons'
+  
+          if swatch_count > 0
+            assign variant_style = 'swatch'
+          endif
+  
+          if variant_style == 'buttons' and settings.variant_button_width == 'equal-width-buttons'
+            assign fieldset_id = section.id | append: '-' | append: product_resource.id | append: '-' | append: product_option.name | handleize
+            assign option_id_attribute = 'data-option-id="' | append: fieldset_id | append: '"'
+            assign longest_value = 0
+          endif
+        -%}
+  
+        {%- if variant_style == 'swatch' or variant_style == 'buttons' -%}
+          <fieldset
+            class="variant-option variant-option--buttons{% if variant_style == 'swatch' %} variant-option--swatches{% else %} variant-option--{{ settings.variant_button_width }}{% endif %}"
+            {{ option_id_attribute }}
+          >
+            {%- assign shade = product_option.name | handleize -%}
+            <legend data-product-option="{{ shade }}">
+              <span class="variant-option__name">{{ product_option.name | escape -}}:</span>
+              {%- if variant_style == 'swatch' -%}
+                <span class="variant-option__selected-value">
+                  {% if concealing_gel and shade contains 'classic-shades' %}
+                    {{ product_option.values[1] }}
+                  {% else %}
+                    {{ product_option.selected_value }}
+                  {% endif %}
+                </span>
+              {%- endif %}
+            </legend>
+            <div class="variant-option__label-wrapper">
+              {%- for product_option_value in product_option.values -%}
+                {% if product_option_value.size > longest_value and option_id_attribute %}
+                  {% assign longest_value = product_option_value.size %}
+                {% endif %}
+                <label 
+                  class="variant-option__button-label{% if variant_style == 'swatch' %} variant-option__button-label--has-swatch{% endif %}"
+                >
+                  <input
+                    type="radio"
+                    name="{{ product_option.name | escape }}-{{ block_id }}-{{ product_resource.id }}"
+                    value="{{ product_option_value | escape }}"
+                    aria-label="{{ product_option_value.name }}"
+                    {% if product_option_value.available == false %}
+                      aria-disabled="true"
+                    {% endif %}
+                    {% if data_att == 'component-variant-picker' %}
+                      data-id="{{ product_option_value | handleize }}"
+                    {% else %}
+                      id="{{ product_option_value | handleize }}"
+                    {% endif %}
+                    data-input-id="{{ product_option.position }}-{{ forloop.index0 }}"
+                    data-option-value-id="{{ product_option_value.id }}"
+                    data-option-available="{{ product_option_value.available }}"
+                    data-connected-product-url="{{ product_option_value.product_url }}"
+                    {% if product_option_value.variant.id %}
+                      data-variant-id="{{ product_option_value.variant.id }}"
+                    {% endif %}
+                    {% if shade contains 'classic-shades' and forloop.index == 2 %}
+                      checked
+                    {% elsif product_option_value.selected %}
+                      checked
+                    {% endif %}
+                  >
+                  {% if variant_style == 'swatch' %}
+                    {% liquid
+                      assign featured_media = product_option_value.variant.featured_media
+    
+                      # If the variant has no featured media, and we have a combined listing product, then fall back to
+                      # using the featured media of the child product that is linked to this option value.
+                      if featured_media == blank and product_option_value.product_url
+                        assign featured_media = product_option_value.variant.product.featured_media
+                      endif
+                    %}
+    
+                    {% render 'custom-swatch',
+                      swatch: product_option_value.swatch,
+                      variant_image: featured_media,
+                      mode: 'unscaled'
+                    %}
+                  {% else %}
+                    <span class="variant-option__button-label__text">{{ product_option_value | escape }}</span>
+                  {% endif %}
+                  {% render 'strikethrough-variant', product_option: product_option_value %}
+                </label>
+              {%- endfor -%}
+            </div>
+            {% if option_id_attribute %}
+              {% style %}
+                [data-option-id="{{ fieldset_id }}"] {
+                  --variant-ch: {{ longest_value }}ch;
+                }
+              {% endstyle %}
+            {% endif %}
+          </fieldset>
+        {%- endif -%}
+      {%- endfor -%}
+
+    </form>
+  </div>
+{% endunless %}

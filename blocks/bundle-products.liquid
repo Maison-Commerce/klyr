@@ -1,0 +1,34 @@
+
+{% liquid
+  assign product_resource = closest.product
+  if request.visual_preview_mode and product_resource == blank
+    assign product_resource = collections.all.products.first
+  endif
+-%}
+
+{% render '_bundle-products', product_resource: product_resource, block: block, section: section %}
+
+
+{% schema %}
+  {
+    "name": "Bundle Products",
+    "tag": null,
+    "settings": [
+      {
+        "type": "header",
+        "content": "Bundle Products"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_swatches",
+        "label": "t:settings.swatches",
+        "default": true
+      },
+    ],
+    "presets": [
+      {
+        "name": "Bundle Products"
+      }
+    ]
+  }
+{% endschema %}

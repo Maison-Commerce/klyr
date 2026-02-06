@@ -1,0 +1,544 @@
+{%- doc -%}
+  Renders the cart drawer, a slide-out panel that displays the contents of the cart. It includes the cart icon that acts as a trigger.
+
+  @param {object} [settings] - An object containing theme settings.
+
+  @param {boolean} [settings.auto_open_cart_drawer] - If `true`, the cart drawer opens automatically after an item is
+  added.
+  @param {string} [settings.drawer_color_scheme] - The color scheme for the drawer.
+{%- enddoc -%}
+
+{% assign enable_free_product = section.settings.enable_free_product %}
+
+<script
+  src="{{ 'cart-drawer.js' | asset_url }}"
+  type="module"
+  fetchpriority="low"
+></script>
+
+<script 
+src="{{ 'custom-cart-upsell.js' | asset_url }}"
+defer="defer"
+></script>
+
+<script 
+  src="{{ 'custom-cart-drawer-operation.js' | asset_url }}" 
+  defer="defer"
+></script>
+
+{% if enable_free_product %}
+<script 
+  src="{{ 'free-product-manager.js' | asset_url }}" 
+  defer="defer"
+></script>
+{% endif %}
+
+<script 
+  src="{{ 'custom-cart-discount.js' | asset_url }}"
+  defer="defer"
+></script>
+
+<cart-drawer-component
+  class="cart-drawer"
+  {{ block.shopify_attributes }}
+  {% if settings.auto_open_cart_drawer %}
+    auto-open
+  {% endif %}
+>
+  <button
+    class="button header-actions__action button-unstyled"
+    on:click="/open"
+    aria-label="{{ 'accessibility.open_cart_drawer' | t }} {{ 'accessibility.cart_count' | t}}: {{ cart.item_count }}"
+  >
+    {% render 'cart-icon-component' %}
+  </button>
+
+  <dialog
+    ref="dialog"
+    class="cart-drawer__dialog dialog-modal dialog-drawer color-{{ settings.drawer_color_scheme }}{% if cart.empty? %} cart-drawer--empty{% endif %}"
+    scroll-lock
+  >
+    {% comment %} Get the customer's country code {% endcomment %}
+    {% assign customer_country = cart.currency.iso_code | slice: 0, 2 %}
+
+    {% comment %} Get the metafield values directly {% endcomment %}
+    {% assign free_tandrops_thresholds = shop.metafields.custom.free_tandrops_thresholds.value %}
+
+    {% comment %} Get the threshold for the customer's country {% endcomment %}
+    {% assign free_mini_tandrops_cents = free_tandrops_thresholds[customer_country] %}
+
+    {% comment %} Fallback to section settings if country not found in metafields {% endcomment %}
+    {% unless free_mini_tandrops_cents %}
+      {% assign free_mini_tandrops_cents = section.settings.free_tandrops_threshold | times: 100 %}
+    {% endunless %}
+
+    <div 
+      class="cart-drawer__inner"
+      {% if enable_free_product %}
+        data-free-product-id="{{ section.settings.free_tandrops_product.id }}"
+        data-free-variant-id="{{ section.settings.free_tandrops_product.selected_or_first_available_variant.id }}"
+        data-free-product-threshold="{{ free_mini_tandrops_cents }}"
+      {% endif %}
+    >
+
+      <cart-items-component
+        class="cart-items-component"
+        data-section-id="{{ section.id }}"
+      >
+        {%- if cart.empty? -%}
+          <div class="cart-drawer__header">
+            <button
+              ref="closeButton"
+              on:click="cart-drawer-component/close"
+              class="button cart-drawer__close-button button-unstyled"
+              aria-label="{{ 'actions.close_dialog' | t }}"
+            >
+              <span class="svg-wrapper">
+                {{- 'icon-close.svg' | inline_asset_content -}}
+              </span>
+            </button>
+          </div>
+
+          <div
+            class="cart-drawer__content motion-reduce"
+            aria-label="{{ 'accessibility.cart' | t }}"
+          >
+            <span class="cart-drawer__heading h3 cart-drawer__heading--empty">
+              {{ 'content.your_cart_is_empty' | t }}
+            </span>
+
+            <div class="cart-drawer__items">
+              {% render 'cart-products' %}
+            </div>
+          </div>
+        {%- else -%}
+          <div
+            class="cart-drawer__header"
+            id="cart-drawer-header"
+          >
+            <span class="cart-drawer__heading">
+              {{ 'content.cart_title' | t }}
+              {% render 'cart-bubble' %}
+            </span>
+
+            <button
+              ref="closeButton"
+              on:click="cart-drawer-component/close"
+              class="button cart-drawer__close-button button-unstyled"
+              aria-label="{{ 'actions.close_dialog' | t }}"
+            >
+              <span class="svg-wrapper">
+                {{- 'icon-close.svg' | inline_asset_content -}}
+              </span>
+            </button>
+            <div class="sd-total-spend">
+              {% comment %} Get the customer's country code {% endcomment %}
+              {% assign customer_country = cart.currency.iso_code | slice: 0, 2 %}
+
+              {% comment %} Get the metafield values directly {% endcomment %}
+              {% assign free_shipping_thresholds = shop.metafields.custom.free_shipping_thresholds.value %}
+              {% assign free_tandrops_thresholds = shop.metafields.custom.free_tandrops_thresholds.value %}
+
+              {% comment %} Get the threshold for the customer's country {% endcomment %}
+              {% assign free_shipping_goal_cents = free_shipping_thresholds[customer_country] %}
+              {% assign free_mini_tandrops_cents = free_tandrops_thresholds[customer_country] %}
+
+              {% comment %} Fallback to section settings if country not found in metafields {% endcomment %}
+              {% unless free_shipping_goal_cents %}
+                {% assign free_shipping_goal_cents = section.settings.free_shipping_threshold | times: 100 %}
+              {% endunless %}
+
+              {% unless free_mini_tandrops_cents %}
+                {% assign free_mini_tandrops_cents = section.settings.free_tandrops_threshold | times: 100 %}
+              {% endunless %}
+
+              {% assign cart_total_cents = cart.total_price %}
+              {% assign remaining_cents_for_shipping = free_shipping_goal_cents | minus: cart_total_cents %}
+              {% assign remaining_cents_for_tandrops = free_mini_tandrops_cents | minus: cart_total_cents %}
+
+              {% capture shipping %}
+                <p class="total-spend-message">You’re <span>{{ remaining_cents_for_shipping | money_without_trailing_zeros }}</span> away from <span>free shipping</span></p>
+              {% endcapture %}
+              {% capture tandrops %}
+                <p class="total-spend-message">You’re <span>{{ remaining_cents_for_tandrops | money_without_trailing_zeros }}</span> away from <span>free Mini Tandrops</span></p>
+              {% endcapture %}
+
+              {% comment %} {% if remaining_cents_for_tandrops > 0 %}
+                <p class="total-spend-message">You’re <span>{{ remaining_cents_for_tandrops | money_without_trailing_zeros }}</span> away from <span>free Mini Tandrops</span></p>
+              {% elsif remaining_cents_for_shipping > 0 %}
+                <p class="total-spend-message">You’re <span>{{ remaining_cents_for_shipping | money_without_trailing_zeros }}</span> away from <span>free shipping</span></p>
+              {% endif %} {% endcomment %}
+
+              {% if enable_free_product %}
+
+                {% if free_shipping_goal_cents < free_mini_tandrops_cents and remaining_cents_for_shipping > 0 %}
+                  {{ shipping }}
+                {% elsif free_mini_tandrops_cents < free_shipping_goal_cents and remaining_cents_for_tandrops > 0 %}
+                  {{ tandrops }}
+                {% elsif free_shipping_goal_cents < free_mini_tandrops_cents and remaining_cents_for_shipping <= 0 and remaining_cents_for_tandrops > 0 %}
+                  {{ tandrops }}
+                {% elsif remaining_cents_for_shipping > 0 %}
+                  {{ shipping }}
+                {% endif %}
+
+              {% elsif remaining_cents_for_shipping > 0 %}
+
+                {{ shipping }}
+
+              {% endif %}
+
+
+              {% if free_shipping_goal_cents < free_mini_tandrops_cents or enable_free_product == false %}
+
+                {% assign shipping_percent = cart_total_cents | times: 100 | divided_by: free_shipping_goal_cents %}
+                {% if shipping_percent > 100 %}
+                  {% assign shipping_percent = 100 %}
+                {% endif %}
+                
+                {% assign actual_amount = cart_total_cents | minus: free_shipping_goal_cents %}
+                {% assign difference = free_mini_tandrops_cents | minus: free_shipping_goal_cents %}
+                {% assign mini_tandrops_percent = actual_amount | times: 100 | divided_by: difference %}
+                {% if mini_tandrops_percent < 0 %}
+                  {% assign mini_tandrops_percent = 0 %}
+                {% elsif mini_tandrops_percent > 100 %}
+                  {% assign mini_tandrops_percent = 100 %}
+                {% endif %}
+
+              {% else %}
+
+                {% assign mini_tandrops_percent = cart_total_cents | times: 100 | divided_by: free_mini_tandrops_cents %}
+                {% if mini_tandrops_percent > 100 %}
+                  {% assign mini_tandrops_percent = 100 %}
+                {% endif %}
+                
+                {% assign actual_amount = cart_total_cents | minus: free_mini_tandrops_cents %}
+                {% assign difference = free_shipping_goal_cents | minus: free_mini_tandrops_cents %}
+                {% assign shipping_percent = actual_amount | times: 100 | divided_by: difference %}
+                {% if shipping_percent < 0 %}
+                  {% assign shipping_percent = 0 %}
+                {% elsif shipping_percent > 100 %}
+                  {% assign shipping_percent = 100 %}
+                {% endif %}
+
+              {% endif %}
+
+
+              {% capture shipping_progress %}
+                <div class="sd-progress" id="free-shipping-progress">
+                  <div class="sd-progress-bg" style="width: {{ shipping_percent }}%;"></div>
+                </div>
+              {% endcapture %}
+
+              {% capture product_progress %}
+                <div class="sd-progress" id="free-product-progress">
+                  <div class="sd-progress-bg" style="width: {{ mini_tandrops_percent }}%;"></div>
+                </div>
+              {% endcapture %}
+
+              {% capture shipping_box %}
+                <div class="free-shipping-box free-box">
+                  {% if free_shipping_goal_cents > cart_total_cents %}
+                    <svg class="free-shipping-before" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+                      <rect width="40" height="40" fill="#ECDDD0"/>
+                      <path d="M30.7867 13.5181C30.7867 13.5143 30.7857 13.5114 30.7857 13.5075C30.7857 13.5018 30.7848 13.496 30.7838 13.4893C30.7829 13.4845 30.7819 13.4797 30.781 13.4749C30.78 13.4692 30.778 13.4634 30.7771 13.4577C30.7761 13.4529 30.7742 13.4481 30.7723 13.4442C30.7704 13.4385 30.7685 13.4337 30.7656 13.4279C30.7637 13.4231 30.7618 13.4193 30.7589 13.4145C30.756 13.4097 30.7531 13.404 30.7503 13.3992C30.7474 13.3953 30.7454 13.3915 30.7426 13.3877C30.7388 13.3829 30.7359 13.3781 30.732 13.3733C30.7292 13.3694 30.7263 13.3656 30.7224 13.3627C30.7186 13.3589 30.7138 13.3541 30.71 13.3502C30.7062 13.3474 30.7032 13.3435 30.6994 13.3407C30.6947 13.3368 30.6898 13.333 30.6851 13.3301C30.6812 13.3272 30.6774 13.3244 30.6736 13.3224L30.6706 13.3205C30.6659 13.3176 30.662 13.3157 30.6572 13.3138C30.6544 13.3119 30.6515 13.31 30.6476 13.309L20.0982 8.51358C20.0349 8.48481 19.963 8.48481 19.8997 8.51358L9.35024 13.309C9.34736 13.3109 9.34449 13.3128 9.34065 13.3138C9.33586 13.3157 9.33106 13.3186 9.32722 13.3205L9.32435 13.3224C9.32051 13.3253 9.31668 13.3282 9.31284 13.3311C9.30804 13.3349 9.30325 13.3378 9.29845 13.3416C9.29462 13.3445 9.29174 13.3483 9.2879 13.3512C9.28311 13.355 9.27927 13.3589 9.27544 13.3637C9.27256 13.3675 9.26968 13.3704 9.26585 13.3742C9.26201 13.379 9.25817 13.3838 9.2553 13.3886C9.25242 13.3924 9.24954 13.3963 9.24762 13.4001C9.24475 13.4049 9.24187 13.4097 9.23899 13.4155C9.23708 13.4193 9.23516 13.4241 9.23324 13.4279C9.23132 13.4337 9.22844 13.4385 9.22653 13.4442C9.22461 13.449 9.22365 13.4529 9.22173 13.4577C9.21981 13.4634 9.21885 13.4692 9.21694 13.4749C9.21598 13.4797 9.21502 13.4845 9.21406 13.4884C9.2131 13.4941 9.21214 13.5008 9.21214 13.5066C9.21214 13.5095 9.21118 13.5133 9.21118 13.5162V13.52V13.5248V25.5135C9.21118 25.6018 9.25913 25.6823 9.33586 25.7245L19.8853 31.4792C19.8891 31.4811 19.8939 31.483 19.8978 31.4849C19.9016 31.4869 19.9054 31.4888 19.9102 31.4907C19.916 31.4926 19.9217 31.4945 19.9275 31.4964C19.9313 31.4974 19.9351 31.4994 19.939 31.5003C19.9457 31.5022 19.9524 31.5032 19.9591 31.5041C19.962 31.5051 19.9658 31.5051 19.9687 31.506C19.9792 31.507 19.9888 31.508 19.9994 31.508C20.0099 31.508 20.0195 31.507 20.0301 31.506C20.033 31.506 20.0368 31.5051 20.0397 31.5041C20.0464 31.5032 20.0531 31.5022 20.0598 31.5003C20.0636 31.4994 20.0675 31.4974 20.0713 31.4964C20.0771 31.4945 20.0828 31.4926 20.0896 31.4907C20.0934 31.4888 20.0972 31.4869 20.102 31.4849C20.1058 31.483 20.1107 31.4811 20.1145 31.4792L30.664 25.7245C30.7407 25.6823 30.7886 25.6018 30.7886 25.5135L30.7867 13.5268V13.522V13.5181ZM19.9977 8.99496L30.0109 13.5468L25.2703 16.1325L15.5256 11.0272L19.9977 8.99496ZM19.7579 30.8662L9.68793 25.3735V13.9306L19.7579 19.4233V30.8662ZM19.9977 19.0078L9.98538 13.5458L15.0059 11.2632C15.027 11.2948 15.0557 11.3217 15.0912 11.3409L24.7639 16.4078L19.9977 19.0078ZM30.3072 25.3735L20.2373 30.8662V19.4233L22.2157 18.3443L30.3071 13.9305L30.3072 25.3735Z" fill="#231C19"/>
+                      <path d="M13.659 23.6724L17.4949 25.7272C17.5295 25.7448 17.5659 25.754 17.6024 25.754C17.6465 25.754 17.6897 25.7406 17.728 25.716C17.7989 25.6687 17.8421 25.5865 17.8421 25.4971V20.8738C17.8421 20.7762 17.7903 20.6878 17.7098 20.6437L13.8738 18.5889C13.799 18.5488 13.7107 18.5529 13.6407 18.6001C13.5698 18.6474 13.5266 18.7296 13.5266 18.819V23.4423C13.5266 23.5399 13.5784 23.6283 13.659 23.6724ZM14.0061 19.234L17.3627 21.032V25.0811L14.0061 23.2832V19.234Z" fill="#231C19"/>
+                      <path d="M26.5551 20.9112C26.5921 20.9438 26.6357 20.9591 26.6784 20.9591C26.7409 20.9591 26.8026 20.9265 26.8428 20.8632L27.7059 19.5207V24.0757C27.7059 24.2081 27.798 24.3155 27.9114 24.3155C28.0249 24.3155 28.1169 24.2081 28.1169 24.0757V19.2494L29.0301 19.96C29.1246 20.0338 29.252 20.0041 29.3154 19.8938C29.3786 19.7835 29.3532 19.6349 29.2586 19.5611L28.0257 18.6021C28.0174 18.5954 28.0092 18.5906 28.0001 18.5849C27.9985 18.5839 27.9968 18.5829 27.9952 18.5829C27.9862 18.5782 27.9763 18.5743 27.9665 18.5705C27.9632 18.5695 27.9599 18.5686 27.9566 18.5676C27.9459 18.5648 27.9344 18.5628 27.9237 18.5618H27.9221C27.9106 18.5609 27.8991 18.5618 27.8867 18.5638C27.8835 18.5638 27.881 18.5648 27.8777 18.5657C27.8678 18.5676 27.858 18.5705 27.8489 18.5733C27.8465 18.5743 27.8448 18.5743 27.8432 18.5753C27.8333 18.5791 27.8242 18.5839 27.8152 18.5897L27.8119 18.5925C27.8094 18.5944 27.807 18.5964 27.8037 18.5983C27.7955 18.604 27.7881 18.6108 27.7807 18.6175C27.7782 18.6194 27.7758 18.6213 27.7741 18.6242C27.7651 18.6338 27.7568 18.6443 27.7495 18.6549L27.7478 18.6568L26.5149 20.5747C26.4458 20.6811 26.4647 20.8315 26.5551 20.9112Z" fill="#231C19"/>
+                      <path d="M22.2398 22.3496C22.2768 22.3822 22.3204 22.3976 22.3631 22.3976C22.4256 22.3976 22.4872 22.365 22.5275 22.3017L23.3904 20.9592V25.5142C23.3904 25.6466 23.4825 25.754 23.5959 25.754C23.7093 25.754 23.8014 25.6466 23.8014 25.5142V20.6879L24.7145 21.3985C24.809 21.4723 24.9364 21.4426 24.9997 21.3323C25.0629 21.2221 25.0375 21.0734 24.9429 20.9996L23.7101 20.0406C23.7019 20.0339 23.6937 20.0291 23.6847 20.0234C23.683 20.0224 23.6814 20.0215 23.6797 20.0205C23.6707 20.0157 23.6608 20.0119 23.6509 20.009C23.6477 20.008 23.6444 20.007 23.6403 20.0061C23.6296 20.0032 23.6189 20.0013 23.6082 20.0004H23.6058C23.5943 19.9994 23.5828 20.0004 23.5713 20.0023C23.568 20.0032 23.5647 20.0032 23.5614 20.0042C23.5523 20.0061 23.5425 20.009 23.5335 20.0119C23.531 20.0128 23.5285 20.0128 23.5269 20.0138C23.517 20.0176 23.5079 20.0224 23.4989 20.0281L23.4956 20.031C23.4931 20.033 23.4899 20.0349 23.4874 20.0368C23.4792 20.0426 23.4718 20.0492 23.4644 20.056C23.4619 20.0579 23.4595 20.0607 23.457 20.0627C23.448 20.0722 23.4398 20.0828 23.4323 20.0933L23.4307 20.0953L22.1979 22.0131C22.1305 22.1196 22.1494 22.2701 22.2398 22.3496Z" fill="#231C19"/>
+                    </svg>
+                  {% else %}
+                    <svg class="free-shipping-after" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+                      <rect x="1" y="1" width="38" height="38" fill="#ECDDD0"/>
+                      <rect x="1" y="1" width="38" height="38" stroke="#231C19" stroke-width="2"/>
+                      <path d="M29.3733 14.3675C29.3733 14.3641 29.3725 14.3616 29.3725 14.3583C29.3725 14.3533 29.3717 14.3483 29.3708 14.3425C29.37 14.3383 29.3691 14.3341 29.3683 14.33C29.3675 14.325 29.3658 14.32 29.365 14.315C29.3641 14.3108 29.3625 14.3066 29.3608 14.3033C29.3591 14.2983 29.3575 14.2941 29.355 14.2891C29.3533 14.285 29.3517 14.2816 29.3491 14.2775C29.3467 14.2733 29.3441 14.2683 29.3417 14.2641C29.3391 14.2608 29.3375 14.2575 29.335 14.2541C29.3317 14.25 29.3291 14.2458 29.3258 14.2416C29.3233 14.2383 29.3208 14.235 29.3175 14.2325C29.3141 14.2291 29.31 14.225 29.3067 14.2216C29.3033 14.2191 29.3008 14.2158 29.2975 14.2133C29.2933 14.21 29.2891 14.2066 29.285 14.2041C29.2817 14.2016 29.2783 14.1991 29.275 14.1975L29.2725 14.1958C29.2683 14.1933 29.265 14.1916 29.2608 14.1899C29.2583 14.1883 29.2558 14.1866 29.2525 14.1858L20.0854 10.0187C20.0304 9.99373 19.9679 9.99373 19.9129 10.0187L10.7458 14.1858C10.7433 14.1874 10.7408 14.1891 10.7375 14.1899C10.7333 14.1916 10.7292 14.1941 10.7258 14.1958L10.7233 14.1975C10.72 14.2 10.7167 14.2025 10.7133 14.205C10.7092 14.2083 10.705 14.2108 10.7008 14.2141C10.6975 14.2166 10.695 14.22 10.6917 14.2225C10.6875 14.2258 10.6842 14.2291 10.6808 14.2333C10.6783 14.2366 10.6758 14.2391 10.6725 14.2425C10.6692 14.2466 10.6658 14.2508 10.6633 14.255C10.6608 14.2583 10.6583 14.2616 10.6567 14.265C10.6542 14.2691 10.6517 14.2733 10.6492 14.2783C10.6475 14.2816 10.6458 14.2858 10.6442 14.2891C10.6425 14.2941 10.64 14.2983 10.6383 14.3033C10.6367 14.3075 10.6358 14.3108 10.6342 14.315C10.6325 14.32 10.6317 14.325 10.63 14.33C10.6292 14.3341 10.6283 14.3383 10.6275 14.3416C10.6267 14.3466 10.6258 14.3525 10.6258 14.3575C10.6258 14.36 10.625 14.3633 10.625 14.3658V14.3691V14.3733V24.791C10.625 24.8677 10.6667 24.9377 10.7333 24.9744L19.9004 29.975C19.9037 29.9767 19.9079 29.9783 19.9112 29.98C19.9146 29.9817 19.9179 29.9833 19.922 29.985C19.927 29.9867 19.932 29.9883 19.937 29.99C19.9404 29.9909 19.9437 29.9925 19.947 29.9933C19.9529 29.995 19.9587 29.9959 19.9646 29.9967C19.967 29.9975 19.9704 29.9975 19.9729 29.9983C19.982 29.9992 19.9904 30 19.9996 30C20.0087 30 20.0171 29.9992 20.0263 29.9983C20.0287 29.9983 20.0321 29.9975 20.0346 29.9967C20.0404 29.9959 20.0463 29.995 20.0521 29.9933C20.0554 29.9925 20.0587 29.9909 20.0621 29.99C20.0671 29.9883 20.0721 29.9867 20.0779 29.985C20.0813 29.9833 20.0846 29.9817 20.0887 29.98C20.0921 29.9783 20.0963 29.9767 20.0996 29.975L29.2667 24.9744C29.3333 24.9377 29.375 24.8677 29.375 24.791L29.3733 14.375V14.3708V14.3675ZM19.9981 10.437L28.6992 14.3924L24.5798 16.6393L16.112 12.203L19.9981 10.437ZM19.7897 29.4423L11.0393 24.6694V14.7259L19.7897 19.4989V29.4423ZM19.9981 19.1379L11.2978 14.3916L15.6604 12.408C15.6787 12.4355 15.7037 12.4589 15.7345 12.4755L24.1397 16.8786L19.9981 19.1379ZM28.9567 24.6694L20.2063 29.4423V19.4989L21.9255 18.5613L28.9566 14.7258L28.9567 24.6694Z" fill="#231C19"/>
+                      <path d="M14.49 23.1912L17.8233 24.9768C17.8533 24.992 17.885 25 17.9167 25C17.955 25 17.9925 24.9884 18.0259 24.967C18.0875 24.9259 18.125 24.8545 18.125 24.7768V20.7593C18.125 20.6745 18.08 20.5977 18.01 20.5593L14.6767 18.7738C14.6117 18.7389 14.535 18.7425 14.4742 18.7836C14.4125 18.8246 14.375 18.896 14.375 18.9738V22.9912C14.375 23.0761 14.42 23.1528 14.49 23.1912ZM14.7917 19.3344L17.7084 20.8967V24.4153L14.7917 22.8529V19.3344Z" fill="#231C19"/>
+                      <path d="M25.6962 20.7918C25.7284 20.8201 25.7662 20.8334 25.8034 20.8334C25.8577 20.8334 25.9112 20.8051 25.9462 20.7501L26.6962 19.5835V23.5417C26.6962 23.6566 26.7762 23.75 26.8748 23.75C26.9734 23.75 27.0534 23.6566 27.0534 23.5417V19.3478L27.8469 19.9652C27.929 20.0294 28.0398 20.0035 28.0948 19.9077C28.1497 19.8119 28.1276 19.6828 28.0455 19.6186L26.9741 18.7853C26.9669 18.7795 26.9598 18.7753 26.9519 18.7703C26.9505 18.7695 26.949 18.7686 26.9476 18.7686C26.9398 18.7645 26.9312 18.7611 26.9226 18.7578C26.9198 18.7569 26.9169 18.7561 26.9141 18.7553C26.9048 18.7528 26.8948 18.7511 26.8855 18.7503H26.8841C26.8741 18.7495 26.8641 18.7503 26.8533 18.7519C26.8505 18.7519 26.8484 18.7528 26.8455 18.7536C26.8369 18.7553 26.8284 18.7578 26.8205 18.7603C26.8184 18.7611 26.8169 18.7611 26.8155 18.7619C26.8069 18.7653 26.799 18.7695 26.7912 18.7745L26.7884 18.7769C26.7862 18.7786 26.7841 18.7803 26.7812 18.7819C26.7741 18.7869 26.7676 18.7928 26.7612 18.7986C26.759 18.8003 26.7569 18.8019 26.7555 18.8045C26.7476 18.8128 26.7405 18.8219 26.7341 18.8311L26.7326 18.8328L25.6613 20.4994C25.6013 20.5918 25.6177 20.7226 25.6962 20.7918Z" fill="#231C19"/>
+                      <path d="M21.9465 22.0417C21.9787 22.0701 22.0165 22.0834 22.0537 22.0834C22.108 22.0834 22.1615 22.0551 22.1965 22.0001L22.9464 20.8335V24.7916C22.9464 24.9066 23.0264 25 23.125 25C23.2235 25 23.3035 24.9066 23.3035 24.7916V20.5977L24.0969 21.2152C24.1791 21.2794 24.2898 21.2536 24.3448 21.1577C24.3997 21.0619 24.3776 20.9327 24.2955 20.8686L23.2242 20.0353C23.2171 20.0294 23.2099 20.0253 23.2021 20.0203C23.2007 20.0194 23.1992 20.0186 23.1978 20.0178C23.1899 20.0136 23.1813 20.0103 23.1728 20.0078C23.1699 20.007 23.1671 20.0061 23.1635 20.0053C23.1542 20.0028 23.145 20.0011 23.1356 20.0003H23.1335C23.1235 19.9994 23.1135 20.0003 23.1035 20.002C23.1007 20.0028 23.0978 20.0028 23.095 20.0036C23.0871 20.0053 23.0785 20.0078 23.0707 20.0103C23.0685 20.0111 23.0664 20.0111 23.065 20.012C23.0564 20.0153 23.0485 20.0194 23.0407 20.0244L23.0378 20.027C23.0357 20.0286 23.0328 20.0303 23.0307 20.032C23.0235 20.037 23.0171 20.0428 23.0107 20.0486C23.0085 20.0503 23.0064 20.0528 23.0042 20.0544C22.9964 20.0628 22.9893 20.072 22.9828 20.0811L22.9814 20.0828L21.9101 21.7493C21.8515 21.8419 21.868 21.9726 21.9465 22.0417Z" fill="#231C19"/>
+                      <rect x="28" width="12" height="12" fill="#231C19"/>
+                      <line x1="31.3536" y1="5.64645" x2="32.8536" y2="7.14645" stroke="white"/>
+                      <line x1="37.3536" y1="3.35355" x2="32.8536" y2="7.85355" stroke="white"/>
+                    </svg>
+                  {% endif %}
+                  <p class="box-title font-small">{{ 'content.free_shipping' | t }}</p>
+                  {% if free_shipping_goal_cents > cart_total_cents %}
+                    <p class="box-price font-small">
+                      {%- render 'shipping-threshold-loader' -%}
+                    </p>
+                  {% else %}
+                    <p class="box-price font-small">{% if localization.language.iso_code == 'pt-PT' or localization.language.iso_code == 'pt-BR' %}
+  Desbloqueado
+{% else %}
+  Unlocked
+{% endif %}</p>
+                  {% endif %}
+                </div>
+              {% endcapture %}
+
+              {% capture product_box %}
+                <div class="free-product-box free-box">
+                  {% if free_mini_tandrops_cents > cart_total_cents %}
+                    <img src="https://cdn.shopify.com/s/files/1/0922/7239/4620/files/free-product-before.png?v=1758034763" width="40" height="40" alt="">
+                  {% else %}
+                    <img src="https://cdn.shopify.com/s/files/1/0922/7239/4620/files/attachment.jpg?v=1758661555" width="40" height="40" alt="">
+                  {% endif %}
+                  <p class="box-title font-small">{{ 'content.free_mini_tandrops' | t }}</p>
+                  {% if free_mini_tandrops_cents > cart_total_cents %}
+                    <p class="box-price font-small">{%- render 'free-tandrops-threshold'-%}</p>
+                  {% else %}
+                    <p class="box-price font-small">{% if localization.language.iso_code == 'pt-PT' or localization.language.iso_code == 'pt-BR' %}
+  Desbloqueado
+{% else %}
+  Unlocked
+{% endif %}</p>
+                  {% endif %}
+                </div>
+              {% endcapture %}
+              
+              <div class="sd-progress__wrapper" {% if enable_free_product == false %}data-only-shipping{% endif %}>
+                {% if free_shipping_goal_cents < free_mini_tandrops_cents or enable_free_product == false %}
+
+                  {{ shipping_progress }}
+                  {% if enable_free_product %}
+                    {{ product_progress }}
+                  {% endif %}
+                  {{ shipping_box }}
+                  {% if enable_free_product %}
+                    {{ product_box }}
+                  {% endif %}
+
+                {% else %}
+
+                  {{ product_progress }}
+                  {{ shipping_progress }}
+                  {{ product_box }}
+                  {{ shipping_box }}
+
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="cart-drawer__content motion-reduce"
+            aria-label="{{ 'accessibility.cart' | t }}"
+            style="--header-height: 60px;"
+          >
+            <scroll-hint
+              class="cart-drawer__items"
+            >
+              <div class="cart-products__discount-field">
+                {% render 'cart-products', section: section %}
+  
+                {%- if section.settings.enable_discount_field -%}
+                  <custom-cart-discount class="cart-drawer__discount-form-wrapper">
+                    <form class="cart-drawer__discount-form">
+                      <input type="text" required name="cart_discount" id="cart-discount" placeholder="{{ section.settings.cart_discount_placeholder }}" class="cart-drawer__discount-input font-base" />
+                      <button type="submit" data-cart-discount class="cart-drawer__discount-apply has__spinner font-small" aria-label="Apply discount">
+                        <div class="loading-overlay loader-hidden">
+                          <div class="loading-overlay__spinner">
+                            <svg
+                              aria-hidden="true"
+                              focusable="false"
+                              class="spinner"
+                              viewBox="0 0 66 66"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+                            </svg>
+                          </div>
+                        </div>
+                        <span>
+                          {{ section.settings.cart_discount_btn }}
+                        </span>
+                      </button>
+                    </form>
+                  </custom-cart-discount>
+                {%- endif -%}
+              </div>
+
+              <custom-cart-upsell class="custom-cart-upsell sd-prodict-slider-wrapper" id="{{ section.id }}">
+                {% if section.settings.collection %}
+                  {% assign shown = 0 %}
+                  <div class="swiper mySwiper sd-product-slider">
+                    <div class="sd-slide-header">
+                      <h2 class="font-base">{{ section.settings.heading }}</h2>
+                    </div>
+                    <div class="swiper-wrapper">
+                      {% for upsell_product in section.settings.collection.products %}
+                        {%- comment -%} skip products already in cart {%- endcomment -%}
+                        {% assign in_cart = false %}
+                        {% for item in cart.items %}
+                          {% if item.product_id == upsell_product.id %}
+                            {% assign in_cart = true %}
+                            {% break %}
+                          {% endif %}
+                        {% endfor %}
+                        {% if in_cart %}
+                          {% continue %}
+                        {% endif %}
+
+                        {%- comment -%} stop when reached limit {%- endcomment -%}
+                        {% if shown >= section.settings.limit %}
+                          {% break %}
+                        {% endif %}
+
+                        {% assign shown = shown | plus: 1 %}
+
+                        <div class="swiper-slide">
+                          <div class="sd-single-product-wrap">
+                            <div class="sd-product-single-slide has__spinner">
+                              <div class="loading-overlay loader-hidden">
+                                <div class="loading-overlay__spinner">
+                                  <svg
+                                    aria-hidden="true"
+                                    focusable="false"
+                                    class="spinner"
+                                    viewBox="0 0 66 66"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="sd-slide-img">
+                                {% if upsell_product.metafields.custom.badge_text.value.badge_text.value != blank %}
+                                  <div class="product-cetagory">
+                                    <span class="product-badge-active bg-red{% unless upsell_product.metafields.custom.badge_text.value.enable_box.value %} bg-transparent{% endunless %}">{{ upsell_product.metafields.custom.badge_text.value.badge_text.value }}</span>
+                                  </div>
+                                {% endif %}
+                                <a href="{{ upsell_product.url }}" class="d-block w-100">
+                                  {% if upsell_product.featured_image %}
+                                    {% assign preview_image = upsell_product.metafields.custom.preview_image | default: upsell_product.featured_image %}
+                                    <img
+                                      src="{{ preview_image | image_url: width: 400 }}"
+                                      alt="{{ upsell_product.title | escape }}" width="auto" height="auto">
+                                  {% endif %}
+                                </a>
+                                <button 
+                                  class="plus-icon" 
+                                  data-add-to-cart 
+                                  data-variant-id="{{ upsell_product.selected_or_first_available_variant.id }}" 
+                                  data-product-handle="{{ upsell_product.handle }}"
+                                  data-product-qty="{{ upsell_product.metafields.custom.cart_upsell_quantity | default: 1 }}"
+                                  {% comment %} data-product-qty="1" {% endcomment %}
+                                >
+                                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <line x1="8.5" y1="1" x2="8.5" y2="14" stroke="#231C19"/>
+                                    <line x1="2" y1="7.5" x2="15" y2="7.5" stroke="#231C19"/>
+                                  </svg>
+                                </button>
+                              </div>
+                              <div class="sd-slide-content">
+                                <h4 class="font-small">{{ upsell_product.title | truncate: 15 }}</h4>
+                                <div class="sd-slide__price">
+                                  <span class="sd-slide-product-price">
+                                    {{ upsell_product.price | money_without_trailing_zeros }} {{ cart.currency.iso_code }}
+                                  </span>
+                                  {% if upsell_product.compare_at_price > upsell_product.price %}
+                                    <span class="sd-slide-product-regl-price">
+                                      {{ upsell_product.compare_at_price | money_without_trailing_zeros }} {{ cart.currency.iso_code }}
+                                    </span>
+                                  {% endif %}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      {% endfor %}
+                    </div>
+
+                    <div class="swiper-button-next">
+                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="4.83594" y="1" width="9.4562" height="1.18202" transform="rotate(45 4.83594 1)" fill="#231C19"/>
+                        <rect x="4" y="13.5371" width="9.4562" height="1.18202" transform="rotate(-45 4 13.5371)" fill="#231C19"/>
+                      </svg>
+                    </div>
+                    <div class="swiper-button-prev">
+                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g>
+                          <rect x="10.6865" y="14.3729" width="9.45619" height="1.18202" transform="rotate(-135 10.6865 14.3729)" fill="#231C19"/>
+                          <rect x="11.5225" y="1.83582" width="9.45619" height="1.18202" transform="rotate(135 11.5225 1.83582)" fill="#231C19"/>
+                        </g>
+                      </svg>
+                    </div>
+                    <div class="swiper-scrollbar__wrapper">
+                      <div class="swiper-scrollbar sd-scrollbar"></div>
+                    </div>
+                  </div>
+                {% endif %}
+              </custom-cart-upsell>
+
+            </scroll-hint>
+
+            <div
+              class="cart-drawer__summary"
+            >
+              {% render 'cart-summary', section: section %}
+            </div>
+          </div>
+        {%- endif -%}
+      </cart-items-component>
+    </div>
+
+  </dialog>
+</cart-drawer-component>
+
+
+{% stylesheet %}
+  .cart-items-component {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cart-drawer__heading .cart-bubble {
+    width: fit-content;
+    border-radius: var(--style-border-radius-buttons-primary);
+    aspect-ratio: auto;
+    padding: var(--cart-padding);
+  }
+
+  .cart-drawer__heading .cart-bubble[data-maintain-ratio] {
+    aspect-ratio: 1;
+    min-width: 26px;
+  }
+
+  .cart-drawer__header {
+    background-color: var(--color-background);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: var(--cart-drawer-padding);
+    border-bottom: var(--style-border-width) solid none;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+
+    @media screen and (min-width: 750px) {
+      padding: var(--cart-drawer-padding-desktop);
+    }
+  }
+
+  .cart-drawer__dialog {
+    overflow: hidden;
+  }
+
+  .cart-drawer__inner {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .cart-drawer__content {
+    height: calc(100% - var(--header-height));
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cart-drawer__summary {
+    background-color: var(--color-background);
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+  }
+{% endstylesheet %}

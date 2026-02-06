@@ -1,0 +1,126 @@
+{%- doc -%}
+  Renders an "Add to cart" button with dynamic text and state. It shows different text based on whether the product can be added to the cart and provides visual feedback when an item is added.
+
+  @param {boolean} can_add_to_cart - Whether the product can be added to the cart.
+  @param {string} add_to_cart_text - The text to display on the button.
+  @param {object} product_resource - The product object to be added to the cart.
+  @param {boolean} [icon_only_on_mobile] - If `true`, only the icon is shown on mobile devices.
+  @param {string} [id] - The ID attribute for the button.
+  @param {object} block - Section block object.
+{%- enddoc -%}
+
+{%- liquid
+  assign default_add_to_cart_text = 'actions.add_to_cart' | t
+-%}
+
+{% if product.has_only_default_variant %}
+  <script type="application/json" id="product_data">
+    {{ product_resource | json }}
+  </script>
+{% endif %}
+
+<button 
+  id="{{ id }}"
+  {% if block.settings.enable_upsell and block.settings.upsell_product != blank %}
+    data-upsell-opener
+    data-product-handle="{{ block.settings.upsell_product.handle }}"
+  {% else %}
+    skip-upsell-drawer=true
+  {% endif %}
+  data-atc-button
+  class="custom-add-to-cart-button has__spinner"
+  {% unless can_add_to_cart %}
+    disabled
+  {% endunless %}
+>
+  <div class="loading-overlay loader-hidden">
+    <div class="loading-overlay__spinner">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        class="spinner"
+        viewBox="0 0 66 66"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+      </svg>
+    </div>
+  </div>
+  <span
+    class="add-to-cart-text"
+  >
+    <span class="add-to-cart-text__content{% if icon_only_on_mobile %} is-visually-hidden-mobile{% endif %}">
+      {{- add_to_cart_text | default: default_add_to_cart_text -}}
+    </span>
+  </span>
+  <span
+    aria-hidden="true"
+    class="add-to-cart-text--added"
+  >
+    {% comment %} <span class="svg-wrapper add-to-cart-icon--added">
+      {{- 'icon-checkmark.svg' | inline_asset_content -}}
+    </span> {% endcomment %}
+    <span class="{% if icon_only_on_mobile %}is-visually-hidden-mobile{% endif %}">
+      {{- 'actions.added' | t -}}
+    </span>
+  </span>
+</button>
+
+{% stylesheet %}
+  .add-to-cart-text {
+    display: flex;
+    gap: var(--gap-2xs);
+    align-items: center;
+    justify-content: center;
+    animation-duration: var(--animation-speed);
+    animation-timing-function: var(--animation-easing);
+    animation-fill-mode: forwards;
+    transition: opacity var(--animation-speed) var(--animation-easing);
+  }
+
+  .atc-added .add-to-cart-text {
+    animation-name: atc-slide-out;
+  }
+
+  .add-to-cart-text--added {
+    position: absolute;
+    inset: 0;
+    animation-duration: var(--animation-speed);
+    animation-timing-function: var(--animation-easing);
+    animation-fill-mode: forwards;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: width var(--animation-speed) var(--animation-easing),
+      opacity var(--animation-speed) var(--animation-easing);
+  }
+
+  .atc-added .add-to-cart-text--added {
+    animation-name: atc-slide-in;
+  }
+
+  @keyframes atc-slide-in {
+    from {
+      opacity: 0;
+      transform: translateY(0.5em);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes atc-slide-out {
+    from {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    to {
+      transform: translateY(-1em);
+      opacity: 0;
+    }
+  }
+{% endstylesheet %}

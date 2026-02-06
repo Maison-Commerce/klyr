@@ -1,0 +1,54 @@
+{% render '_video-slider', 
+  block: block 
+%}
+
+{% schema %}
+  {
+    "name": "Video Slider",
+    "tag": null,
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Title",
+        "default": "LOVED BY 20.000+ HAPPY CUSTOMERS"
+      },
+      {
+        "type": "video",
+        "id": "video_1",
+        "label": "Video 1"
+      },
+      {
+        "type": "video",
+        "id": "video_2",
+        "label": "Video 2"
+      },
+      {
+        "type": "video",
+        "id": "video_3",
+        "label": "Video 3"
+      },
+      {
+        "type": "video",
+        "id": "video_4",
+        "label": "Video 4"
+      },
+      {
+        "type": "video",
+        "id": "video_5",
+        "label": "Video 5"
+      },
+      {
+        "type": "video",
+        "id": "video_6",
+        "label": "Video 6"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Video Slider",
+        "category": "Custom"
+      }
+    ]
+  }
+{% endschema %}

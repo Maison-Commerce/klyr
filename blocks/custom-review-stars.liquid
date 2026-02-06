@@ -1,0 +1,88 @@
+<div 
+  class="product-ratting"
+  id="custom-rating{{ section.id }}-{{ block.id }}"
+  {{ block.shopify_attributes }}
+>
+  <ul class="custom-review_stars">
+    <li class="d-flex">
+      <svg xmlns="http://www.w3.org/2000/svg" width="96" height="17" viewBox="0 0 96 17" fill="none">
+        <path d="M8 0.5L9.79611 6.02786H15.6085L10.9062 9.44427L12.7023 14.9721L8 11.5557L3.29772 14.9721L5.09383 9.44427L0.391548 6.02786H6.20389L8 0.5Z" fill="#EBBF20"/>
+        <path d="M28 0.5L29.7961 6.02786H35.6085L30.9062 9.44427L32.7023 14.9721L28 11.5557L23.2977 14.9721L25.0938 9.44427L20.3915 6.02786H26.2039L28 0.5Z" fill="#EBBF20"/>
+        <path d="M48 0.5L49.7961 6.02786H55.6085L50.9062 9.44427L52.7023 14.9721L48 11.5557L43.2977 14.9721L45.0938 9.44427L40.3915 6.02786H46.2039L48 0.5Z" fill="#EBBF20"/>
+        <path d="M68 0.5L69.7961 6.02786H75.6085L70.9062 9.44427L72.7023 14.9721L68 11.5557L63.2977 14.9721L65.0938 9.44427L60.3915 6.02786H66.2039L68 0.5Z" fill="#EBBF20"/>
+          <path d="M88 1L89.7961 6.52786H95.6085L90.9062 9.94427L92.7023 15.4721L88 12.0557L83.2977 15.4721L85.0938 9.94427L80.3915 6.52786H86.2039L88 1Z" fill="#EBBF20"/>
+        <path opacity="0.25" d="M88 1L89.7961 6.52786H95.6085L90.9062 9.94427L92.7023 15.4721L88 12.0557L83.2977 15.4721L85.0938 9.94427L80.3915 6.52786H86.2039L88 1Z" fill="#EBBF20"/>
+        <defs>
+        <clipPath id="clip0_243_3912">
+          <rect width="8" height="16" fill="white" transform="translate(80)"/>
+        </clipPath>
+        </defs>
+      </svg>
+      {% comment %} <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M8 0.5L9.79611 6.02786H15.6085L10.9062 9.44427L12.7023 14.9721L8 11.5557L3.29772 14.9721L5.09383 9.44427L0.391548 6.02786H6.20389L8 0.5Z"
+          fill="#231C19" />
+      </svg>
+      <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M8 0.5L9.79611 6.02786H15.6085L10.9062 9.44427L12.7023 14.9721L8 11.5557L3.29772 14.9721L5.09383 9.44427L0.391548 6.02786H6.20389L8 0.5Z"
+          fill="#231C19" />
+      </svg>
+      <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M8 0.5L9.79611 6.02786H15.6085L10.9062 9.44427L12.7023 14.9721L8 11.5557L3.29772 14.9721L5.09383 9.44427L0.391548 6.02786H6.20389L8 0.5Z"
+          fill="#231C19" />
+      </svg>
+      <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M8 0.5L9.79611 6.02786H15.6085L10.9062 9.44427L12.7023 14.9721L8 11.5557L3.29772 14.9721L5.09383 9.44427L0.391548 6.02786H6.20389L8 0.5Z"
+          fill="#231C19" />
+      </svg>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 17" fill="none">
+        <g clip-path="url(#clip0_167_393)">
+          <path d="M8 1L9.79611 6.52786H15.6085L10.9062 9.94427L12.7023 15.4721L8 12.0557L3.29772 15.4721L5.09383 9.94427L0.391548 6.52786H6.20389L8 1Z" fill="#231C19"/>
+        </g>
+        <path opacity="0.25" d="M8 1L9.79611 6.52786H15.6085L10.9062 9.94427L12.7023 15.4721L8 12.0557L3.29772 15.4721L5.09383 9.94427L0.391548 6.52786H6.20389L8 1Z" fill="#231C19"/>
+        <defs>
+          <clipPath id="clip0_167_393">
+            <rect width="8" height="16" fill="white"/>
+          </clipPath>
+        </defs>
+      </svg> {% endcomment %}
+      {% comment %} <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path opacity="0.25"
+          d="M8 0L9.79611 5.52786H15.6085L10.9062 8.94427L12.7023 14.4721L8 11.0557L3.29772 14.4721L5.09383 8.94427L0.391548 5.52786H6.20389L8 0Z"
+          fill="#231C19" />
+      </svg> {% endcomment %}
+    </li>
+    <li class="custom-review-stars-text">
+      <span>{{ block.settings.avg_rating }}</span><span>|</span><span>{{ block.settings.total_rating }}</span>
+    </li>
+  </ul>
+</div>
+
+{% schema %}
+{
+  "name": "Custom Review Stars",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "avg_rating",
+      "label": "Avg rating",
+      "default": "4.6"
+    },
+    {
+      "type": "text",
+      "id": "total_rating",
+      "label": "Total Rating",
+      "default": "1.397"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Review Stars"
+    }
+  ]
+}
+{% endschema %}

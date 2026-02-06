@@ -1,0 +1,159 @@
+{% liquid
+  assign settings = section.settings
+  assign max_items = settings.max_products
+
+  if settings.collection != blank and settings.collection.all_products_count != 0
+    assign section_products = settings.collection.products
+    assign max_items = section_products.size | at_most: settings.max_products
+  endif
+%}
+
+<!-- Favourite Formulations-area -->
+<div class="favourite-formulation-wp section-spacer">
+  <div class="large-space-left">
+    <div class="favourite-formulation__grid">
+      <div class="formulation-grid__left">
+        <div class="ff-content-col">
+          <h3 class="secondary-heading">{{ settings.favourite_formulations_title }}</h3>
+          <p>{{ settings.favourite_formulations_description }}</p>
+          <div class="ff-content">
+            <a href="{{ settings.btn_url }}" class="ff-link">
+              <span>{{ settings.btn_label }}</span>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7.224 1.27195L12 6.02395L7.224 10.8H5.64L9.96 6.57595H0V5.42395H9.96L5.64 1.19995H7.224V1.27195Z" fill="#231C19"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="formulation-grid__right">
+        <div class="ff-product-slider-wrap">
+          <div class="swiper mySwiper ff-product-slider product-grid-slider">
+            <div class="swiper-wrapper">
+              {% if section_products %}
+                {% for product in section_products limit: max_items %}
+                  <div class="swiper-slide">
+                    <div class="single-product-wrap">
+                      <a href="{{ product.url }}" class="d-block w-100">
+                        <div class="single-product-card">
+                          <div class="product-img-wrap">
+                            {% if product.metafields.custom.badge_text.value.badge_text.value != blank %}
+                              <div class="product-cetagory">
+                                <span class="product-badge-active{% unless product.metafields.custom.badge_text.value.enable_box.value %} bg-transparent{% endunless %}">{{ product.metafields.custom.badge_text.value.badge_text.value }}</span>
+                              </div>
+                            {% endif %}
+                            <div class="product-img">
+                              {% if product.featured_image %}
+                                {% assign preview_image = product.metafields.custom.preview_image | default: product.featured_image %}
+                                <img src="{{ preview_image | image_url: width: 500, height: 500 }}" height="auto" width="auto" alt="{{ product }}">
+                              {% endif %}
+                            </div>
+                          </div>
+                          <div class="product-content">
+                            <h4 class="font-base">{{ product.title }}</h4>
+                            <p class="font-small">{{ product.metafields.custom.short_description }}</p>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                {% endfor %}
+              {% else %}
+                {% for i in (1..5) %}
+                  <div class="swiper-slide">
+                    <div class="single-product-wrap">
+                      <a href="#" class="d-block w-100">
+                        <div class="single-product-card">
+                          <div class="product-img-wrap">
+                            <div class="product-cetagory">
+                              <span>new formulation</span>
+                            </div>
+                            <div class="product-img">
+                              <placeholder-image data-block-id="{{ section.id }}-{{ forloop.index }}" data-type="product"></placeholder-image>
+                            </div>
+                          </div>
+                          <div class="product-content">
+                            <h4 class="font-base">Concealing Gel+</h4>
+                            <p>Light gel for quick cover ups</p>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                {% endfor %}
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-max">
+    <div class="row">
+      <div class="col-12">
+        <div class="swiper-scrollbar__wrapper spacer-64">
+          <div class="swiper-scrollbar ff-scrollbar"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Favourite Formulations-area -->
+
+
+{% schema %}
+  {
+    "name": "New Featured Collection",
+    "class": "favourite-formulation-section",
+    "tag": "section",
+    "settings": [
+      {
+        "type": "text",
+        "id": "favourite_formulations_title",
+        "label": "Section Title",
+        "default": "Favourite Formulations"
+      },
+      {
+        "type": "text",
+        "id": "favourite_formulations_description",
+        "label": "Section Description",
+        "default": "Timeless gift options including celebrated staples of skin, hand and body care, as well as fragrant delights for the home."
+      },
+      {
+        "type": "url",
+        "id": "btn_url",
+        "label": "Button URL"
+      },
+      {
+        "type": "text",
+        "id": "btn_label",
+        "label": "Button Label",
+        "default": "browse favourite formulations"
+      },
+      {
+        "type": "header",
+        "content": "Collection Settings"
+      },
+      {
+        "type": "collection",
+        "id": "collection",
+        "label": "Featured Collection"
+      },
+      {
+        "type": "range",
+        "id": "max_products",
+        "label": "t:settings.product_count",
+        "min": 1,
+        "max": 16,
+        "step": 1,
+        "default": 4
+      }
+    ],
+    "presets": [
+      {
+        "name": "New Featured Collection",
+        "category": "Custom"
+      }
+    ]
+  }
+{% endschema %}
