@@ -1,0 +1,48 @@
+{% comment %}
+  Cart page redirect to home with side cart drawer open
+  This snippet redirects users from the cart page to the homepage
+  and automatically opens the side cart drawer
+{% endcomment %}
+
+{% if template == 'cart' %}
+  <script>
+    (function() {
+      // Function to open cart drawer
+      function openCartDrawer() {
+        const drawerButton = document.querySelector('.cart-drawer .header-actions__action');
+        if (drawerButton) {
+          setTimeout(() => {
+            drawerButton.click();
+          }, 100);
+        }
+      }
+
+      // Redirect to home and open cart drawer
+      if (window.location.pathname === '/cart') {
+        // Store flag in sessionStorage to open drawer after redirect
+        sessionStorage.setItem('openCartDrawerOnLoad', 'true');
+        window.location.href = '/';
+      }
+    })();
+  </script>
+{% endif %}
+
+{% comment %}
+  Check if we need to open the cart drawer after redirect
+{% endcomment %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    if (sessionStorage.getItem('openCartDrawerOnLoad') === 'true') {
+      // Remove the flag
+      sessionStorage.removeItem('openCartDrawerOnLoad');
+
+      // Open the cart drawer
+      const drawerButton = document.querySelector('.cart-drawer .header-actions__action');
+      if (drawerButton) {
+        setTimeout(() => {
+          drawerButton.click();
+        }, 500); // Small delay to ensure page is fully loaded
+      }
+    }
+  });
+</script>

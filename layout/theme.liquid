@@ -33,6 +33,9 @@
     {%- render 'theme-styles-variables' -%}
     {%- render 'color-schemes' -%}
 
+    {% comment %} Cart page redirect with drawer open {% endcomment %}
+    {%- render 'cart-page-redirect' -%}
+
     {% if request.design_mode %}
       {%- render 'theme-editor' -%}
     {% endif %}
