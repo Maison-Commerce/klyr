@@ -48,10 +48,14 @@
   function getNextDeadlineMs() {
     const nowTz = getNowInGMTminus5();
     
-    // Start with tomorrow's date to ensure we always get the next occurrence
+    // Set to end of today (23:59:59.999)
     const deadlineTz = new Date(nowTz.getTime());
-    deadlineTz.setUTCDate(deadlineTz.getUTCDate() + 1);
-    deadlineTz.setUTCHours(0, 0, 0, 0); // Set to midnight of next day
+    deadlineTz.setUTCHours(23, 59, 59, 999);
+    
+    // If we've already passed it, move to end of tomorrow
+    if (nowTz.getTime() >= deadlineTz.getTime()) {
+      deadlineTz.setUTCDate(deadlineTz.getUTCDate() + 1);
+    }
     
     // Convert back to real UTC milliseconds
     return deadlineTz.getTime() - TZ_OFFSET_MINUTES * 60 * 1000;
@@ -74,10 +78,10 @@
     const now = Date.now();
     let t = deadlineMs - now;
 
-    // When timer hits zero or goes negative, reset to next midnight
-    if (t <= 0) {
+    // When timer hits zero or goes negative, get next deadline
+    if (t <= 1000) { // Reset when less than 1 second remaining
       deadlineMs = getNextDeadlineMs();
-      t = deadlineMs - Date.now();
+      t = deadlineMs - now;
     }
 
     const days = Math.floor(t / (1000 * 60 * 60 * 24));
