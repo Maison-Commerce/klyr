@@ -1,0 +1,229 @@
+<div class="announcement-bar header-top-bar">
+  <div class="container-max">
+    <div class="header-top-bar-inner">
+      <div>
+        <p class="font-small">{{ section.settings.announcement_text }}</p>
+         <p class="font-small" style=" margin-top: 4px; font-family: Swiss721BT-Light">{{ section.settings.announcement_additional_text }}</p>
+      </div>
+      <div>
+        {% comment %} <p class="font-small">{{ section.settings.announcement_additional_text }}</p> {% endcomment %}
+         <style>
+  .timer-wrapper {
+    display: flex;
+    gap: 2px;
+    font-family: 'Swiss721BT-Medium', Arial, sans-serif;
+  }
+
+  .timer-box {
+    background: #ffffff10; /* subtle white tint on black */
+    border: 1px solid #ffffff40;
+    color: #ffffff;
+    font-size: 12px;
+    padding: 4px 6px;
+    border-radius: 1px;
+    text-align: center;
+    min-width: 24px;
+  }
+</style>
+<div class="timer-wrapper">
+  <div id="days" class="timer-box">00d</div>
+  <div id="hours" class="timer-box">00h</div>
+  <div id="minutes" class="timer-box">00m</div>
+  <div id="seconds" class="timer-box">00s</div>
+</div>
+
+<script>
+  // Daily reset timer anchored to GMT-5 (America/New_York-style offset)
+  // It always counts down to the next 23:59:59 in GMT-5.
+  // When it hits 0, it automatically rolls to the next day.
+
+  const TZ_OFFSET_MINUTES = -5 * 60; // GMT-5
+
+  function pad2(n) {
+    return n < 10 ? "0" + n : "" + n;
+  }
+
+  // Convert "now" to a Date that represents the same instant,
+  // but shifted so its UTC fields behave like "local time in GMT-5".
+  function getNowInGMTminus5() {
+    const now = new Date();
+    const utcMs = now.getTime() + now.getTimezoneOffset() * 60 * 1000; // now in UTC ms
+    return new Date(utcMs + TZ_OFFSET_MINUTES * 60 * 1000); // "now" expressed in GMT-5
+  }
+
+  // Get the next reset point: 23:59:59 in GMT-5 for today (or tomorrow if already passed)
+  function getNextDeadlineMs() {
+    const nowTz = getNowInGMTminus5();
+
+    // Build "today 23:59:59" in GMT-5, using UTC setters on the shifted date
+    const deadlineTz = new Date(nowTz.getTime());
+    deadlineTz.setUTCHours(23, 59, 59, 999);
+
+    // If we've already passed it, move to tomorrow
+    if (deadlineTz.getTime() <= nowTz.getTime()) {
+      deadlineTz.setUTCDate(deadlineTz.getUTCDate() + 1);
+      deadlineTz.setUTCHours(23, 59, 59, 999);
+    }
+
+    // Convert that GMT-5 "wall clock" moment back to real UTC milliseconds
+    // (reverse of getNowInGMTminus5 shift)
+    return deadlineTz.getTime() - TZ_OFFSET_MINUTES * 60 * 1000;
+  }
+
+  let deadlineMs = getNextDeadlineMs();
+
+  function setAll(d, h, m, s) {
+    const elD = document.getElementById("days");
+    const elH = document.getElementById("hours");
+    const elM = document.getElementById("minutes");
+    const elS = document.getElementById("seconds");
+    if (elD) elD.innerHTML = pad2(d) + "d";
+    if (elH) elH.innerHTML = pad2(h) + "h";
+    if (elM) elM.innerHTML = pad2(m) + "m";
+    if (elS) elS.innerHTML = pad2(s) + "s";
+  }
+
+  function updateTimer() {
+    const now = Date.now();
+    let t = deadlineMs - now;
+
+    // If we hit/passed zero, roll the deadline to the next day's 23:59:59 (GMT-5)
+    if (t <= 0) {
+      deadlineMs = getNextDeadlineMs();
+      t = Math.max(0, deadlineMs - Date.now());
+    }
+
+    const days = Math.floor(t / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((t % (1000 * 60)) / 1000);
+
+    setAll(days, hours, minutes, seconds);
+  }
+
+  updateTimer();
+  setInterval(updateTimer, 1000);
+
+  // Optional: re-sync the deadline occasionally (handles tab sleep / long pauses)
+  setInterval(() => { deadlineMs = getNextDeadlineMs(); }, 60 * 1000);
+</script>
+
+
+
+
+{% comment %} 
+ <div class="timer-wrapper">
+  <div id="days" class="timer-box">00d</div>
+  <div id="hours" class="timer-box">00h</div>
+  <div id="minutes" class="timer-box">00m</div>
+  <div id="seconds" class="timer-box">00s</div>
+</div> 
+
+ <script>
+  const deadline = new Date("2026-02-04T23:59:59-05:00").getTime();
+
+  function updateTimer() {
+    const now = new Date().getTime();
+    const t = deadline - now;
+
+    if (t <= 0) {
+      document.getElementById("days") && (document.getElementById("days").innerHTML = "00d");
+      document.getElementById("hours") && (document.getElementById("hours").innerHTML = "00h");
+      document.getElementById("minutes") && (document.getElementById("minutes").innerHTML = "00m");
+      document.getElementById("seconds") && (document.getElementById("seconds").innerHTML = "00s");
+      return;
+    }
+
+    const days = Math.floor(t / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((t % (1000 * 60)) / 1000);
+
+    document.getElementById("days") && (document.getElementById("days").innerHTML =
+      (days < 10 ? "0" + days : days) + "d");
+    document.getElementById("hours") && (document.getElementById("hours").innerHTML =
+      (hours < 10 ? "0" + hours : hours) + "h");
+    document.getElementById("minutes") && (document.getElementById("minutes").innerHTML =
+      (minutes < 10 ? "0" + minutes : minutes) + "m");
+    document.getElementById("seconds") && (document.getElementById("seconds").innerHTML =
+      (seconds < 10 ? "0" + seconds : seconds) + "s");
+  }
+
+  updateTimer();
+  setInterval(updateTimer, 1000);
+</script>  {% endcomment %}
+
+{% comment %} <script>
+  // Local deadline for every user — 28 Nov 2025 at 23:59 in THEIR timezone
+  const deadline = new Date("2025-11-28T23:59:00").getTime();
+
+  function updateTimer() {
+    const now = new Date().getTime();
+    const t = deadline - now;
+
+    if (t <= 0) {
+      document.getElementById("days").innerHTML = "00d";
+      document.getElementById("hours").innerHTML = "00h";
+      document.getElementById("minutes").innerHTML = "00m";
+      document.getElementById("seconds").innerHTML = "00s";
+      return;
+    }
+
+    const days = Math.floor(t / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((t % (1000 * 60)) / 1000);
+
+    document.getElementById("days").innerHTML = (days < 10 ? "0" + days : days) + "d";
+    document.getElementById("hours").innerHTML = (hours < 10 ? "0" + hours : hours) + "h";
+    document.getElementById("minutes").innerHTML = (minutes < 10 ? "0" + minutes : minutes) + "m";
+    document.getElementById("seconds").innerHTML = (seconds < 10 ? "0" + seconds : seconds) + "s";
+  }
+
+  updateTimer();
+  setInterval(updateTimer, 1000);
+</script> {% endcomment %}
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Set the height of the announcement bar dynamically
+    document.documentElement.style.setProperty(
+      '--announcement-bar-height', 
+      `${document.getElementById('shopify-section-{{ section.id }}').clientHeight.toFixed(2)}px`
+    );
+  });
+</script>
+
+{% schema %}
+  {
+    "name": "New Announcement Bar",
+    "class": "announcement-bar",
+    "tag": "section",
+    "settings": [
+      {
+        "type": "text",
+        "id": "announcement_text",
+        "label": "Announcement Text",
+        "default": "Free shipping over €50 euro’s"
+      },
+      {
+        "type": "text",
+        "id": "announcement_additional_text",
+        "label": "Additional Announcement Text",
+        "default": "+"
+      }
+    ],
+    "presets": [
+      {
+        "name": "New Announcement Bar",
+        "category": "Header"
+      }
+    ]
+  }
+{% endschema %}

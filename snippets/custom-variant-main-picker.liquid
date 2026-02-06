@@ -1,0 +1,471 @@
+{%- doc -%}
+  Renders a default variant picker, used to display the variant picker in the variants block.
+
+  @parem {object} section - the section 
+  @param {object} product_resource - The product object.
+  @param {object} block - The block object.
+  @param {number} shades - The total shades.
+{%- enddoc -%}
+
+{% unless product_resource.has_only_default_variant %}
+  <div
+    class="custom-variant-picker variant-picker spacing-style variant-picker--left"
+    custom-variant-main-picker
+    data-section-id="{{ section.id }}"
+    data-product-id="{{ product_resource.id }}"
+    data-block-id="{{ block.id }}"
+    {{ block.shopify_attributes }}
+  >
+    {% liquid
+      assign concealing_gel = false
+      if product_resource.handle == 'concealing-cream'
+        assign concealing_gel = true
+      endif
+    %}
+
+    {% assign selected = block.settings.selected_qty %}
+
+    {% for i in (1..shades) %}
+      <form class="new-variant-picker__form" data-group="{{ i }}" data-toggle="true"{% if i > selected %} style="display: none;"{% endif %}>
+        {%- for product_option in product_resource.options_with_values -%}
+          {%- liquid
+            assign swatch_count = product_option.values | map: 'swatch' | compact | size
+            assign variant_style = 'buttons'
+
+            if swatch_count > 0
+              assign variant_style = 'swatch'
+            endif
+
+            if variant_style == 'buttons' and settings.variant_button_width == 'equal-width-buttons'
+              assign fieldset_id = section.id | append: '-' | append: product_resource.id | append: '-' | append: product_option.name | handleize
+              assign option_id_attribute = 'data-option-id="' | append: fieldset_id | append: '"'
+              assign longest_value = 0
+            endif
+          -%}
+
+          {%- if variant_style == 'swatch' or variant_style == 'buttons' -%}
+            <fieldset
+              class="variant-option variant-option--buttons{% if variant_style == 'swatch' %} variant-option--swatches{% else %} variant-option--{{ settings.variant_button_width }}{% endif %}"
+              {{ option_id_attribute }}
+            >
+              {%- assign shade = product_option.name | handleize -%}
+              {% if i == 1 %}
+                <legend {% if shade contains 'classic-shades' or shade contains 'tons-classicos' %}class="d-flex justify-content-between w-100"{% endif %} data-product-option="{{ shade }}">
+                  {%- if shade contains 'classic-shades' or shade contains 'tons-classicos' -%}
+                    <div class="variant-option__label">
+                  {%- endif -%}
+                  <span {% if i == 1 %}id="shade_1"{% endif %}>
+                    {% if localization.language.iso_code == 'pt-PT' or localization.language.iso_code == 'pt-BR' %}
+                      Tom
+                    {% else %}
+                      Shade
+                    {% endif %}
+                    {% unless shades == 1 %}{{ i }}{% endunless %}:
+                  </span>
+                  {%- if variant_style == 'swatch' -%}
+                    <span class="variant-option__selected-value">
+                      {% if concealing_gel and shade contains 'classic-shades' or shade contains 'tons-classicos' or shade contains 'concealing-cream-classic-shades' %}
+                        {{ product_option.values[1] }}
+                      {% else %}
+                        {{ product_option.selected_value }}
+                      {% endif %}
+                    </span>
+                  {%- endif %}
+                  {% if shade contains 'classic-shades' or shade contains 'tons-classicos' %}
+                    </div>
+                    <div class="find-your-shade d-flex">
+                      {% comment %} <a class="open-modal-btn">{{ block.settings.find_your_shade }}</a> {% endcomment %}
+                      
+                      {% if localization.language.iso_code == 'pt-PT' or localization.language.iso_code == 'pt-BR' %}
+                        <a href="#open-quiz-tools/perfect-product-finder/discover-your-perfect-shade-bra">
+                          Encontre o seu tom </a>
+                      {% else %}
+                        <a href="#open-quiz-tools/perfect-product-finder/discover-your-perfect-shade">
+                        Find your shade </a>
+                      {% endif %}
+                     
+                    </div>
+                  {% endif %}
+                </legend>
+              {% else %}
+                <legend data-product-option="{{ shade }}">
+                  <span>{% if localization.language.iso_code == 'pt-PT' or localization.language.iso_code == 'pt-BR' %}
+                      Tom
+                    {% else %}
+                      Shade
+                    {% endif %} {{ i }}:</span>
+                  {%- if variant_style == 'swatch' -%}
+                    <span class="variant-option__selected-value">
+                      {% if concealing_gel and shade contains 'classic-shades' or shade contains 'concealing-cream-classic-shades' %}
+                        {{ product_option.values[1] }}
+                      {% else %}
+                        {{ product_option.selected_value }}
+                      {% endif %}
+                    </span>
+                  {%- endif %}
+                </legend>
+              {% endif %}
+
+              <div class="variant-option__label-wrapper">
+                {%- for product_option_value in product_option.values -%}
+                  {% if product_option_value.size > longest_value and option_id_attribute %}
+                    {% assign longest_value = product_option_value.size %}
+                  {% endif %}
+                  <label 
+                    class="variant-option__button-label{% if variant_style == 'swatch' %} variant-option__button-label--has-swatch{% endif %}"
+                    data-main-variant-option-label
+                    {% if variant_style == 'swatch' %}
+                    data-image-id="{{ product_option_value.variant.featured_media.id }}"
+                    {% endif %}
+                  >
+                    <input
+                      type="radio"
+                      id="{{ product_option_value | handleize }}"
+                      name="{{ product_option.name | escape }}-{{ block.id }}-{{ product_resource.id }}"
+                      value="{{ product_option_value | escape }}"
+                      aria-label="{{ product_option_value.name }}"
+                      {% if product_option_value.available == false %}
+                        aria-disabled="true"
+                      {% endif %}
+                      data-input-id="{{ product_option.position }}-{{ forloop.index0 }}"
+                      data-option-value-id="{{ product_option_value.id }}"
+                      data-option-available="{{ product_option_value.available }}"
+                      data-connected-product-url="{{ product_option_value.product_url }}"
+                      {% if product_option_value.variant.id %}
+                        data-variant-id="{{ product_option_value.variant.id }}"
+                      {% endif %}
+                      {% if shade contains 'classic-shades' and forloop.index == 2 %}
+                        checked
+                      {% elsif product_option_value.selected %}
+                        checked
+                      {% endif %}
+                    >
+                    {% if variant_style == 'swatch' %}
+                      {% liquid
+                        assign featured_media = product_option_value.variant.featured_media
+    
+                        # If the variant has no featured media, and we have a combined listing product, then fall back to
+                        # using the featured media of the child product that is linked to this option value.
+                        if featured_media == blank and product_option_value.product_url
+                          assign featured_media = product_option_value.variant.product.featured_media
+                        endif
+                      %}
+    
+                      {% render 'custom-swatch',
+                        swatch: product_option_value.swatch,
+                        variant_image: featured_media,
+                        mode: 'unscaled'
+                      %}
+                    {% else %}
+                      <span class="variant-option__button-label__text">{{ product_option_value | escape }}</span>
+                    {% endif %}
+                    {% render 'strikethrough-variant', product_option: product_option_value %}
+                  </label>
+                {%- endfor -%}
+              </div>
+              {% if option_id_attribute %}
+                {% style %}
+                  [data-option-id="{{ fieldset_id }}"] {
+                    --variant-ch: {{ longest_value }}ch;
+                  }
+                {% endstyle %}
+              {% endif %}
+            </fieldset>
+          {%- endif -%}
+        {%- endfor -%}
+      </form>
+    {% endfor %}
+
+  </div>
+
+  {% if product_resource.metafields.custom.bundle_products_list %}
+    <style>
+      [custom-variant-main-picker] {
+        display: none !important;
+      }
+    </style>
+  {% endif %}
+{% endunless %}
+
+<script type="application/json" id="product_data">
+  {{ product_resource | json }}
+</script>
+
+{% stylesheet %}
+  .variant-picker {
+    width: 100%;
+  }
+
+  .variant-option {
+    --options-border-radius: var(--variant-picker-button-radius);
+    --options-border-width: var(--variant-picker-button-border-width);
+    --variant-option-padding-inline: var(--padding-md);
+  }
+
+  .variant-option--swatches {
+    --options-border-radius: var(--variant-picker-swatch-radius);
+    width: 100%;
+  }
+
+  .variant-option--swatches-disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+  }
+
+  .variant-option--swatches > overflow-list {
+    justify-content: var(--product-swatches-alignment);
+
+    @media (max-width: 749px) {
+      justify-content: var(--product-swatches-alignment-mobile);
+    }
+  }
+
+  .variant-option--buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-sm);
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+
+  .variant-option--buttons legend {
+    padding: 0;
+    margin-block-end: var(--margin-xs);
+  }
+
+  .variant-option__swatch-value {
+    padding-inline-start: var(--padding-xs);
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-70));
+  }
+
+  .variant-option__button-label {
+    --variant-picker-stroke-color: var(--color-variant-border);
+
+    display: flex;
+    flex: 0 0 calc(3ch + 1.3em);
+    align-items: center;
+    position: relative;
+    padding-block: var(--padding-sm);
+    padding-inline: var(--padding-lg);
+    border: var(--style-border-width) solid var(--color-variant-border);
+    border-radius: var(--options-border-radius);
+    border-width: var(--options-border-width);
+    overflow: clip;
+    justify-content: center;
+    min-height: calc(3ch + 1.3em);
+    min-width: fit-content;
+    white-space: nowrap;
+    background-color: var(--color-variant-background);
+    color: var(--color-variant-text);
+    transition: background-color var(--animation-speed) var(--animation-easing),
+      border-color var(--animation-speed) var(--animation-easing);
+
+    &:hover {
+      background-color: var(--color-variant-hover-background);
+      border-color: var(--color-variant-hover-border);
+      color: var(--color-variant-hover-text);
+    }
+
+    @media screen and (min-width: 750px) {
+      padding: var(--padding-xs) var(--variant-option-padding-inline);
+    }
+  }
+
+  .variant-option__button-label__text {
+    text-align: left;
+    text-wrap: auto;
+  }
+
+  .variant-option--equal-width-buttons {
+    --variant-min-width: clamp(44px, calc(var(--variant-option-padding-inline) * 2 + var(--variant-ch)), 100%);
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(var(--variant-min-width), 1fr));
+
+    .variant-option__button-label {
+      min-width: var(--variant-min-width);
+    }
+
+    .variant-option__button-label__text {
+      text-align: center;
+      text-wrap: balance;
+    }
+  }
+
+  .variant-option__button-label:has(:focus-visible) {
+    --variant-picker-stroke-color: var(--color-foreground);
+
+    border-color: var(--color-foreground);
+    outline: var(--focus-outline-width) solid var(--color-foreground);
+    outline-offset: var(--focus-outline-offset);
+  }
+
+  .variant-option__button-label--has-swatch {
+    padding: 0;
+    border: none;
+    display: block;
+    flex-basis: auto;
+    min-height: auto;
+  }
+
+  .variant-option__button-label:has(:checked) {
+    color: var(--color-selected-variant-text);
+    background-color: var(--color-selected-variant-background);
+    border-color: var(--color-selected-variant-border);
+    transition: background-color var(--animation-speed) var(--animation-easing),
+      border-color var(--animation-speed) var(--animation-easing);
+
+    &:hover {
+      background-color: var(--color-selected-variant-hover-background);
+      border-color: var(--color-selected-variant-hover-border);
+      color: var(--color-selected-variant-hover-text);
+    }
+  }
+
+  .variant-option__button-label:has([data-option-available='false']) {
+    color: rgb(var(--color-variant-text-rgb) / var(--opacity-60));
+  }
+
+  .facets__inputs-list--swatches-grid .variant-option__button-label--has-swatch:hover .swatch {
+    outline: var(--focus-outline-width) solid rgb(var(--color-foreground-rgb) / var(--opacity-35-55));
+    outline-offset: var(--focus-outline-offset);
+  }
+
+  .facets__inputs-list--swatches-grid .variant-option__button-label:has(:focus-visible) .swatch {
+    outline: var(--focus-outline-width) solid currentcolor;
+    outline-offset: var(--focus-outline-offset);
+  }
+
+  .facets__inputs-list--swatches-grid .variant-option__button-label:has(:focus-visible) {
+    outline: none;
+  }
+
+  .facets__inputs-list--swatches-grid .variant-option__button-label--has-swatch:hover {
+    outline: none;
+  }
+
+  .variant-option__button-label--has-swatch:hover {
+    outline: var(--focus-outline-width) solid rgb(var(--color-foreground-rgb) / var(--opacity-35-55));
+    outline-offset: var(--focus-outline-offset);
+  }
+
+  .facets__inputs-list--swatches-grid .variant-option__button-label--has-swatch:has(:checked) {
+    outline: none;
+  }
+
+  .facets__inputs-list--swatches-grid .variant-option__button-label--has-swatch:has(:checked) .swatch {
+    outline: var(--focus-outline-width) solid var(--color-foreground);
+    outline-offset: var(--focus-outline-offset);
+  }
+
+  .variant-option__button-label--has-swatch:has(:checked) {
+    outline: var(--focus-outline-width) solid var(--color-foreground);
+    outline-offset: var(--focus-outline-offset);
+  }
+
+  .variant-option__button-label:has([data-option-available='false']):has(:checked) {
+    --variant-picker-stroke-color: rgb(var(--color-variant-text-rgb) / var(--opacity-60));
+
+    background-color: inherit;
+    color: rgb(var(--color-variant-text-rgb) / var(--opacity-60));
+    border-color: var(--color-selected-variant-border);
+  }
+
+  .variant-option__button-label input,
+  .variant-option--images input {
+    /* remove the checkbox from the page flow */
+    position: absolute;
+
+    /* set the dimensions to match those of the label */
+    inset: 0;
+
+    /* hide it */
+    opacity: 0;
+    margin: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+
+  .variant-option__button-label svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+    pointer-events: none;
+    stroke-width: var(--style-border-width);
+    stroke: var(--variant-picker-stroke-color);
+  }
+
+  .variant-option__select-wrapper {
+    display: flex;
+    position: relative;
+    border: var(--style-border-width-inputs) solid var(--color-border);
+    border-radius: var(--style-border-radius-inputs);
+    align-items: center;
+    margin-top: var(--margin-2xs);
+    overflow: clip;
+    transition: background-color var(--animation-speed) var(--animation-easing),
+      border-color var(--animation-speed) var(--animation-easing);
+  }
+
+  .variant-option__select-wrapper:has(.swatch) {
+    --variant-picker-swatch-width: 20px;
+    --variant-picker-swatch-height: 20px;
+  }
+
+  .variant-option__select-wrapper:hover {
+    border-color: var(--color-variant-hover-border);
+  }
+
+  .variant-option__select:focus-visible {
+    outline: var(--focus-outline-width) solid currentcolor;
+    outline-offset: var(--focus-outline-offset);
+  }
+
+  .variant-option__select {
+    padding-block: var(--padding-md);
+    padding-inline: var(--padding-lg) calc(var(--padding-lg) + var(--icon-size-2xs));
+    appearance: none;
+    border: 0;
+    width: 100%;
+    margin: 0;
+    cursor: pointer;
+  }
+
+  .variant-option__select-wrapper .icon {
+    position: absolute;
+    right: var(--padding-md);
+    top: 50%;
+    transform: translateY(-50%);
+    width: var(--icon-size-2xs);
+    height: var(--icon-size-2xs);
+    pointer-events: none;
+  }
+
+  .variant-option__select--has-swatch {
+    padding-inline-start: calc((2 * var(--padding-sm)) + var(--variant-picker-swatch-width));
+  }
+
+  .variant-option__select-wrapper .swatch {
+    position: absolute;
+    top: 50%;
+    left: var(--padding-md);
+    transform: translateY(-50%);
+  }
+
+  .variant-picker--center,
+  .variant-picker--center .variant-option {
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .variant-picker--right,
+  .variant-picker--right .variant-option {
+    text-align: right;
+    justify-content: right;
+  }
+{% endstylesheet %}

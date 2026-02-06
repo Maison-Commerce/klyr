@@ -1,0 +1,35 @@
+<style>
+
+</style>
+
+<!-- footer-top-area -->
+<div class="footer-top-section section-spacer">
+  <div class="container-max">
+    <div class="footer-top-inner text-center">
+      <h2 class="secondary-heading">{{ section.settings.heading }}</h2>
+    </div>
+  </div>
+</div>
+<!-- footer-top-area -->
+
+{% schema %}
+{
+  "name": "New Rich Text",
+  "class": "rich-text-section",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "KLYR IS A solution driven BRAND CREATING CLEAN, PURPOSE-BUILT cosmetics THAT HELP MEN LOOK SHARP — WITHOUT THE FUSS."
+    }
+  ],
+  "presets": [
+    {
+      "name": "New Rich Text",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

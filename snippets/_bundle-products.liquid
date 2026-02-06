@@ -1,0 +1,133 @@
+{% liquid
+  assign bundle_products_list = product_resource.metafields.custom.bundle_products_list
+%}
+
+{% unless bundle_products_list == blank %}
+  <div
+    class="product__block custom-bundle-products"
+    data-block-id="{{ block.id }}"
+    {{ block.shopify_attributes }}
+  >
+    <div class="bundle-product__list">
+      {% for bundle_product in bundle_products_list.value %}
+        {% assign first_variant = bundle_product.selected_or_first_available_variant %}
+        <div class="bundle-product__item" data-bundle-item data-bundle-variant-id="{{ first_variant.id }}">
+          <div class="bundle-product__item-image">
+            <a class="bundle-product__item-url" href="{{ bundle_product.url }}">
+              {% assign bundle_product_image = bundle_product.metafields.custom.preview_image | default: bundle_product.featured_image %}
+              {% if bundle_product_image %}
+                <img 
+                  src="{{ bundle_product_image | image_url: width: 250 }}" 
+                  width="auto" 
+                  height="auto" 
+                  alt="{{ bundle_product.title }}"
+                >
+              {% endif %}
+            </a>
+          </div>
+          <div class="bundle-product__item-details">
+            <h3 class="font-base">
+              <a href="{{ bundle_product.url }}" class="link">
+                {{ bundle_product.title }}
+              </a>
+            </h3>
+            {% render 'custom-component-variant-picker', product_resource: bundle_product, section: section, data_att: 'component-variant-picker' %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+  </div>
+
+  <script>
+    (function(){
+      document.addEventListener("DOMContentLoaded", () => {
+        setTimeout(() => {
+  
+          const mainOptions = [];
+          const addonFieldsets = [];
+  
+          /* ----------------------------------------------------------
+          * 1. Collect MAIN product options + allowed values
+          * ---------------------------------------------------------- */
+          document.querySelectorAll("[custom-variant-main-picker] fieldset").forEach(fieldset => {
+            const legend = fieldset.querySelector("legend");
+            if (!legend) return;
+  
+            const optionName = legend.dataset.productOption.toLowerCase();
+            const values = [...fieldset.querySelectorAll("input[type='radio']")].map(i => i.value.trim());
+  
+            mainOptions.push({
+              name: optionName,
+              values: values
+            });
+          });
+  
+          /* ----------------------------------------------------------
+          * 2. Collect ADDON variant fieldsets
+          * ---------------------------------------------------------- */
+          document.querySelectorAll(".bundle-product__item-details [component-variant-picker] fieldset").forEach(fieldset => {
+            const legend = fieldset.querySelector("legend");
+            if (!legend) return;
+  
+            addonFieldsets.push({
+              name: legend.dataset.productOption.toLowerCase(),
+              fieldset: fieldset
+            });
+          });
+  
+          /* ----------------------------------------------------------
+          * 3. Hide mismatched addon options
+          *    (match by substring name)
+          * ---------------------------------------------------------- */
+          addonFieldsets.forEach(addon => {
+            const addonName = addon.name;
+  
+            const matchedMain = mainOptions.find(main =>
+              main.name.includes(addonName)
+            );
+  
+            // No match → skip hiding
+            if (!matchedMain) return;
+  
+            const allowedValues = matchedMain.values;
+  
+            addon.fieldset.querySelectorAll(".variant-option__button-label").forEach(label => {
+              const input = label.querySelector("input[type='radio']");
+              const value = input?.value.trim();
+  
+              if (!allowedValues.includes(value)) {
+                label.style.display = "none";
+              } else {
+                label.style.display = "";
+              }
+            });
+          });
+  
+          /* ----------------------------------------------------------
+          * 4. Sync ADDON click → MAIN click
+          *    addon input[data-id="x"] → main input#x
+          * ---------------------------------------------------------- */
+          document.querySelectorAll(
+            ".bundle-product__item-details [component-variant-picker] input[type='radio']"
+          ).forEach(addonInput => {
+  
+            addonInput.addEventListener("click", () => {
+              const id = addonInput.dataset.id;
+              if (!id) return;
+  
+              const mainInput = document.querySelector(`[custom-variant-main-picker] input#${CSS.escape(id)}`);
+  
+              if (mainInput) {
+                mainInput.click();  // This triggers all Shopify logic
+              }
+            });
+  
+          });
+  
+        }, 500);
+      });
+    })();
+  </script>
+  
+{% endunless %}

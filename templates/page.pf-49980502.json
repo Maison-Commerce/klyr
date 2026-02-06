@@ -1,0 +1,12 @@
+{
+  "sections": {
+    "pf-49980502": {
+      "type": "pf-49980502",
+      "settings": {}
+    }
+  },
+  "order": [
+    "pf-49980502"
+  ],
+  "layout": "theme.pagefly"
+}

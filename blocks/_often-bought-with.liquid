@@ -1,0 +1,101 @@
+
+{% liquid
+  assign product_resource = closest.product
+  if request.visual_preview_mode and product_resource == blank
+    assign product_resource = collections.all.products.first
+  endif
+-%}
+
+{% render 'custom-bought-with', product_resource: product_resource, block: block %}
+
+{% schema %}
+  {
+    "name": "Often Bought",
+    "tag": null,
+    "settings": [
+      {
+        "type": "header",
+        "content": "Often Bought with block"
+      },
+      {
+        "type": "text",
+        "id": "title_1",
+        "label": "Title",
+        "default": "OFTEN BOUGHT WITH"
+      },
+      {
+        "type": "product",
+        "id": "often_product_1",
+        "label": "Often Bought with Product 1",
+      },
+      {
+        "type": "text",
+        "id": "often_badge_1",
+        "label": "Custom badge",
+        "info": "If blank, Discount percentage will show"
+      },
+      {
+        "type": "product",
+        "id": "ofter_product_2",
+        "label": "Often Bought with Product 2",
+        "info": "Optional"
+      },
+      {
+        "type": "text",
+        "id": "often_badge_2",
+        "label": "Custom badge",
+        "info": "If blank, Discount percentage will show"
+      },
+      {
+        "type": "text",
+        "id": "atc_text_1",
+        "label": "ATC Text",
+        "default": "ADD TO your CART"
+      },
+      {
+        "type": "header",
+        "content": "Bundle & Save block"
+      },
+      {
+        "type": "text",
+        "id": "title_2",
+        "label": "Title"
+      },
+      {
+        "type": "product",
+        "id": "bundle_product_1",
+        "label": "Bundle & Save Product 1",
+      },
+      {
+        "type": "text",
+        "id": "bundle_badge_1",
+        "label": "Custom badge",
+        "info": "If blank, Discount percentage will show"
+      },
+      {
+        "type": "product",
+        "id": "bundle_product_2",
+        "label": "Bundle & Save Product 2",
+        "info": "Optional"
+      },
+      {
+        "type": "text",
+        "id": "bundle_badge_2",
+        "label": "Custom badge",
+        "info": "If blank, Discount percentage will show"
+      },
+      {
+        "type": "text",
+        "id": "atc_text_2",
+        "label": "ATC Text",
+        "default": "ADD TO your CART"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Often Bought",
+        "category": "Custom"
+      }
+    ]
+  }
+{% endschema %}

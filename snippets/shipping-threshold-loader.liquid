@@ -1,0 +1,7 @@
+
+{% comment %} FREE SHIPPING THRESHOLD {% endcomment %}
+{% assign shipping_threshold = shop.metafields.custom.free_shipping_thresholds.value %}
+{% assign country = localization.country.iso_code %}
+{% assign shipping_threshold = shipping_threshold[country] | default: shipping_threshold["US"] %}
+
+{{ shipping_threshold | money_without_trailing_zeros}}

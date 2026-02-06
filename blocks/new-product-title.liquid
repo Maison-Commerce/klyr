@@ -1,0 +1,63 @@
+<div 
+	class="product__block product__block-title-group"
+	id="product-title-{{ block.id }}"
+	{{ block.shopify_attributes }}
+>
+	<div class="sgl-product-title">
+		<h2 class="secondary-heading">{{ product.title }}</h2>
+		{% if block.settings.show_tag %}
+			{% assign badge = product.metafields.custom.product_badge | default: block.settings.badge %}
+			<span class="product-badge-active">{{ badge }}</span>
+		{% endif %}
+	</div>
+	{% if block.settings.show_short_info %}
+		{% assign subtitle = product.metafields.custom.subtitle | default: block.settings.subtitle %}
+		<p class="sgl-product-srt-desc">
+			{{ subtitle }}
+		</p>
+	{% endif %}
+</div>
+
+
+{% schema %}
+{
+  "name": "Product Title",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tag",
+      "label": "Show Best seller badge",
+			"default": true
+    },
+    {
+      "type": "text",
+      "id": "badge",
+      "label": "Text",
+      "default": "Best seller",
+			"info": "For individual badge, please write on metafields. "
+    },
+    {
+      "type": "checkbox",
+      "id": "show_short_info",
+      "label": "Show Subtitle",
+			"default": true
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "30ml | Conceals dark circles and blemishes",
+			"info": "For individual badge, please write on metafields."
+    },
+  ],
+  "presets": [
+    {
+      "name": "Product Title"
+    }
+  ]
+}
+{% endschema %}

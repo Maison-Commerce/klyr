@@ -1,0 +1,107 @@
+{% comment %} 
+  Custom Promo Banner Block for Shopify 2.0
+  Compatible with Online Store 2.0 architecture
+{% endcomment %}
+
+<div class="custom-promo" {{ block.shopify_attributes }}>
+  <div class="custom-promo__content">
+    <h2 class="custom-promo__title">{{ block.settings.banner_title }}</h2>
+    {% if block.settings.banner_subtitle != blank %}
+      <div class="custom-promo__subtitle">
+        {{ block.settings.banner_subtitle }}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<style>
+  .custom-promo {
+    background-color: {{ block.settings.background_color }};
+    border-radius: 2px;
+    padding: 24px 16px;
+    margin: {{ block.settings.margin_top }}px 0 {{ block.settings.margin_bottom }}px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .custom-promo__content {
+    text-align: center;
+    max-width: 600px;
+  }
+
+  .custom-promo__title {
+    font-family: var(--swiss721BTMedium), Arial, sans-serif;
+    font-size: 16px;
+    color: {{ block.settings.title_color }};
+    margin-bottom: 16px;
+    line-height: 1.2;
+    margin-top: 0;
+  }
+
+  .custom-promo__subtitle {
+    font-family: var(--swiss721BTLight), Arial, sans-serif;
+    font-size: 14px;
+    color: {{ block.settings.subtitle_color }};
+    line-height: 1.4;
+    margin: 0;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Custom Promo Banner",
+  "settings": [
+    {
+      "type": "text",
+      "id": "banner_title",
+      "label": "Banner Title",
+      "default": "SALE | 50% OFF YOUR 2ND ITEM"
+    },
+    {
+      "type": "richtext",
+      "id": "banner_subtitle",
+      "label": "Banner Subtitle",
+      "default": "<p>Add two items to your cart and automatically receive 50% off the second item at checkout.</p>"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#231c190f"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title Color",
+      "default": "#231C19"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Subtitle Color",
+      "default": "#231C19"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top Margin",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom Margin",
+      "default": 0
+    }
+  ]
+}
+{% endschema %}

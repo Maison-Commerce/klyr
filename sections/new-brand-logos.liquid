@@ -1,0 +1,164 @@
+<!-- Splide Core CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" />
+
+<style>
+  .brand-logos-wrap .splide {
+    max-width: 100%;
+  }
+  .brand-logos-wrap .splide__slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .brand-logos-wrap .splide__slide img {
+    height: 30px; /* adjust size */
+    flex-shrink: 0;
+  }
+  .mobile-only {
+    display: none;
+  }
+  @media screen and (max-width: 575px) {
+    .desktop-only {
+      display: none;
+    }
+    .mobile-only {
+      display: block;
+    }
+  }
+</style>
+
+<div class="brand-logos-wrap inner-spacer">
+  <div class="container-max desktop-only">
+    <div class="brands-logos-inner">
+      {% for block in section.blocks %}
+        <div class="single-logo" {{ block.shopify_attributes }}>
+          {% if block.settings.logo_image != blank %}
+            <img
+              src="{{ block.settings.logo_image | image_url: width: 300 }}"
+              alt="{{ block.settings.alt_text | escape }}"
+              width="auto" height="auto">
+          {% else %}
+            <placeholder-image data-block-id="{{ section.id }}-{{ forloop.index }}" data-type="product"></placeholder-image>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="mobile-only">
+    <div class="splide" id="splideAutoScroll">
+      <div class="splide__track">
+        <ul class="splide__list">
+          {% for i in (1..2) %}
+            {% for block in section.blocks %}
+              <li class="splide__slide">
+                {% if block.settings.logo_image != blank %}
+                  <img
+                    src="{{ block.settings.logo_image | image_url: width: 300 }}"
+                    alt="{{ block.settings.alt_text | escape }}"
+                    width="auto" height="auto">
+                {% else %}
+                  <placeholder-image data-block-id="{{ section.id }}-{{ forloop.index }}" data-type="product"></placeholder-image>
+                {% endif %}
+              </li>
+            {% endfor %}
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    {% comment %} <div class="logo-marquee">
+      <div class="logo-track" id="logoTrack">
+        {% for i in (1..7) %}
+          {% for block in section.blocks %}
+            <div class="single-logo">
+              {% if block.settings.logo_image != blank %}
+                <img
+                  src="{{ block.settings.logo_image | image_url: width: 300 }}"
+                  alt="{{ block.settings.alt_text | escape }}"
+                  width="auto" height="auto">
+              {% else %}
+                <placeholder-image data-block-id="{{ section.id }}-{{ forloop.index }}" data-type="product"></placeholder-image>
+              {% endif %}
+            </div>
+          {% endfor %}
+        {% endfor %}
+      </div>
+    </div> {% endcomment %}
+  </div>
+</div>
+
+<!-- Splide Core JS -->
+<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js" defer></script>
+<!-- Auto Scroll Extension -->
+<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide-extension-auto-scroll@0.5.3/dist/js/splide-extension-auto-scroll.min.js" defer></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    new Splide("#splideAutoScroll", {
+      type: "loop",
+      perPage: 4,
+      gap: "32px",
+      pagination: false,
+      arrows: false,
+      drag: false, // disable drag for smooth auto scroll
+      // autoWidth: true,
+      autoScroll: {
+        speed: 1,     // control scroll speed (higher = faster)
+        pauseOnHover: false,
+        pauseOnFocus: false,
+      },
+    }).mount(window.splide.Extensions);
+  });
+</script>
+
+
+{% schema %}
+{
+  "name": "New Brand Logos",
+  "tag": "section",
+  "class": "brand-logos-section",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "logo",
+      "name": "Single Brand Logo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "logo_image",
+          "label": "Brand Logo Image"
+        },
+        {
+          "type": "text",
+          "id": "alt_text",
+          "label": "Image Alt Text",
+          "default": "Brand Logo"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 10,
+  "presets": [
+    {
+      "name": "New Brand Logos",
+      "category": "Custom",
+      "blocks": [
+        {
+          "type": "logo"
+        },
+        {
+          "type": "logo"
+        },
+        {
+          "type": "logo"
+        },
+        {
+          "type": "logo"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+
