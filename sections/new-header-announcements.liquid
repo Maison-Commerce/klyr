@@ -33,40 +33,27 @@
 </div>
 
 <script>
-  // Daily reset timer anchored to GMT-5 (America/New_York-style offset)
-  // It always counts down to the next 23:59:59 in GMT-5.
-  // When it hits 0, it automatically rolls to the next day.
-
   const TZ_OFFSET_MINUTES = -5 * 60; // GMT-5
 
   function pad2(n) {
     return n < 10 ? "0" + n : "" + n;
   }
 
-  // Convert "now" to a Date that represents the same instant,
-  // but shifted so its UTC fields behave like "local time in GMT-5".
   function getNowInGMTminus5() {
     const now = new Date();
-    const utcMs = now.getTime() + now.getTimezoneOffset() * 60 * 1000; // now in UTC ms
-    return new Date(utcMs + TZ_OFFSET_MINUTES * 60 * 1000); // "now" expressed in GMT-5
+    const utcMs = now.getTime() + now.getTimezoneOffset() * 60 * 1000;
+    return new Date(utcMs + TZ_OFFSET_MINUTES * 60 * 1000);
   }
 
-  // Get the next reset point: 23:59:59 in GMT-5 for today (or tomorrow if already passed)
   function getNextDeadlineMs() {
     const nowTz = getNowInGMTminus5();
-
-    // Build "today 23:59:59" in GMT-5, using UTC setters on the shifted date
+    
+    // Start with tomorrow's date to ensure we always get the next occurrence
     const deadlineTz = new Date(nowTz.getTime());
-    deadlineTz.setUTCHours(23, 59, 59, 999);
-
-    // If we've already passed it, move to tomorrow
-    if (deadlineTz.getTime() <= nowTz.getTime()) {
-      deadlineTz.setUTCDate(deadlineTz.getUTCDate() + 1);
-      deadlineTz.setUTCHours(23, 59, 59, 999);
-    }
-
-    // Convert that GMT-5 "wall clock" moment back to real UTC milliseconds
-    // (reverse of getNowInGMTminus5 shift)
+    deadlineTz.setUTCDate(deadlineTz.getUTCDate() + 1);
+    deadlineTz.setUTCHours(0, 0, 0, 0); // Set to midnight of next day
+    
+    // Convert back to real UTC milliseconds
     return deadlineTz.getTime() - TZ_OFFSET_MINUTES * 60 * 1000;
   }
 
@@ -87,10 +74,10 @@
     const now = Date.now();
     let t = deadlineMs - now;
 
-    // If we hit/passed zero, roll the deadline to the next day's 23:59:59 (GMT-5)
+    // When timer hits zero or goes negative, reset to next midnight
     if (t <= 0) {
       deadlineMs = getNextDeadlineMs();
-      t = Math.max(0, deadlineMs - Date.now());
+      t = deadlineMs - Date.now();
     }
 
     const days = Math.floor(t / (1000 * 60 * 60 * 24));
@@ -103,11 +90,7 @@
 
   updateTimer();
   setInterval(updateTimer, 1000);
-
-  // Optional: re-sync the deadline occasionally (handles tab sleep / long pauses)
-  setInterval(() => { deadlineMs = getNextDeadlineMs(); }, 60 * 1000);
 </script>
-
 
 
 
