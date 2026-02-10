@@ -712,63 +712,6 @@
               },
               "blocks": {}
             },
-            "buy_buttons_eYQEYi": {
-              "type": "buy-buttons",
-              "disabled": true,
-              "settings": {
-                "stacking": true,
-                "show_pickup_availability": false,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {
-                "quantity": {
-                  "type": "quantity",
-                  "disabled": true,
-                  "static": true,
-                  "settings": {},
-                  "blocks": {}
-                },
-                "add-to-cart": {
-                  "type": "add-to-cart",
-                  "static": true,
-                  "settings": {
-                    "style_class": "button"
-                  },
-                  "blocks": {}
-                },
-                "custom-add-to-cart": {
-                  "type": "custom-add-to-cart",
-                  "static": true,
-                  "settings": {
-                    "text": "Add to your cart",
-                    "upsell_product": "{{ closest.product.metafields.custom.upsell_product.value }}",
-                    "enable_upsell": true
-                  },
-                  "blocks": {}
-                },
-                "accelerated-checkout": {
-                  "type": "accelerated-checkout",
-                  "disabled": true,
-                  "static": true,
-                  "settings": {},
-                  "blocks": {}
-                },
-                "icon-with-text": {
-                  "type": "icon-with-text",
-                  "static": true,
-                  "settings": {
-                    "custom_icon": "shopify://shop_images/Vector.svg",
-                    "text": "30-day hassle free returns",
-                    "align_center": true
-                  },
-                  "blocks": {}
-                }
-              },
-              "block_order": []
-            },
             "custom_buy_buttons_8DPAGb": {
               "type": "custom-buy-buttons",
               "name": "Custom Buy Buttons",
@@ -839,6 +782,63 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
+            },
+            "buy_buttons_eYQEYi": {
+              "type": "buy-buttons",
+              "settings": {
+                "stacking": true,
+                "show_pickup_availability": false,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "quantity": {
+                  "type": "quantity",
+                  "disabled": true,
+                  "static": true,
+                  "settings": {},
+                  "blocks": {}
+                },
+                "add-to-cart": {
+                  "type": "add-to-cart",
+                  "static": true,
+                  "settings": {
+                    "style_class": "button"
+                  },
+                  "blocks": {}
+                },
+                "custom-add-to-cart": {
+                  "type": "custom-add-to-cart",
+                  "disabled": true,
+                  "static": true,
+                  "settings": {
+                    "text": "Add to your cart",
+                    "upsell_product": "{{ closest.product.metafields.custom.upsell_product.value }}",
+                    "enable_upsell": true
+                  },
+                  "blocks": {}
+                },
+                "accelerated-checkout": {
+                  "type": "accelerated-checkout",
+                  "disabled": true,
+                  "static": true,
+                  "settings": {},
+                  "blocks": {}
+                },
+                "icon-with-text": {
+                  "type": "icon-with-text",
+                  "static": true,
+                  "settings": {
+                    "custom_icon": "shopify://shop_images/Vector.svg",
+                    "text": "30-day hassle free returns",
+                    "align_center": true
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": []
             },
             "text_nptwjw": {
               "type": "text",
@@ -1106,10 +1106,10 @@
             "custom_quantity_bundle_DqkzNm",
             "custom_liquid_RX4FLj",
             "custom_variant_picker_TbRrA8",
-            "buy_buttons_eYQEYi",
             "custom_buy_buttons_8DPAGb",
             "custom_promo_qy3Wq9",
             "payment_icons_Jz9HT4",
+            "buy_buttons_eYQEYi",
             "text_nptwjw",
             "custom_bought_with_HLqpNP",
             "group_JbmQwr",
