@@ -32,6 +32,10 @@
   {% unless can_add_to_cart %}
     disabled
   {% endunless %}
+  type="submit"
+    name="add"
+    ref="addToCartButton"
+    on:click="/handleClick"
 >
   <div class="loading-overlay loader-hidden">
     <div class="loading-overlay__spinner">
