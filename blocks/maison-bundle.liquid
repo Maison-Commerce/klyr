@@ -1,0 +1,129 @@
+{% liquid
+  assign product_resource = closest.product
+  if request.visual_preview_mode and product_resource == blank
+    assign product_resource = collections.all.products.first
+  endif
+%}
+
+{% render 'maison-bundle', product_resource: product_resource, block: block, section: section %}
+
+{% schema %}
+{
+  "name": "Maison Bundle",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Low Stock"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_low_stock",
+      "label": "Show low stock indicator",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "low_stock_text",
+      "label": "Low stock text",
+      "default": "Low stock: Only few items left"
+    },
+    {
+      "type": "header",
+      "content": "Tabs"
+    },
+    {
+      "type": "text",
+      "id": "single_tab_label",
+      "label": "Single purchase tab label",
+      "default": "Single Purchase"
+    },
+    {
+      "type": "text",
+      "id": "subscribe_tab_label",
+      "label": "Subscribe tab label",
+      "default": "Subscribe & Save"
+    },
+    {
+      "type": "number",
+      "id": "save_percent",
+      "label": "Save percentage badge",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Single Purchase"
+    },
+    {
+      "type": "number",
+      "id": "single_units",
+      "label": "Number of units (quantity multiplier)",
+      "default": 2
+    },
+    {
+      "type": "text",
+      "id": "bogo_badge_text",
+      "label": "Badge text",
+      "default": "BOGO SALE"
+    },
+    {
+      "type": "text",
+      "id": "single_compare_price",
+      "label": "Compare at price",
+      "default": "118"
+    },
+    {
+      "type": "text",
+      "id": "single_price",
+      "label": "Price",
+      "default": "59"
+    },
+    {
+      "type": "header",
+      "content": "Subscribe & Save"
+    },
+    {
+      "type": "text",
+      "id": "selling_plan_id",
+      "label": "Selling Plan ID",
+      "info": "Enter the numeric selling plan ID to attach when subscribe & save is selected"
+    },
+    {
+      "type": "header",
+      "content": "Shade Finder"
+    },
+    {
+      "type": "url",
+      "id": "find_shade_url",
+      "label": "Find your shade link"
+    },
+    {
+      "type": "header",
+      "content": "Trust Badges"
+    },
+    {
+      "type": "text",
+      "id": "trust_badge_1",
+      "label": "Trust badge 1",
+      "default": "30-day money back guarantee"
+    },
+    {
+      "type": "text",
+      "id": "trust_badge_2",
+      "label": "Trust badge 2",
+      "default": "Free shipping from $75"
+    },
+    {
+      "type": "text",
+      "id": "cancel_note",
+      "label": "Cancel note text",
+      "default": "Cancel or modify anytime — no commitments"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Maison Bundle"
+    }
+  ]
+}
+{% endschema %}
