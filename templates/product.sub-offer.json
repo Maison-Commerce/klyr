@@ -638,19 +638,6 @@
                 "icon_with_text_aBMHjq"
               ]
             },
-            "product_inventory_tYVpdX": {
-              "type": "product-inventory",
-              "name": "t:names.product_inventory",
-              "settings": {
-                "inventory_threshold": 10,
-                "show_inventory_quantity": false,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
             "price_G9DxMK": {
               "type": "price",
               "name": "t:names.product_price",
@@ -675,9 +662,31 @@
               },
               "blocks": {}
             },
+            "maison_bundle_bcYgcb": {
+              "type": "maison-bundle",
+              "name": "Maison Bundle",
+              "settings": {
+                "show_low_stock": true,
+                "low_stock_text": "Low stock: Only few items left",
+                "single_tab_label": "Single Purchase",
+                "subscribe_tab_label": "Subscribe & Save",
+                "save_percent": 15,
+                "single_units": 2,
+                "bogo_badge_text": "BOGO SALE",
+                "single_compare_price": "118",
+                "single_price": "59",
+                "selling_plan_id": "",
+                "find_shade_url": "",
+                "trust_badge_1": "30-day money back guarantee",
+                "trust_badge_2": "Free shipping from $75",
+                "cancel_note": "Cancel or modify anytime — no commitments"
+              },
+              "blocks": {}
+            },
             "custom_quantity_bundle_DqkzNm": {
               "type": "custom-quantity-bundle",
               "name": "Custom Quantity Bundle",
+              "disabled": true,
               "settings": {
                 "label_1": "One",
                 "qty_1": 1,
@@ -712,6 +721,7 @@
             "custom_variant_picker_TbRrA8": {
               "type": "custom-variant-picker",
               "name": "Custom Variant Picker",
+              "disabled": true,
               "settings": {
                 "max_shade": 2,
                 "selected_qty": 2,
@@ -1113,8 +1123,8 @@
             "group_icgrde",
             "loox_reviews_loox_rating_3UraKP",
             "group_JGwT3D",
-            "product_inventory_tYVpdX",
             "price_G9DxMK",
+            "maison_bundle_bcYgcb",
             "custom_quantity_bundle_DqkzNm",
             "custom_liquid_RX4FLj",
             "custom_variant_picker_TbRrA8",
@@ -1805,54 +1815,9 @@
         "padding-block-start": 48,
         "padding-block-end": 48
       }
-    },
-    "maison_bundle": {
-      "type": "maison-bundle",
-      "settings": {},
-      "blocks": {
-        "sub_option_1": {
-          "type": "sub_option",
-          "settings": {
-            "quantity": 1,
-            "price_per_bottle": "50",
-            "compare_price_per_bottle": "59",
-            "save_percent": 15,
-            "best_value": false,
-            "delivery_months": 1
-          }
-        },
-        "sub_option_2": {
-          "type": "sub_option",
-          "settings": {
-            "quantity": 2,
-            "price_per_bottle": "45",
-            "compare_price_per_bottle": "59",
-            "save_percent": 24,
-            "best_value": false,
-            "delivery_months": 2
-          }
-        },
-        "sub_option_3": {
-          "type": "sub_option",
-          "settings": {
-            "quantity": 4,
-            "price_per_bottle": "40",
-            "compare_price_per_bottle": "59",
-            "save_percent": 32,
-            "best_value": true,
-            "delivery_months": 4
-          }
-        }
-      },
-      "block_order": [
-        "sub_option_1",
-        "sub_option_2",
-        "sub_option_3"
-      ]
     }
   },
   "order": [
-    "maison_bundle",
     "main",
     "new_product_information_NVmrBc",
     "new_how_to_use_qnnbfx",
