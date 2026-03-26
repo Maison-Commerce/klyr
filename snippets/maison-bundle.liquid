@@ -287,6 +287,16 @@
       selectSubQty(i) { this.subQty = i; },
       setSubShade(index, value) { this.subShades[index] = value; this.subShades = [...this.subShades]; },
 
+      async openCartDrawer() {
+        const cartRes = await fetch('/cart.js');
+        const newCart = await cartRes.json();
+        document.dispatchEvent(new CustomEvent('cart:updated', { detail: newCart }));
+        const drawerDialog = document.querySelector('.cart-drawer__dialog');
+        if (drawerDialog) drawerDialog.classList.remove('cart-drawer--empty');
+        const drawerButton = document.querySelector('.cart-drawer .header-actions__action');
+        setTimeout(() => drawerButton?.click(), 500);
+      },
+
       async addToCartSingle() {
         if (this.loading) return;
         this.loading = true;
@@ -302,8 +312,7 @@
             body: JSON.stringify({ items: Object.entries(combined).map(([id, quantity]) => ({ id: parseInt(id), quantity })) })
           });
           if (!res.ok) throw new Error('Failed');
-          document.dispatchEvent(new CustomEvent('cart:updated'));
-          window.location.href = '{{ routes.cart_url }}';
+          await this.openCartDrawer();
         } catch (e) { console.error(e); } finally { this.loading = false; }
       },
 
@@ -325,8 +334,7 @@
             body: JSON.stringify({ items: Object.values(combined) })
           });
           if (!res.ok) throw new Error('Failed');
-          document.dispatchEvent(new CustomEvent('cart:updated'));
-          window.location.href = '{{ routes.cart_url }}';
+          await this.openCartDrawer();
         } catch (e) { console.error(e); } finally { this.loading = false; }
       }
     };
