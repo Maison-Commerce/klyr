@@ -67,18 +67,6 @@
       "default": "BOGO SALE"
     },
     {
-      "type": "text",
-      "id": "single_compare_price",
-      "label": "Compare at price",
-      "default": "118"
-    },
-    {
-      "type": "text",
-      "id": "single_price",
-      "label": "Price",
-      "default": "59"
-    },
-    {
       "type": "header",
       "content": "Subscribe & Save"
     },
@@ -87,6 +75,99 @@
       "id": "selling_plan_id",
       "label": "Selling Plan ID",
       "info": "Enter the numeric selling plan ID to attach when subscribe & save is selected"
+    },
+    {
+      "type": "range",
+      "id": "tier_count",
+      "label": "Number of tiers",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "header",
+      "content": "Tier 1"
+    },
+    {
+      "type": "number",
+      "id": "tier_1_qty",
+      "label": "Tier 1 — Bottles",
+      "default": 1
+    },
+    {
+      "type": "number",
+      "id": "tier_1_save",
+      "label": "Tier 1 — Save %",
+      "default": 15
+    },
+    {
+      "type": "number",
+      "id": "tier_1_months",
+      "label": "Tier 1 — Delivery every X months",
+      "default": 1
+    },
+    {
+      "type": "checkbox",
+      "id": "tier_1_best",
+      "label": "Tier 1 — Best Value badge",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Tier 2"
+    },
+    {
+      "type": "number",
+      "id": "tier_2_qty",
+      "label": "Tier 2 — Bottles",
+      "default": 2
+    },
+    {
+      "type": "number",
+      "id": "tier_2_save",
+      "label": "Tier 2 — Save %",
+      "default": 24
+    },
+    {
+      "type": "number",
+      "id": "tier_2_months",
+      "label": "Tier 2 — Delivery every X months",
+      "default": 2
+    },
+    {
+      "type": "checkbox",
+      "id": "tier_2_best",
+      "label": "Tier 2 — Best Value badge",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Tier 3"
+    },
+    {
+      "type": "number",
+      "id": "tier_3_qty",
+      "label": "Tier 3 — Bottles",
+      "default": 4
+    },
+    {
+      "type": "number",
+      "id": "tier_3_save",
+      "label": "Tier 3 — Save %",
+      "default": 32
+    },
+    {
+      "type": "number",
+      "id": "tier_3_months",
+      "label": "Tier 3 — Delivery every X months",
+      "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "tier_3_best",
+      "label": "Tier 3 — Best Value badge",
+      "default": true
     },
     {
       "type": "header",

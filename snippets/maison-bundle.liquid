@@ -12,33 +12,19 @@
   assign low_stock_text = block.settings.low_stock_text | default: 'Low stock: Only few items left'
   assign bogo_text = block.settings.bogo_badge_text | default: 'BOGO SALE'
   assign single_units = block.settings.single_units | default: 2
-  assign single_compare_price = block.settings.single_compare_price
-  assign single_price = block.settings.single_price
+  assign variant = product_resource.selected_or_first_available_variant
+  assign single_price = variant.price | times: single_units | money
+  assign single_compare_price = nil
+  if variant.compare_at_price and variant.compare_at_price > variant.price
+    assign single_compare_price = variant.compare_at_price | times: single_units | money
+  endif
   assign cancel_note = block.settings.cancel_note | default: 'Cancel or modify anytime — no commitments'
   assign trust_1 = block.settings.trust_badge_1 | default: '30-day money back guarantee'
   assign trust_2 = block.settings.trust_badge_2 | default: 'Free shipping from $75'
   assign find_shade_url = block.settings.find_shade_url | default: '#open-quiz-tools/perfect-product-finder/discover-your-perfect-shade'
   assign selling_plan_id = block.settings.selling_plan_id | default: ''
 
-  assign sub_options_json = '[]'
-  assign sub_count = 0
-  assign sub_items = ''
-
-  for b in section.blocks
-    if b.type == 'maison-bundle-sub-option'
-      assign sub_count = sub_count | plus: 1
-      assign item = '{"qty":' | append: b.settings.quantity | append: ',"pricePerBottle":' | append: b.settings.price_per_bottle | append: ',"originalPerBottle":' | append: b.settings.compare_price_per_bottle | append: ',"save":' | append: b.settings.save_percent | append: ',"best":' | append: b.settings.best_value | append: ',"deliveryMonths":' | append: b.settings.delivery_months | append: '}'
-      if sub_items != ''
-        assign sub_items = sub_items | append: ',' | append: item
-      else
-        assign sub_items = item
-      endif
-    endif
-  endfor
-
-  if sub_count > 0
-    assign sub_options_json = '[' | append: sub_items | append: ']'
-  endif
+  assign tier_count = block.settings.tier_count | default: 3
 -%}
 
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -94,12 +80,10 @@
           {% endif %}
         </div>
         <div class="mb-qty-card__pricing">
-          {% if single_compare_price != blank %}
-            <span class="mb-price-old">${{ single_compare_price }}</span>
+          {% if product_resource.compare_at_price > product_resource.price %}
+            <span class="mb-price-old">{{ product_resource.compare_at_price | money }}</span>
           {% endif %}
-          {% if single_price != blank %}
-            <span class="mb-price-new">${{ single_price }}</span>
-          {% endif %}
+          <span class="mb-price-new">{{ product_resource.price | money }}</span>
         </div>
       </div>
 
@@ -140,36 +124,24 @@
 
       <div class="mb-sub-section-label">Choose your quantity</div>
       <div class="mb-qty-selector">
-        {% assign sub_index = 0 %}
-        {% for b in section.blocks %}
-          {% if b.type == 'maison-bundle-sub-option' %}
-            <div
-              class="mb-qty-option"
-              :class="{ 'mb-qty-option--selected': subQty === {{ sub_index }} }"
-              @click="selectSubQty({{ sub_index }})"
-            >
-              <div class="mb-qty-option__left">
-                <span class="mb-qty-option__text">
-                  {{ b.settings.quantity }} {% if b.settings.quantity == 1 %}bottle{% else %}bottles{% endif %}
-                </span>
-                {% if b.settings.save_percent > save_percent %}
-                  <span class="mb-qty-option__save">Save {{ b.settings.save_percent }}%</span>
-                {% endif %}
-                {% if b.settings.best_value %}
-                  <span class="mb-qty-option__best-value">Best Value</span>
-                {% endif %}
-              </div>
-              <div class="mb-qty-option__right">
-                {% if b.settings.compare_price_per_bottle != blank %}
-                  <span class="mb-qty-option__compare">${{ b.settings.compare_price_per_bottle }}</span>
-                {% endif %}
-                <span class="mb-qty-option__price">${{ b.settings.price_per_bottle }}</span>
-                <span class="mb-qty-option__per">/bottle</span>
-              </div>
+        <template x-for="(opt, i) in subOptions" :key="'sub-qty-' + i">
+          <div
+            class="mb-qty-option"
+            :class="{ 'mb-qty-option--selected': subQty === i }"
+            @click="selectSubQty(i)"
+          >
+            <div class="mb-qty-option__left">
+              <span class="mb-qty-option__text" x-text="opt.qty + (opt.qty === 1 ? ' bottle' : ' bottles')"></span>
+              <span class="mb-qty-option__save" x-show="opt.save > {{ save_percent }}" x-text="'Save ' + opt.save + '%'"></span>
+              <span class="mb-qty-option__best-value" x-show="opt.best">Best Value</span>
             </div>
-            {% assign sub_index = sub_index | plus: 1 %}
-          {% endif %}
-        {% endfor %}
+            <div class="mb-qty-option__right">
+              <span class="mb-qty-option__compare" x-text="formatMoney(opt.originalPerBottle)"></span>
+              <span class="mb-qty-option__price" x-text="formatMoney(opt.pricePerBottle)"></span>
+              <span class="mb-qty-option__per">/bottle</span>
+            </div>
+          </div>
+        </template>
       </div>
 
       <!-- Delivery Note -->
@@ -247,7 +219,29 @@
     const productData = {{ product_resource | json }};
     const sellingPlanId = '{{ selling_plan_id }}' || null;
     const cartAddUrl = '{{ routes.cart_add_url | append: ".js" }}';
-    const subOptions = {{ sub_options_json }};
+
+    const firstVariant = productData.variants[0];
+    const basePrice = firstVariant.price;
+    const comparePrice = firstVariant.compare_at_price || basePrice;
+
+    const subOptions = [
+      {% for i in (1..3) %}
+        {% assign qty_key = 'tier_' | append: i | append: '_qty' %}
+        {% assign save_key = 'tier_' | append: i | append: '_save' %}
+        {% assign months_key = 'tier_' | append: i | append: '_months' %}
+        {% assign best_key = 'tier_' | append: i | append: '_best' %}
+        {% if i <= tier_count %}
+        {
+          qty: {{ block.settings[qty_key] | default: i }},
+          save: {{ block.settings[save_key] | default: 15 }},
+          best: {{ block.settings[best_key] | default: false | json }},
+          deliveryMonths: {{ block.settings[months_key] | default: i }},
+          pricePerBottle: Math.round(basePrice * (1 - {{ block.settings[save_key] | default: 15 }} / 100)),
+          originalPerBottle: comparePrice
+        },
+        {% endif %}
+      {% endfor %}
+    ];
 
     const variants = productData.variants.map(v => ({
       id: v.id,
@@ -276,7 +270,11 @@
       tab: 'single',
       loading: false,
       variants,
-      subOptions: subOptions.length ? subOptions : [{ qty: 1, pricePerBottle: 50, originalPerBottle: 59, save: 15, best: false, deliveryMonths: 1 }],
+      subOptions,
+
+      formatMoney(cents) {
+        return '$' + (cents / 100).toFixed(2).replace(/\.00$/, '');
+      },
       singleShades: Array.from({ length: {{ single_units }} }, (_, i) => Math.min(i, variants.length - 1)),
       subQty: 0,
       subShades: [0, 1, 2, 3],
