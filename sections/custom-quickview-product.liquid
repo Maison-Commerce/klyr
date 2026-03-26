@@ -16,13 +16,27 @@
         <div class="quickview-product__media">
           <a href="{{ product_resource.url }}" class="absolute-title">
           </a>
-          <img 
-            id="quick-img" 
-            src="{{ product_resource.featured_image | image_url: width: 340 }}" 
-            alt="{{ product_resource.title | escape }}" loading="lazy"
-            width="340" height="340"
-            style="object-fit: cover; aspect-ratio: 1/1;"
-          >
+          {% if product_resource.metafields.custom.preview_image %}
+        <img 
+          id="quick-img" 
+          src="{{ product_resource.metafields.custom.preview_image | image_url: width: 340 }}" 
+          alt="{{ product_resource.title | escape }}" 
+          loading="lazy"
+          width="340" 
+          height="340"
+          style="object-fit: cover; aspect-ratio: 1/1;"
+        >
+      {% else %}
+        <img 
+          id="quick-img" 
+          src="{{ product_resource.featured_image | image_url: width: 340 }}" 
+          alt="{{ product_resource.title | escape }}" 
+          loading="lazy"
+          width="340" 
+          height="340"
+          style="object-fit: cover; aspect-ratio: 1/1;"
+        >
+      {% endif %}
         </div>
         <div class="quickview-product__details">
           <h4 id="quick-title" class="font-base">

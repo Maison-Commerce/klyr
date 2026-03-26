@@ -2105,7 +2105,7 @@ deferred-media[class] :is(.deferred-media__poster-button img, .deferred-media__p
 /* Custom Typography style */
 .custom-typography,
 .custom-typography > * {
-  font-family: var(--font-family);
+  font-family: var(--swiss721BTLight);
   font-weight: var(--font-weight);
   text-transform: var(--text-transform);
   text-wrap: var(--text-wrap);
