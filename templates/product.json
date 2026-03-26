@@ -71,7 +71,7 @@
               "type": "icon-with-text",
               "name": "Icon with Text",
               "settings": {
-                "text": "Made with 100% natural ingrediënts",
+                "text": "Made with 100% natural ingredi\u00ebnts",
                 "align_center": false
               },
               "blocks": {}
@@ -366,13 +366,13 @@
               "name": "Product Tabs",
               "settings": {
                 "tab1_title": "Details",
-                "tab1_content": "<p>Made in Nijmegen, the Netherlands — where precision grooming meets European craftsmanship. Designed for men, our products combine clean formulas.</p>",
+                "tab1_content": "<p>Made in Nijmegen, the Netherlands \u2014 where precision grooming meets European craftsmanship. Designed for men, our products combine clean formulas.</p>",
                 "tab2_title": "How to use",
-                "tab2_content": "<p>Our products combine clean Made in Nijmegen, the Netherlands — where precision grooming meets European craftsmanship.</p>",
+                "tab2_content": "<p>Our products combine clean Made in Nijmegen, the Netherlands \u2014 where precision grooming meets European craftsmanship.</p>",
                 "tab3_title": "Shipping & returns",
                 "tab3_content": "<p>Where precision grooming meets European craftsmanship. Designed for men, our products combine clean formulas.</p>",
-                "tab4_title": "Ingrediënts",
-                "tab4_content": "<p>Results you can trust., the Netherlands — where precision grooming meets European craftsmanship.</p>",
+                "tab4_title": "Ingredi\u00ebnts",
+                "tab4_content": "<p>Results you can trust., the Netherlands \u2014 where precision grooming meets European craftsmanship.</p>",
                 "tab5_title": "",
                 "tab5_content": "",
                 "tab6_title": "",
@@ -769,7 +769,7 @@
               "type": "custom-promo",
               "name": "Custom Promo Banner",
               "settings": {
-                "banner_title": "SPRING OFFER | BOGO SALE  🌱",
+                "banner_title": "SPRING OFFER | BOGO SALE  \ud83c\udf31",
                 "banner_subtitle": "<p>Add 2 to cart. 1 is free automatically.</p>",
                 "background_color": "#231c190f",
                 "title_color": "#231c19",
@@ -1036,15 +1036,15 @@
                 "tab1_title": "",
                 "tab1_content": "",
                 "tab2_title": "Details",
-                "tab2_content": "{% if localization.language.iso_code == 'pt-PT' or localization.language.iso_code == 'pt-BR' %}\n  <p><strong>A forma de parecer mais fresco, mais nítido e mais confiante.</strong></p>\n  <p>Cobre instantaneamente olheiras, vermelhidão, acne e imperfeições; combinando perfeitamente com o seu tom de pele natural para que ninguém perceba que você está usando. Feito para a pele masculina, aplica-se em segundos, não tem peso e mantém você com a melhor aparência o dia todo.</p>\n{% else %}\n  <p><strong>An effortless upgrade to your face.</strong></p>\n  <p>Concealing Cream+ immediately covers dark circles, redness, and spots. It adapts to your skin tone, which means it covers blemishes without anyone noticing you're wearing anything.</p>\n{% endif %}",
+                "tab2_content": "{% if localization.language.iso_code == 'pt-PT' or localization.language.iso_code == 'pt-BR' %}\n  <p><strong>A forma de parecer mais fresco, mais n\u00edtido e mais confiante.</strong></p>\n  <p>Cobre instantaneamente olheiras, vermelhid\u00e3o, acne e imperfei\u00e7\u00f5es; combinando perfeitamente com o seu tom de pele natural para que ningu\u00e9m perceba que voc\u00ea est\u00e1 usando. Feito para a pele masculina, aplica-se em segundos, n\u00e3o tem peso e mant\u00e9m voc\u00ea com a melhor apar\u00eancia o dia todo.</p>\n{% else %}\n  <p><strong>An effortless upgrade to your face.</strong></p>\n  <p>Concealing Cream+ immediately covers dark circles, redness, and spots. It adapts to your skin tone, which means it covers blemishes without anyone noticing you're wearing anything.</p>\n{% endif %}",
                 "tab3_title": "How to Use",
-                "tab3_content": "{% if localization.language.iso_code == 'pt-PT' or localization.language.iso_code == 'pt-BR' %}\n  <p>Como usar o Concealing Cream+</p>\n  <ul>\n    <li>\n      <h5>1 Prepare sua pele</h5>\n      <span>Aplique seu hidratante ou creme facial habitual para criar uma base lisa.</span>\n    </li>\n    <li>\n      <h5>2 Aplique nas áreas alvo</h5>\n      <span>Dispense uma pequena quantidade e aplique em olheiras, vermelhidão, acne ou imperfeições.</span>\n    </li>\n    <li>\n      <h5>3 Misture perfeitamente</h5>\n      <span>Use as pontas dos dedos ou a <strong>Concealing Sponge+</strong> para misturar suavemente até ficar invisível.</span>\n    </li>\n    <li>\n      <h5>4 Adicione se necessário</h5>\n      <span>Adicione um pouco mais nas áreas problemáticas para cobertura extra sem perder o visual natural.</span>\n    </li>\n  </ul>\n{% else %}\n  <p>How to use Concealing Cream+</p>\n  <ul>\n    <li>\n      <h5>1 Prep your skin</h5>\n      <span>Apply moisturizer or <a href=\"https://klyrmen.com/products/daycream\"><strong><u>daycream</u>+</strong></a> to create a smooth base.</span>\n    </li>\n    <li>\n      <h5>2 Apply to target areas</h5>\n      <span>Dispense a small amount and dab onto dark circles, redness, acne, or blemishes.</span>\n    </li>\n    <li>\n      <h5>3 Blend seamlessly</h5>\n      <span>Use fingertips or the <a href=\"https://klyrmen.com/products/concealing-sponge\"><strong><u>Concealing Sponge+</u></strong></a> to gently blend until invisible.</span>\n    </li>\n    <li>\n      <h5>4 Build if needed</h5>\n      <span>Add a little more on problem spots for extra coverage without losing the natural look.</span>\n    </li>\n  </ul>\n{% endif %}",
+                "tab3_content": "{% if localization.language.iso_code == 'pt-PT' or localization.language.iso_code == 'pt-BR' %}\n  <p>Como usar o Concealing Cream+</p>\n  <ul>\n    <li>\n      <h5>1 Prepare sua pele</h5>\n      <span>Aplique seu hidratante ou creme facial habitual para criar uma base lisa.</span>\n    </li>\n    <li>\n      <h5>2 Aplique nas \u00e1reas alvo</h5>\n      <span>Dispense uma pequena quantidade e aplique em olheiras, vermelhid\u00e3o, acne ou imperfei\u00e7\u00f5es.</span>\n    </li>\n    <li>\n      <h5>3 Misture perfeitamente</h5>\n      <span>Use as pontas dos dedos ou a <strong>Concealing Sponge+</strong> para misturar suavemente at\u00e9 ficar invis\u00edvel.</span>\n    </li>\n    <li>\n      <h5>4 Adicione se necess\u00e1rio</h5>\n      <span>Adicione um pouco mais nas \u00e1reas problem\u00e1ticas para cobertura extra sem perder o visual natural.</span>\n    </li>\n  </ul>\n{% else %}\n  <p>How to use Concealing Cream+</p>\n  <ul>\n    <li>\n      <h5>1 Prep your skin</h5>\n      <span>Apply moisturizer or <a href=\"https://klyrmen.com/products/daycream\"><strong><u>daycream</u>+</strong></a> to create a smooth base.</span>\n    </li>\n    <li>\n      <h5>2 Apply to target areas</h5>\n      <span>Dispense a small amount and dab onto dark circles, redness, acne, or blemishes.</span>\n    </li>\n    <li>\n      <h5>3 Blend seamlessly</h5>\n      <span>Use fingertips or the <a href=\"https://klyrmen.com/products/concealing-sponge\"><strong><u>Concealing Sponge+</u></strong></a> to gently blend until invisible.</span>\n    </li>\n    <li>\n      <h5>4 Build if needed</h5>\n      <span>Add a little more on problem spots for extra coverage without losing the natural look.</span>\n    </li>\n  </ul>\n{% endif %}",
                 "tab4_title": "Risk-Free Trial",
-                "tab4_content": "{% if localization.language.iso_code == 'pt-PT' or localization.language.iso_code == 'pt-BR' %}\n  <p>Oferecemos uma Garantia de Devolução do Dinheiro de 30 Dias no Concealing Cream+ para que você possa testá-lo sem nenhum risco. Se o tom não estiver certo, uma nova cor será enviada imediatamente ou você pode obter um reembolso total sem perguntas.</p>\n{% else %}\n  <p>We offer a 30-Day Money-Back Guarantee on Concealing Cream+ so you can test it without any risk. If the shade isn't right, a new color will be sent straight away or you can get a full refund with no questions asked.</p>\n{% endif %}",
+                "tab4_content": "{% if localization.language.iso_code == 'pt-PT' or localization.language.iso_code == 'pt-BR' %}\n  <p>Oferecemos uma Garantia de Devolu\u00e7\u00e3o do Dinheiro de 30 Dias no Concealing Cream+ para que voc\u00ea possa test\u00e1-lo sem nenhum risco. Se o tom n\u00e3o estiver certo, uma nova cor ser\u00e1 enviada imediatamente ou voc\u00ea pode obter um reembolso total sem perguntas.</p>\n{% else %}\n  <p>We offer a 30-Day Money-Back Guarantee on Concealing Cream+ so you can test it without any risk. If the shade isn't right, a new color will be sent straight away or you can get a full refund with no questions asked.</p>\n{% endif %}",
                 "tab5_title": "Shipping",
-                "tab5_content": "{% if localization.language.iso_code == 'pt-PT' or localization.language.iso_code == 'pt-BR' %}\n  <p>Envio grátis a partir de {%- render 'shipping-threshold-loader'-%}.</p>\n  <p>Por favor, considere os seguintes prazos de envio:</p>\n  <ul>\n    <li>Envio padrão (4–7 dias úteis) {{ standard_rate_cents | money_with_currency }}</li>\n    <li>Envio expresso (3–6 dias úteis) {{ express_rate_cents | money_with_currency }}</li>\n  </ul>\n  <p>Tempo de processamento: 1 dia útil. Não serão cobradas taxas ou tarifas de importação adicionais.</p>\n{% else %}\n  <p>Free shipping from {%- render 'shipping-threshold-loader'-%}.</p>\n  <p>Please allow the following shipping times:</p>\n  <ul>\n    <li>Standard shipping (4–7 business days) {{ standard_rate_cents | money_with_currency }}</li>\n    <li>Express shipping (3–6 business days) {{ express_rate_cents | money_with_currency }}</li>\n  </ul>\n  <p>Processing time: 1 business day. No additional import duties or tariffs will be imposed.</p>\n{% endif %}",
+                "tab5_content": "{% if localization.language.iso_code == 'pt-PT' or localization.language.iso_code == 'pt-BR' %}\n  <p>Envio gr\u00e1tis a partir de {%- render 'shipping-threshold-loader'-%}.</p>\n  <p>Por favor, considere os seguintes prazos de envio:</p>\n  <ul>\n    <li>Envio padr\u00e3o (4\u20137 dias \u00fateis) {{ standard_rate_cents | money_with_currency }}</li>\n    <li>Envio expresso (3\u20136 dias \u00fateis) {{ express_rate_cents | money_with_currency }}</li>\n  </ul>\n  <p>Tempo de processamento: 1 dia \u00fatil. N\u00e3o ser\u00e3o cobradas taxas ou tarifas de importa\u00e7\u00e3o adicionais.</p>\n{% else %}\n  <p>Free shipping from {%- render 'shipping-threshold-loader'-%}.</p>\n  <p>Please allow the following shipping times:</p>\n  <ul>\n    <li>Standard shipping (4\u20137 business days) {{ standard_rate_cents | money_with_currency }}</li>\n    <li>Express shipping (3\u20136 business days) {{ express_rate_cents | money_with_currency }}</li>\n  </ul>\n  <p>Processing time: 1 business day. No additional import duties or tariffs will be imposed.</p>\n{% endif %}",
                 "tab6_title": "Ingredients",
-                "tab6_content": "{% if localization.language.iso_code == 'pt-PT' or localization.language.iso_code == 'pt-BR' %}\n  <p>Ingredientes Principais no Concealing Cream+</p>\n  <ul>\n    <li>\n      <h5>Dimeticona</h5>\n      <span>Cria um acabamento suave e uniforme enquanto reduz a aparência de poros e linhas finas.</span>\n    </li>\n    <li>\n      <h5>Pigmentos Naturais</h5>\n      <span>Fornecem cobertura natural que se adapta ao tom de pele, uniformizando vermelhidão e imperfeições.</span>\n    </li>\n    <li>\n      <h5>Acetato de Tocoferila (Vitamina E)</h5>\n      <span>Oferece cuidado antioxidante e apoia a pele para uma sensação saudável e confortável.</span>\n    </li>\n  </ul>\n  <p>Lista completa de ingredientes:</p>\n  <p>\n  Water, Cyclopentasiloxane, Propylene Glycol, Ethylhexyl Palmitate, Isododecane, \n  Hydrogenated Polydecene, Butylene Glycol, Silica, Sorbitan Sesquioleate, Dimethicone, \n  Steareth-21, Chlorphenesin, Tocopheryl Acetate, Fragrance, o-Cymene-5-Alcohol, BHT. \n  Pode conter: Titanium Dioxide (CI 77891), Iron Oxides (CI 77491, CI 77492, CI 77499).\n  </p>\n{% else %}\n  <p>Key Ingredients in Concealing Cream+</p>\n  <ul>\n    <li>\n      <h5>Dimethicone</h5>\n      <span>Creates a smooth, even finish while reducing the look of pores and fine lines.</span>\n    </li>\n    <li>\n      <h5>Natural Pigments</h5>\n      <span>Provide natural coverage that adapts to skin tone, evening out redness and imperfections.</span>\n    </li>\n    <li>\n      <h5>Tocopheryl Acetate (Vitamin E)</h5>\n      <span>Delivers antioxidant care and supports skin for a healthy, comfortable feel.</span>\n    </li>\n  </ul>\n  <p>Full ingredient list:</p>\n  <p>\n  Water, Cyclopentasiloxane, Propylene Glycol, Ethylhexyl Palmitate, Isododecane, \n  Hydrogenated Polydecene, Butylene Glycol, Silica, Sorbitan Sesquioleate, Dimethicone, \n  Steareth-21, Chlorphenesin, Tocopheryl Acetate, Fragrance, o-Cymene-5-Alcohol, BHT. \n  May contain: Titanium Dioxide (CI 77891), Iron Oxides (CI 77491, CI 77492, CI 77499).\n  </p>\n{% endif %}"
+                "tab6_content": "{% if localization.language.iso_code == 'pt-PT' or localization.language.iso_code == 'pt-BR' %}\n  <p>Ingredientes Principais no Concealing Cream+</p>\n  <ul>\n    <li>\n      <h5>Dimeticona</h5>\n      <span>Cria um acabamento suave e uniforme enquanto reduz a apar\u00eancia de poros e linhas finas.</span>\n    </li>\n    <li>\n      <h5>Pigmentos Naturais</h5>\n      <span>Fornecem cobertura natural que se adapta ao tom de pele, uniformizando vermelhid\u00e3o e imperfei\u00e7\u00f5es.</span>\n    </li>\n    <li>\n      <h5>Acetato de Tocoferila (Vitamina E)</h5>\n      <span>Oferece cuidado antioxidante e apoia a pele para uma sensa\u00e7\u00e3o saud\u00e1vel e confort\u00e1vel.</span>\n    </li>\n  </ul>\n  <p>Lista completa de ingredientes:</p>\n  <p>\n  Water, Cyclopentasiloxane, Propylene Glycol, Ethylhexyl Palmitate, Isododecane, \n  Hydrogenated Polydecene, Butylene Glycol, Silica, Sorbitan Sesquioleate, Dimethicone, \n  Steareth-21, Chlorphenesin, Tocopheryl Acetate, Fragrance, o-Cymene-5-Alcohol, BHT. \n  Pode conter: Titanium Dioxide (CI 77891), Iron Oxides (CI 77491, CI 77492, CI 77499).\n  </p>\n{% else %}\n  <p>Key Ingredients in Concealing Cream+</p>\n  <ul>\n    <li>\n      <h5>Dimethicone</h5>\n      <span>Creates a smooth, even finish while reducing the look of pores and fine lines.</span>\n    </li>\n    <li>\n      <h5>Natural Pigments</h5>\n      <span>Provide natural coverage that adapts to skin tone, evening out redness and imperfections.</span>\n    </li>\n    <li>\n      <h5>Tocopheryl Acetate (Vitamin E)</h5>\n      <span>Delivers antioxidant care and supports skin for a healthy, comfortable feel.</span>\n    </li>\n  </ul>\n  <p>Full ingredient list:</p>\n  <p>\n  Water, Cyclopentasiloxane, Propylene Glycol, Ethylhexyl Palmitate, Isododecane, \n  Hydrogenated Polydecene, Butylene Glycol, Silica, Sorbitan Sesquioleate, Dimethicone, \n  Steareth-21, Chlorphenesin, Tocopheryl Acetate, Fragrance, o-Cymene-5-Alcohol, BHT. \n  May contain: Titanium Dioxide (CI 77891), Iron Oxides (CI 77491, CI 77492, CI 77499).\n  </p>\n{% endif %}"
               },
               "blocks": {}
             },
@@ -1251,7 +1251,7 @@
         "video": "shopify://files/videos/V3_Concealing Gel_Klyr.mp4",
         "how_to_use_label": "why concealing cream+",
         "how_to_use_heading": "invisble coverage for men",
-        "how_to_use_description": "Concealing Cream+ adapts to your skin tone for invisible coverage that hides dark circles, redness, and blemishes. Lightweight, long-lasting, and made for men’s skin with a Shade Match Guarantee.",
+        "how_to_use_description": "Concealing Cream+ adapts to your skin tone for invisible coverage that hides dark circles, redness, and blemishes. Lightweight, long-lasting, and made for men\u2019s skin with a Shade Match Guarantee.",
         "bg_color": "#fbf9f5",
         "mobile_bg_color": "#ffffff"
       }
@@ -1518,7 +1518,7 @@
           "type": "faq",
           "settings": {
             "question": "What if I choose the wrong shade?",
-            "answer": "<p>Our Shade Technology helps Concealing Cream+ adapt naturally to your skin tone, and you can use the shade quiz to find your best match before ordering. Still not right? You’re covered by our 100% Shade Match Guarantee we’ll send you a new shade or give you a full refund, no questions asked.</p>"
+            "answer": "<p>Our Shade Technology helps Concealing Cream+ adapt naturally to your skin tone, and you can use the shade quiz to find your best match before ordering. Still not right? You\u2019re covered by our 100% Shade Match Guarantee we\u2019ll send you a new shade or give you a full refund, no questions asked.</p>"
           }
         },
         "faq_dpRRnp": {
@@ -1546,8 +1546,8 @@
       ],
       "name": "Product FAQ",
       "settings": {
-        "left_label": "you’ve got question",
-        "left_heading": "we’ve got answers"
+        "left_label": "you\u2019ve got question",
+        "left_heading": "we\u2019ve got answers"
       }
     },
     "new_product_recomm_8AcAmw": {
@@ -1805,9 +1805,54 @@
         "padding-block-start": 48,
         "padding-block-end": 48
       }
+    },
+    "maison_bundle": {
+      "type": "maison-bundle",
+      "settings": {},
+      "blocks": {
+        "sub_option_1": {
+          "type": "sub_option",
+          "settings": {
+            "quantity": 1,
+            "price_per_bottle": "50",
+            "compare_price_per_bottle": "59",
+            "save_percent": 15,
+            "best_value": false,
+            "delivery_months": 1
+          }
+        },
+        "sub_option_2": {
+          "type": "sub_option",
+          "settings": {
+            "quantity": 2,
+            "price_per_bottle": "45",
+            "compare_price_per_bottle": "59",
+            "save_percent": 24,
+            "best_value": false,
+            "delivery_months": 2
+          }
+        },
+        "sub_option_3": {
+          "type": "sub_option",
+          "settings": {
+            "quantity": 4,
+            "price_per_bottle": "40",
+            "compare_price_per_bottle": "59",
+            "save_percent": 32,
+            "best_value": true,
+            "delivery_months": 4
+          }
+        }
+      },
+      "block_order": [
+        "sub_option_1",
+        "sub_option_2",
+        "sub_option_3"
+      ]
     }
   },
   "order": [
+    "maison_bundle",
     "main",
     "new_product_information_NVmrBc",
     "new_how_to_use_qnnbfx",
