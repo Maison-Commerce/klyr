@@ -21,7 +21,10 @@
   assign trust_1 = block.settings.trust_badge_1 | default: '30-day money back guarantee'
   assign trust_2 = block.settings.trust_badge_2 | default: 'Free shipping from $75'
   assign find_shade_url = block.settings.find_shade_url | default: '#open-quiz-tools/perfect-product-finder/discover-your-perfect-shade'
-  assign selling_plan_id = block.settings.selling_plan_id | default: ''
+  assign selling_plan_id = ''
+  if product_resource.selling_plan_groups.size > 0
+    assign selling_plan_id = product_resource.selling_plan_groups.first.selling_plans.first.id
+  endif
 
   assign tier_count = block.settings.tier_count | default: 3
 -%}
@@ -86,29 +89,31 @@
         </div>
       </div>
 
-      {% for i in (1..single_units) %}
-        <div class="mb-shade-row">
-          <div class="mb-shade-label">
-            <div>
-              <span>{% if single_units > 1 %}Shade {{ i }}:{% else %}Shade:{% endif %}</span>
-              <strong x-text="getVariantName(singleShades[{{ i | minus: 1 }}])"></strong>
+      <div class="mb-shade-grid">
+        {% for i in (1..single_units) %}
+          <div class="mb-shade-row">
+            <div class="mb-shade-label">
+              <div>
+                <span>{% if single_units > 1 %}Shade {{ i }}:{% else %}Shade:{% endif %}</span>
+                <strong x-text="getVariantName(singleShades[{{ i | minus: 1 }}])"></strong>
+              </div>
+              {% if i == 1 and find_shade_url != blank %}
+                <a class="mb-find-shade" href="{{ find_shade_url }}">Find your shade</a>
+              {% endif %}
             </div>
-            {% if i == 1 and find_shade_url != blank %}
-              <a class="mb-find-shade" href="{{ find_shade_url }}">Find your shade</a>
-            {% endif %}
+            <div class="mb-swatches">
+              <template x-for="(variant, idx) in variants" :key="'single-{{ i }}-' + idx">
+                <div
+                  class="mb-swatch"
+                  :class="{ 'mb-swatch--selected': singleShades[{{ i | minus: 1 }}] === idx }"
+                  :style="'background:' + variant.swatchColor"
+                  @click="setSingleShade({{ i | minus: 1 }}, idx)"
+                ></div>
+              </template>
+            </div>
           </div>
-          <div class="mb-swatches">
-            <template x-for="(variant, idx) in variants" :key="'single-{{ i }}-' + idx">
-              <div
-                class="mb-swatch"
-                :class="{ 'mb-swatch--selected': singleShades[{{ i | minus: 1 }}] === idx }"
-                :style="'background:' + variant.swatchColor"
-                @click="setSingleShade({{ i | minus: 1 }}, idx)"
-              ></div>
-            </template>
-          </div>
-        </div>
-      {% endfor %}
+        {% endfor %}
+      </div>
 
       <form action="{{ routes.cart_add_url }}" method="post" @submit.prevent="addToCartSingle()">
         <button type="submit" class="mb-add-to-cart" :disabled="loading">
@@ -125,19 +130,19 @@
       <div class="mb-sub-benefits">
         <div class="mb-sub-benefits__grid">
           <div class="mb-sub-benefit">
-            <span class="mb-sub-benefit__check">✓</span>
+            <svg class="mb-sub-benefit__check" width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x=".5" y=".5" width="15" height="15" stroke="currentColor"/><path d="M4 8l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             <span>Save <strong>{{ save_percent }}%</strong> on all deliveries</span>
           </div>
           <div class="mb-sub-benefit">
-            <span class="mb-sub-benefit__check">✓</span>
+            <svg class="mb-sub-benefit__check" width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x=".5" y=".5" width="15" height="15" stroke="currentColor"/><path d="M4 8l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             <span>No commitment - modify or cancel anytime</span>
           </div>
           <div class="mb-sub-benefit">
-            <span class="mb-sub-benefit__check">✓</span>
+            <svg class="mb-sub-benefit__check" width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x=".5" y=".5" width="15" height="15" stroke="currentColor"/><path d="M4 8l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             <span>Free shipping, always</span>
           </div>
           <div class="mb-sub-benefit">
-            <span class="mb-sub-benefit__check">✓</span>
+            <svg class="mb-sub-benefit__check" width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x=".5" y=".5" width="15" height="15" stroke="currentColor"/><path d="M4 8l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             <span>Out of stock protection for consistent result</span>
           </div>
         </div>
@@ -174,27 +179,29 @@
       </div>
 
       <!-- Shade selectors for subscribe -->
-      <template x-for="n in subOptions[subQty].qty" :key="'sub-shade-' + n">
-        <div class="mb-shade-row mb-animate-in">
-          <div class="mb-shade-label">
-            <div>
-              <span x-text="subOptions[subQty].qty > 1 ? 'Shade ' + n + ': ' : 'Shade: '"></span>
-              <strong x-text="getVariantName(subShades[n - 1] ?? 0)"></strong>
+      <div class="mb-shade-grid">
+        <template x-for="n in subOptions[subQty].qty" :key="'sub-shade-' + n">
+          <div class="mb-shade-row mb-animate-in">
+            <div class="mb-shade-label">
+              <div>
+                <span x-text="subOptions[subQty].qty > 1 ? 'Shade ' + n + ': ' : 'Shade: '"></span>
+                <strong x-text="getVariantName(subShades[n - 1] ?? 0)"></strong>
+              </div>
+              <a class="mb-find-shade" x-show="n === 1" href="{{ find_shade_url }}">Find your shade</a>
             </div>
-            <a class="mb-find-shade" x-show="n === 1" href="{{ find_shade_url }}">Find your shade</a>
+            <div class="mb-swatches">
+              <template x-for="(variant, idx) in variants" :key="'sub-sw-' + n + '-' + idx">
+                <div
+                  class="mb-swatch"
+                  :class="{ 'mb-swatch--selected': (subShades[n - 1] ?? 0) === idx }"
+                  :style="'background:' + variant.swatchColor"
+                  @click="setSubShade(n - 1, idx)"
+                ></div>
+              </template>
+            </div>
           </div>
-          <div class="mb-swatches">
-            <template x-for="(variant, idx) in variants" :key="'sub-sw-' + n + '-' + idx">
-              <div
-                class="mb-swatch"
-                :class="{ 'mb-swatch--selected': (subShades[n - 1] ?? 0) === idx }"
-                :style="'background:' + variant.swatchColor"
-                @click="setSubShade(n - 1, idx)"
-              ></div>
-            </template>
-          </div>
-        </div>
-      </template>
+        </template>
+      </div>
 
       <form action="{{ routes.cart_add_url }}" method="post" @submit.prevent="addToCartSubscribe()">
         <button type="submit" class="mb-add-to-cart" :disabled="loading">
@@ -286,7 +293,7 @@
     {%- endfor -%}
 
     return {
-      tab: 'single',
+      tab: '{{ block.settings.default_tab | default: "single" }}',
       loading: false,
       variants,
       subOptions,
@@ -462,29 +469,27 @@
 
   /* Subscribe Benefits Grid */
   .mb-sub-benefits {
-    background: var(--textPrimaryColor, #231c19);
-    padding: 24px;
+    padding: 0;
     margin-bottom: 24px;
   }
   .mb-sub-benefits__grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    gap: 12px 24px;
   }
   .mb-sub-benefit {
     display: flex;
     align-items: flex-start;
     gap: 8px;
     font-size: 14px;
-    color: #fff;
+    color: var(--textPrimaryColor, #231c19);
     font-family: var(--swiss721BTLight), sans-serif;
     line-height: 1.4;
   }
   .mb-sub-benefit__check {
-    color: #c9a96e;
-    font-size: 16px;
+    color: var(--textPrimaryColor, #231c19);
     flex-shrink: 0;
-    line-height: 1.3;
+    margin-top: 1px;
   }
   .mb-sub-benefit strong {
     font-family: var(--swiss721BTMedium), sans-serif;
@@ -550,7 +555,8 @@
   .mb-qty-option__left { display: flex; align-items: center; gap: 8px; }
   .mb-qty-option__text {
     font-size: 16px;
-    font-family: var(--swiss721BTLight), sans-serif;
+    font-family: var(--swiss721BTMedium), sans-serif;
+    font-weight: 500;
     color: var(--textPrimaryColor, #231c19);
     line-height: 17px;
   }
@@ -608,7 +614,13 @@
   }
 
   /* Shade Selection */
-  .mb-shade-row { margin-bottom: 24px; }
+  .mb-shade-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+  .mb-shade-row { margin-bottom: 0; }
   .mb-shade-label {
     font-size: 16px;
     color: var(--textPrimaryColor, #231c19);
@@ -649,7 +661,7 @@
     transition: border-color 0.2s ease;
   }
   .mb-swatch:hover { border-color: rgba(35, 28, 25, .25); }
-  .mb-swatch--selected { border-color: var(--textPrimaryColor, #231c19) !important; }
+  .mb-swatch--selected { border: 1.5px solid var(--textPrimaryColor, #231c19) !important; }
 
   /* Add to Cart */
   .mb-add-to-cart {
@@ -703,10 +715,9 @@
     .mb-qty-option__price { font-size: 14px; }
     .mb-shade-label, .mb-find-shade { font-size: 14px; }
     .mb-add-to-cart { font-size: 14px; }
-    .mb-sub-benefits { padding: 20px 16px; }
     .mb-sub-benefit { font-size: 12px; }
-    .mb-sub-benefit__check { font-size: 14px; }
-    .mb-sub-benefits__grid { gap: 12px; }
+    .mb-sub-benefits__grid { gap: 10px 16px; }
+    .mb-sub-benefit__check { width: 14px; height: 14px; }
     .mb-trust-badge { font-size: 12px; }
     .mb-trust-badges { gap: 16px; }
   }

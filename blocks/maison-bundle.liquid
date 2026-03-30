@@ -71,10 +71,14 @@
       "content": "Subscribe & Save"
     },
     {
-      "type": "text",
-      "id": "selling_plan_id",
-      "label": "Selling Plan ID",
-      "info": "Enter the numeric selling plan ID to attach when subscribe & save is selected"
+      "type": "select",
+      "id": "default_tab",
+      "label": "Default active tab",
+      "options": [
+        { "value": "single", "label": "Single Purchase" },
+        { "value": "subscribe", "label": "Subscribe & Save" }
+      ],
+      "default": "single"
     },
     {
       "type": "range",
