@@ -91,6 +91,12 @@
         </div>
       </div>
 
+      {% if find_shade_url != blank %}
+        <div class="mb-delivery-row mb-delivery-row--end">
+          <a class="mb-find-shade" href="{{ find_shade_url }}">Find your shade</a>
+        </div>
+      {% endif %}
+
       <div class="mb-shade-grid">
         {% for i in (1..single_units) %}
           <div class="mb-shade-row">
@@ -99,9 +105,6 @@
                 <span>{% if single_units > 1 %}Shade {{ i }}:{% else %}Shade:{% endif %}</span>
                 <strong x-text="getVariantName(singleShades[{{ i | minus: 1 }}])"></strong>
               </div>
-              {% if i == 1 and find_shade_url != blank %}
-                <a class="mb-find-shade" href="{{ find_shade_url }}">Find your shade</a>
-              {% endif %}
             </div>
             <div class="mb-swatches">
               <template x-for="(variant, idx) in variants" :key="'single-{{ i }}-' + idx">
@@ -611,6 +614,7 @@
     justify-content: space-between;
     margin-bottom: 24px;
   }
+  .mb-delivery-row--end { justify-content: flex-end; }
   .mb-delivery-row .mb-find-shade {
     font-size: 12px;
   }
