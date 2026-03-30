@@ -21,12 +21,14 @@
   assign trust_1 = block.settings.trust_badge_1 | default: '30-day money back guarantee'
   assign trust_2 = block.settings.trust_badge_2 | default: 'Free shipping from $75'
   assign find_shade_url = block.settings.find_shade_url | default: '#open-quiz-tools/perfect-product-finder/discover-your-perfect-shade'
-  assign selling_plan_id = ''
-  if product_resource.selling_plan_groups.size > 0
-    assign selling_plan_id = product_resource.selling_plan_groups.first.selling_plans.first.id
-  endif
-
   assign tier_count = block.settings.tier_count | default: 3
+  assign trust_count = 0
+  if trust_1 != blank
+    assign trust_count = trust_count | plus: 1
+  endif
+  if trust_2 != blank
+    assign trust_count = trust_count | plus: 1
+  endif
 -%}
 
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -130,19 +132,19 @@
       <div class="mb-sub-benefits">
         <div class="mb-sub-benefits__grid">
           <div class="mb-sub-benefit">
-            <svg class="mb-sub-benefit__check" width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x=".5" y=".5" width="15" height="15" stroke="currentColor"/><path d="M4 8l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg class="mb-sub-benefit__check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.5 3.5L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             <span>Save <strong>{{ save_percent }}%</strong> on all deliveries</span>
           </div>
           <div class="mb-sub-benefit">
-            <svg class="mb-sub-benefit__check" width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x=".5" y=".5" width="15" height="15" stroke="currentColor"/><path d="M4 8l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg class="mb-sub-benefit__check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.5 3.5L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             <span>No commitment - modify or cancel anytime</span>
           </div>
           <div class="mb-sub-benefit">
-            <svg class="mb-sub-benefit__check" width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x=".5" y=".5" width="15" height="15" stroke="currentColor"/><path d="M4 8l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg class="mb-sub-benefit__check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.5 3.5L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             <span>Free shipping, always</span>
           </div>
           <div class="mb-sub-benefit">
-            <svg class="mb-sub-benefit__check" width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x=".5" y=".5" width="15" height="15" stroke="currentColor"/><path d="M4 8l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg class="mb-sub-benefit__check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.5 3.5L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             <span>Out of stock protection for consistent result</span>
           </div>
         </div>
@@ -158,24 +160,28 @@
           >
             <div class="mb-qty-option__left">
               <span class="mb-qty-option__text" x-text="opt.qty + (opt.qty === 1 ? ' bottle' : ' bottles')"></span>
-              <span class="mb-qty-option__save" x-show="opt.save > {{ save_percent }}" x-text="'Save ' + opt.save + '%'"></span>
-              <span class="mb-qty-option__best-value" x-show="opt.best">Best Value</span>
             </div>
             <div class="mb-qty-option__right">
               <span class="mb-qty-option__compare" x-text="formatMoney(opt.originalPerBottle)"></span>
               <span class="mb-qty-option__price" x-text="formatMoney(opt.pricePerBottle)"></span>
               <span class="mb-qty-option__per">/bottle</span>
             </div>
+            <span class="mb-qty-option__best-value" x-show="opt.best">Best Value</span>
           </div>
         </template>
       </div>
 
-      <!-- Delivery Note -->
-      <div class="mb-delivery-note">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-        </svg>
-        <span>Delivered every <strong x-text="subOptions[subQty].deliveryMonths + (subOptions[subQty].deliveryMonths === 1 ? ' month' : ' months')"></strong></span>
+      <!-- Delivery Note + Find Your Shade -->
+      <div class="mb-delivery-row">
+        <div class="mb-delivery-note">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+          </svg>
+          <span>Delivered every <strong x-text="subOptions[subQty].deliveryMonths + (subOptions[subQty].deliveryMonths === 1 ? ' month' : ' months')"></strong></span>
+        </div>
+        {% if find_shade_url != blank %}
+          <a class="mb-find-shade" href="{{ find_shade_url }}">Find your shade</a>
+        {% endif %}
       </div>
 
       <!-- Shade selectors for subscribe -->
@@ -187,7 +193,6 @@
                 <span x-text="subOptions[subQty].qty > 1 ? 'Shade ' + n + ': ' : 'Shade: '"></span>
                 <strong x-text="getVariantName(subShades[n - 1] ?? 0)"></strong>
               </div>
-              <a class="mb-find-shade" x-show="n === 1" href="{{ find_shade_url }}">Find your shade</a>
             </div>
             <div class="mb-swatches">
               <template x-for="(variant, idx) in variants" :key="'sub-sw-' + n + '-' + idx">
@@ -213,25 +218,21 @@
 
   </div>
 
-  <!-- Trust Badges -->
+  <!-- Trust Badges (rotating) -->
   {% if trust_1 != blank or trust_2 != blank %}
     <div class="mb-trust-badges">
       {% if trust_1 != blank %}
-        <div class="mb-trust-badge">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M23 4l-6 6-3-3"/>
-            <path d="M20 12v6a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h9"/>
+        <div class="mb-trust-badge" x-show="trustIdx === 0" x-transition:enter="mb-usp-enter" x-transition:enter-start="mb-usp-start" x-transition:enter-end="mb-usp-end" x-transition:leave="mb-usp-leave" x-transition:leave-start="mb-usp-end" x-transition:leave-end="mb-usp-start">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 6L9 17l-5-5"/>
           </svg>
           {{ trust_1 }}
         </div>
       {% endif %}
       {% if trust_2 != blank %}
-        <div class="mb-trust-badge">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="1" y="3" width="15" height="13" rx="2"/>
-            <path d="M16 8h4l3 3v5a2 2 0 01-2 2h-1"/>
-            <circle cx="5.5" cy="18.5" r="2.5"/>
-            <circle cx="18.5" cy="18.5" r="2.5"/>
+        <div class="mb-trust-badge" x-show="trustIdx === 1" x-transition:enter="mb-usp-enter" x-transition:enter-start="mb-usp-start" x-transition:enter-end="mb-usp-end" x-transition:leave="mb-usp-leave" x-transition:leave-start="mb-usp-end" x-transition:leave-end="mb-usp-start">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 6L9 17l-5-5"/>
           </svg>
           {{ trust_2 }}
         </div>
@@ -243,7 +244,6 @@
 <script>
   function maisonBundle() {
     const productData = {{ product_resource | json }};
-    const sellingPlanId = '{{ selling_plan_id }}' || null;
     const cartAddUrl = '{{ routes.cart_add_url | append: ".js" }}';
 
     const firstVariant = productData.variants[0];
@@ -256,12 +256,14 @@
         {% assign save_key = 'tier_' | append: i | append: '_save' %}
         {% assign months_key = 'tier_' | append: i | append: '_months' %}
         {% assign best_key = 'tier_' | append: i | append: '_best' %}
+        {% assign sp_key = 'tier_' | append: i | append: '_selling_plan' %}
         {% if i <= tier_count %}
         {
           qty: {{ block.settings[qty_key] | default: i }},
           save: {{ block.settings[save_key] | default: 15 }},
           best: {{ block.settings[best_key] | default: false | json }},
           deliveryMonths: {{ block.settings[months_key] | default: i }},
+          sellingPlan: '{{ block.settings[sp_key] | default: "" }}' || null,
           pricePerBottle: Math.round(basePrice * (1 - {{ block.settings[save_key] | default: 15 }} / 100)),
           originalPerBottle: comparePrice
         },
@@ -297,6 +299,14 @@
       loading: false,
       variants,
       subOptions,
+      trustIdx: 0,
+
+      init() {
+        const trustCount = {{ trust_count }};
+        if (trustCount > 1) {
+          setInterval(() => { this.trustIdx = (this.trustIdx + 1) % trustCount; }, 5000);
+        }
+      },
 
       formatMoney(cents) {
         return '$' + (cents / 100).toFixed(2).replace(/\.00$/, '');
@@ -344,13 +354,13 @@
         if (this.loading) return;
         this.loading = true;
         try {
-          const qty = this.subOptions[this.subQty].qty;
+          const tier = this.subOptions[this.subQty];
           const combined = {};
-          this.subShades.slice(0, qty).forEach(idx => {
+          this.subShades.slice(0, tier.qty).forEach(idx => {
             const id = this.variants[idx].id;
             if (!combined[id]) combined[id] = { id, quantity: 0 };
             combined[id].quantity += 1;
-            if (sellingPlanId) combined[id].selling_plan = parseInt(sellingPlanId);
+            if (tier.sellingPlan) combined[id].selling_plan = parseInt(tier.sellingPlan);
           });
           const res = await fetch(cartAddUrl, {
             method: 'POST',
@@ -549,6 +559,7 @@
     padding: 11px 14px;
     cursor: pointer; transition: all 0.2s ease; background: #fff;
     min-height: 42px;
+    position: relative;
   }
   .mb-qty-option:hover { border-color: rgba(35, 28, 25, .5); }
   .mb-qty-option--selected { border-color: var(--textPrimaryColor, #231c19); }
@@ -560,23 +571,18 @@
     color: var(--textPrimaryColor, #231c19);
     line-height: 17px;
   }
-  .mb-qty-option__save {
-    font-size: 12px;
-    font-family: var(--swiss721BTMedium), sans-serif;
-    color: var(--darkRedColor, rgb(163, 42, 60));
-    background: rgba(163, 42, 60, .08);
-    padding: 4px 6px;
-    line-height: 9px;
-  }
   .mb-qty-option__best-value {
-    font-size: 12px;
+    font-size: 9px;
     font-family: var(--swiss721BTMedium), sans-serif;
     color: #fff;
     background: var(--textPrimaryColor, #231c19);
-    padding: 4px 6px;
-    line-height: 9px;
+    padding: 3px 5px;
+    line-height: 1;
     letter-spacing: 0.3px;
     text-transform: uppercase;
+    position: absolute;
+    top: -1px;
+    right: -1px;
   }
   .mb-qty-option__right { display: flex; align-items: center; gap: 6px; }
   .mb-qty-option__compare {
@@ -598,12 +604,20 @@
     font-family: var(--swiss721BTLight), sans-serif;
   }
 
-  /* Delivery Note */
+  /* Delivery Row */
+  .mb-delivery-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+  .mb-delivery-row .mb-find-shade {
+    font-size: 12px;
+  }
   .mb-delivery-note {
-    font-size: 14px;
+    font-size: 12px;
     color: var(--textPrimaryColor, #231c19);
     opacity: .6;
-    margin-bottom: 24px;
     display: flex; align-items: center; gap: 6px;
     font-family: var(--swiss721BTLight), sans-serif;
   }
@@ -684,23 +698,27 @@
   .mb-add-to-cart:hover { opacity: .85; }
   .mb-add-to-cart:disabled { opacity: 0.5; cursor: not-allowed; }
 
-  /* Trust Badges */
+  /* Trust Badges (rotating) */
   .mb-trust-badges {
     display: flex;
-    flex-direction: row;
     justify-content: center;
-    gap: 24px;
+    position: relative;
+    min-height: 24px;
     margin-bottom: 16px;
   }
   .mb-trust-badge {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 14px;
+    gap: 6px;
+    font-size: 13px;
     color: var(--textPrimaryColor, #231c19);
     font-family: var(--swiss721BTLight), sans-serif;
   }
   .mb-trust-badge svg { flex-shrink: 0; }
+  .mb-usp-enter { transition: opacity 0.4s ease, transform 0.4s ease; }
+  .mb-usp-leave { transition: opacity 0.3s ease, transform 0.3s ease; position: absolute; }
+  .mb-usp-start { opacity: 0; transform: translateY(8px); }
+  .mb-usp-end { opacity: 1; transform: translateY(0); }
 
   /* Mobile */
   @media screen and (max-width: 1023px) {
@@ -718,8 +736,8 @@
     .mb-sub-benefit { font-size: 12px; }
     .mb-sub-benefits__grid { gap: 10px 16px; }
     .mb-sub-benefit__check { width: 14px; height: 14px; }
-    .mb-trust-badge { font-size: 12px; }
-    .mb-trust-badges { gap: 16px; }
+    .mb-trust-badge { font-size: 11px; }
+    .mb-qty-option__best-value { font-size: 8px; }
   }
 
   @keyframes mb-fadeSlideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
