@@ -18,7 +18,6 @@
   if variant.compare_at_price and variant.compare_at_price > variant.price
     assign single_compare_price = variant.compare_at_price | times: single_units | money
   endif
-  assign cancel_note = block.settings.cancel_note | default: 'Cancel or modify anytime — no commitments'
   assign trust_1 = block.settings.trust_badge_1 | default: '30-day money back guarantee'
   assign trust_2 = block.settings.trust_badge_2 | default: 'Free shipping from $75'
   assign find_shade_url = block.settings.find_shade_url | default: '#open-quiz-tools/perfect-product-finder/discover-your-perfect-shade'
@@ -122,6 +121,28 @@
     <!-- SUBSCRIBE & SAVE PANEL -->
     <div class="mb-tab-panel" :class="{ 'mb-tab-panel--hidden': tab !== 'subscribe' }">
 
+      <!-- Subscribe Benefits -->
+      <div class="mb-sub-benefits">
+        <div class="mb-sub-benefits__grid">
+          <div class="mb-sub-benefit">
+            <span class="mb-sub-benefit__check">✓</span>
+            <span>Save <strong>{{ save_percent }}%</strong> on all deliveries</span>
+          </div>
+          <div class="mb-sub-benefit">
+            <span class="mb-sub-benefit__check">✓</span>
+            <span>No commitment - modify or cancel anytime</span>
+          </div>
+          <div class="mb-sub-benefit">
+            <span class="mb-sub-benefit__check">✓</span>
+            <span>Free shipping, always</span>
+          </div>
+          <div class="mb-sub-benefit">
+            <span class="mb-sub-benefit__check">✓</span>
+            <span>Out of stock protection for consistent result</span>
+          </div>
+        </div>
+      </div>
+
       <div class="mb-sub-section-label">Choose your quantity</div>
       <div class="mb-qty-selector">
         <template x-for="(opt, i) in subOptions" :key="'sub-qty-' + i">
@@ -174,8 +195,6 @@
           </div>
         </div>
       </template>
-
-      <p class="mb-cancel-note">{{ cancel_note }}</p>
 
       <form action="{{ routes.cart_add_url }}" method="post" @submit.prevent="addToCartSubscribe()">
         <button type="submit" class="mb-add-to-cart" :disabled="loading">
@@ -344,74 +363,85 @@
 
   .maison-bundle {
     width: 100%;
-    font-family: var(--font-paragraph--family), sans-serif;
-    color: #1a1a1a;
+    font-family: var(--swiss721BTLight), sans-serif;
+    color: var(--textPrimaryColor, #231c19);
+    font-size: 16px;
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }
 
+  /* Low Stock */
   .mb-low-stock {
     display: flex;
     align-items: center;
     gap: 8px;
     font-size: 14px;
-    color: #555;
+    color: var(--textPrimaryColor, #231c19);
     margin-bottom: 24px;
   }
   .mb-low-stock__dot {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: #e8a030;
+    background: var(--color-lowstock, #EE9441);
+    animation: orangedot 2s linear infinite;
     flex-shrink: 0;
   }
+  @keyframes orangedot {
+    0% { box-shadow: rgba(238,148,65,.46) 0 0; transform: scale(.95); }
+    70% { box-shadow: transparent 0 0 0 10px; transform: scale(1); }
+    to { box-shadow: transparent 0 0; transform: scale(.95); }
+  }
 
+  /* Tab Switcher */
   .mb-tab-container {
     display: flex;
-    border: 1.5px solid #e0e0e0;
-    border-radius: 10px;
+    border: 1px solid rgba(35, 28, 25, .25);
     overflow: hidden;
-    margin-bottom: 28px;
+    margin-bottom: 24px;
     position: relative;
-    background: #fafafa;
+    background: rgba(35, 28, 25, .04);
   }
   .mb-tab-btn {
     flex: 1;
     padding: 16px 12px;
-    font-family: var(--font-paragraph--family), sans-serif;
+    font-family: var(--swiss721BTLight), sans-serif;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 400;
     text-align: center;
     cursor: pointer;
     border: none;
     background: transparent;
-    color: #777;
+    color: rgba(35, 28, 25, .5);
     position: relative;
     z-index: 1;
-    transition: color 0.3s ease;
+    transition: color 0.2s ease;
     line-height: 1.3;
   }
-  .mb-tab-btn--active { color: #1a1a1a; font-weight: 600; }
+  .mb-tab-btn--active {
+    color: var(--textPrimaryColor, #231c19);
+    font-family: var(--swiss721BTMedium), sans-serif;
+    font-weight: 500;
+  }
   .mb-tab-slider {
     position: absolute;
-    top: 3px;
-    left: 3px;
-    width: calc(50% - 3px);
-    height: calc(100% - 6px);
+    top: 0; left: 0;
+    width: 50%;
+    height: 100%;
     background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(35, 28, 25, .25);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 0;
   }
   .mb-tab-slider--right { transform: translateX(100%); }
   .mb-tab-save-badge {
     display: inline-block;
-    background: #b8232a;
+    background: var(--darkRedColor, rgb(163, 42, 60));
     color: #fff;
+    font-family: var(--swiss721BTMedium), sans-serif;
     font-size: 10px;
-    font-weight: 700;
-    padding: 2px 6px;
-    border-radius: 3px;
+    font-weight: 500;
+    padding: 3px 6px;
     margin-left: 4px;
     letter-spacing: 0.3px;
     vertical-align: middle;
@@ -419,6 +449,7 @@
     top: -1px;
   }
 
+  /* Panels */
   .mb-panels-container { position: relative; }
   .mb-tab-panel {
     transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
@@ -429,75 +460,256 @@
     opacity: 0; visibility: hidden; transform: translateY(6px); pointer-events: none;
   }
 
-  .mb-qty-card {
-    border: 1.5px solid #e0e0e0;
-    border-radius: 10px;
-    padding: 16px 18px;
-    margin-bottom: 28px;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  /* Subscribe Benefits Grid */
+  .mb-sub-benefits {
+    background: var(--textPrimaryColor, #231c19);
+    padding: 24px;
+    margin-bottom: 24px;
   }
-  .mb-qty-card--selected { border-color: #1a1a1a; box-shadow: 0 0 0 1px #1a1a1a; }
+  .mb-sub-benefits__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .mb-sub-benefit {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 14px;
+    color: #fff;
+    font-family: var(--swiss721BTLight), sans-serif;
+    line-height: 1.4;
+  }
+  .mb-sub-benefit__check {
+    color: #c9a96e;
+    font-size: 16px;
+    flex-shrink: 0;
+    line-height: 1.3;
+  }
+  .mb-sub-benefit strong {
+    font-family: var(--swiss721BTMedium), sans-serif;
+    font-weight: 500;
+  }
+
+  /* Single Purchase Card */
+  .mb-qty-card {
+    border: 1px solid rgba(35, 28, 25, .25);
+    padding: 16px 18px;
+    margin-bottom: 24px;
+    transition: border-color 0.2s ease;
+  }
+  .mb-qty-card--selected { border-color: var(--textPrimaryColor, #231c19); }
   .mb-qty-card__header { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
-  .mb-qty-card__units { font-size: 16px; font-weight: 500; }
+  .mb-qty-card__units {
+    font-size: 16px;
+    font-family: var(--swiss721BTMedium), sans-serif;
+    font-weight: 500;
+  }
   .mb-bogo-badge {
-    background: #b8232a; color: #fff; font-size: 11px; font-weight: 700;
-    padding: 2px 8px; border-radius: 3px; letter-spacing: 0.3px;
+    background: var(--darkRedColor, rgb(163, 42, 60));
+    color: #fff;
+    font-size: 12px;
+    font-family: var(--swiss721BTMedium), sans-serif;
+    font-weight: 500;
+    padding: 4px 8px;
+    line-height: 9px;
   }
   .mb-qty-card__pricing { display: flex; align-items: center; gap: 8px; }
-  .mb-price-old { font-size: 15px; color: #999; text-decoration: line-through; }
-  .mb-price-new { font-size: 17px; font-weight: 700; color: #b8232a; }
+  .mb-price-old {
+    font-size: 16px;
+    color: var(--textPrimaryColor, #231c19);
+    opacity: .5;
+    text-decoration: line-through;
+    font-family: var(--swiss721BTMedium), sans-serif;
+  }
+  .mb-price-new {
+    font-size: 16px;
+    font-family: var(--swiss721BTMedium), sans-serif;
+    font-weight: 500;
+    color: var(--redColor, rgb(163, 42, 60));
+  }
 
-  .mb-sub-section-label { font-size: 13px; color: #777; font-weight: 500; margin-bottom: 10px; letter-spacing: 0.2px; }
+  /* Subscribe Section */
+  .mb-sub-section-label {
+    font-size: 14px;
+    color: var(--textPrimaryColor, #231c19);
+    opacity: .5;
+    font-family: var(--swiss721BTLight), sans-serif;
+    margin-bottom: 10px;
+  }
   .mb-qty-selector { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
   .mb-qty-option {
     display: flex; align-items: center; justify-content: space-between;
-    border: 1.5px solid #e0e0e0; border-radius: 8px; padding: 12px 14px;
-    cursor: pointer; transition: all 0.25s ease; background: #fff;
+    border: 1px solid rgba(35, 28, 25, .25);
+    padding: 11px 14px;
+    cursor: pointer; transition: all 0.2s ease; background: #fff;
+    min-height: 42px;
   }
-  .mb-qty-option:hover { border-color: #bbb; }
-  .mb-qty-option--selected { border-color: #1a1a1a; box-shadow: 0 0 0 1px #1a1a1a; }
+  .mb-qty-option:hover { border-color: rgba(35, 28, 25, .5); }
+  .mb-qty-option--selected { border-color: var(--textPrimaryColor, #231c19); }
   .mb-qty-option__left { display: flex; align-items: center; gap: 8px; }
-  .mb-qty-option__text { font-size: 14px; font-weight: 600; color: #1a1a1a; }
-  .mb-qty-option__save { font-size: 10px; font-weight: 700; color: #b8232a; background: #fef2f2; padding: 2px 6px; border-radius: 3px; }
-  .mb-qty-option__best-value { font-size: 9px; font-weight: 700; color: #fff; background: #1a1a1a; padding: 2px 6px; border-radius: 3px; letter-spacing: 0.3px; text-transform: uppercase; }
+  .mb-qty-option__text {
+    font-size: 16px;
+    font-family: var(--swiss721BTLight), sans-serif;
+    color: var(--textPrimaryColor, #231c19);
+    line-height: 17px;
+  }
+  .mb-qty-option__save {
+    font-size: 12px;
+    font-family: var(--swiss721BTMedium), sans-serif;
+    color: var(--darkRedColor, rgb(163, 42, 60));
+    background: rgba(163, 42, 60, .08);
+    padding: 4px 6px;
+    line-height: 9px;
+  }
+  .mb-qty-option__best-value {
+    font-size: 12px;
+    font-family: var(--swiss721BTMedium), sans-serif;
+    color: #fff;
+    background: var(--textPrimaryColor, #231c19);
+    padding: 4px 6px;
+    line-height: 9px;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
   .mb-qty-option__right { display: flex; align-items: center; gap: 6px; }
-  .mb-qty-option__compare { font-size: 12px; color: #999; text-decoration: line-through; font-weight: 500; }
-  .mb-qty-option__price { font-size: 14px; font-weight: 700; color: #1a1a1a; }
-  .mb-qty-option__per { font-size: 11px; color: #888; font-weight: 500; }
+  .mb-qty-option__compare {
+    font-size: 14px;
+    color: var(--textPrimaryColor, #231c19);
+    opacity: .5;
+    text-decoration: line-through;
+    font-family: var(--swiss721BTMedium), sans-serif;
+  }
+  .mb-qty-option__price {
+    font-size: 16px;
+    font-family: var(--swiss721BTMedium), sans-serif;
+    color: var(--textPrimaryColor, #231c19);
+  }
+  .mb-qty-option__per {
+    font-size: 14px;
+    color: var(--textPrimaryColor, #231c19);
+    opacity: .5;
+    font-family: var(--swiss721BTLight), sans-serif;
+  }
 
-  .mb-delivery-note { font-size: 13px; color: #777; margin-bottom: 28px; display: flex; align-items: center; gap: 6px; }
+  /* Delivery Note */
+  .mb-delivery-note {
+    font-size: 14px;
+    color: var(--textPrimaryColor, #231c19);
+    opacity: .6;
+    margin-bottom: 24px;
+    display: flex; align-items: center; gap: 6px;
+    font-family: var(--swiss721BTLight), sans-serif;
+  }
   .mb-delivery-note svg { flex-shrink: 0; }
-  .mb-delivery-note strong { font-weight: 600; color: #555; }
+  .mb-delivery-note strong {
+    font-family: var(--swiss721BTMedium), sans-serif;
+    font-weight: 500;
+  }
 
+  /* Shade Selection */
   .mb-shade-row { margin-bottom: 24px; }
-  .mb-shade-label { font-size: 14px; color: #1a1a1a; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+  .mb-shade-label {
+    font-size: 16px;
+    color: var(--textPrimaryColor, #231c19);
+    margin-bottom: 12px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--swiss721BTLight), sans-serif;
+    line-height: 100%;
+  }
   .mb-shade-label span { font-weight: 400; }
-  .mb-shade-label strong { font-weight: 700; }
-  .mb-find-shade { font-size: 14px; color: #1a1a1a; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; font-weight: 500; }
-  .mb-swatches { display: flex; gap: 10px; flex-wrap: wrap; }
+  .mb-shade-label strong {
+    font-family: var(--swiss721BTMedium), sans-serif;
+    font-weight: 500;
+  }
+  .mb-find-shade {
+    font-size: 16px;
+    color: var(--textPrimaryColor, #231c19);
+    font-family: var(--swiss721BTMedium), sans-serif;
+    text-decoration: none;
+    cursor: pointer;
+    position: relative;
+  }
+  .mb-find-shade::before {
+    background-color: #000;
+    bottom: -5px;
+    content: "";
+    height: 1px;
+    position: absolute;
+    width: 100%;
+  }
+  .mb-find-shade:hover { opacity: .7; }
+  .mb-swatches { display: flex; gap: 4px; flex-wrap: wrap; }
   .mb-swatch {
-    width: 44px; height: 44px; border-radius: 6px; cursor: pointer;
-    border: 2px solid transparent; transition: border-color 0.2s ease, transform 0.15s ease;
+    width: 32px; height: 32px; cursor: pointer;
+    padding: 4px;
+    border: .5px solid transparent;
+    background-clip: content-box;
     background-size: cover; background-position: center;
+    transition: border-color 0.2s ease;
   }
-  .mb-swatch:hover { transform: scale(1.08); }
-  .mb-swatch--selected { border-color: #1a1a1a; }
+  .mb-swatch:hover { border-color: rgba(35, 28, 25, .25); }
+  .mb-swatch--selected { border-color: var(--textPrimaryColor, #231c19) !important; }
 
+  /* Add to Cart */
   .mb-add-to-cart {
-    width: 100%; background: #1a1a1a; color: #fff; border: none; border-radius: 10px;
-    padding: 20px; font-family: var(--font-paragraph--family), sans-serif;
-    font-size: 15px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
-    cursor: pointer; transition: background 0.2s ease, transform 0.15s ease; margin-bottom: 20px;
+    width: 100%;
+    background: var(--textPrimaryColor, #231c19);
+    color: #fff;
+    border: none;
+    height: 60px;
+    padding: 24px;
+    font-family: var(--swiss721BTMedium), sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    margin-bottom: 16px;
+    line-height: 12px;
   }
-  .mb-add-to-cart:hover { background: #333; }
-  .mb-add-to-cart:active { transform: scale(0.985); }
-  .mb-add-to-cart:disabled { opacity: 0.7; cursor: not-allowed; }
+  .mb-add-to-cart:hover { opacity: .85; }
+  .mb-add-to-cart:disabled { opacity: 0.5; cursor: not-allowed; }
 
-  .mb-trust-badges { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 32px; }
-  .mb-trust-badge { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #555; }
+  /* Trust Badges */
+  .mb-trust-badges {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 16px;
+  }
+  .mb-trust-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--textPrimaryColor, #231c19);
+    font-family: var(--swiss721BTLight), sans-serif;
+  }
   .mb-trust-badge svg { flex-shrink: 0; }
 
-  .mb-cancel-note { text-align: center; font-size: 12px; color: #999; margin-bottom: 24px; }
+  /* Mobile */
+  @media screen and (max-width: 1023px) {
+    .maison-bundle { font-size: 14px; }
+    .mb-tab-btn { font-size: 12px; }
+    .mb-tab-save-badge { font-size: 9px; }
+    .mb-qty-card__units { font-size: 14px; }
+    .mb-bogo-badge { font-size: 10px; line-height: 8px; }
+    .mb-price-old, .mb-price-new { font-size: 14px; }
+    .mb-sub-section-label { font-size: 12px; }
+    .mb-qty-option__text { font-size: 14px; }
+    .mb-qty-option__price { font-size: 14px; }
+    .mb-shade-label, .mb-find-shade { font-size: 14px; }
+    .mb-add-to-cart { font-size: 14px; }
+    .mb-sub-benefits { padding: 20px 16px; }
+    .mb-sub-benefit { font-size: 12px; }
+    .mb-sub-benefit__check { font-size: 14px; }
+    .mb-sub-benefits__grid { gap: 12px; }
+    .mb-trust-badge { font-size: 12px; }
+    .mb-trust-badges { gap: 16px; }
+  }
 
   @keyframes mb-fadeSlideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
   .mb-animate-in { animation: mb-fadeSlideIn 0.35s ease forwards; }
