@@ -22,13 +22,7 @@
   assign trust_2 = block.settings.trust_badge_2 | default: 'Free shipping from $75'
   assign find_shade_url = block.settings.find_shade_url | default: '#open-quiz-tools/perfect-product-finder/discover-your-perfect-shade'
   assign tier_count = block.settings.tier_count | default: 3
-  assign trust_count = 0
-  if trust_1 != blank
-    assign trust_count = trust_count | plus: 1
-  endif
-  if trust_2 != blank
-    assign trust_count = trust_count | plus: 1
-  endif
+  assign show_single_tiers = block.settings.show_single_tiers | default: false
 -%}
 
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -76,20 +70,44 @@
     <!-- SINGLE PURCHASE PANEL -->
     <div class="mb-tab-panel" :class="{ 'mb-tab-panel--hidden': tab !== 'single' }">
 
-      <div class="mb-qty-card mb-qty-card--selected">
-        <div class="mb-qty-card__header">
-          <span class="mb-qty-card__units">{{ single_units }} Units</span>
-          {% if bogo_text != blank %}
-            <span class="mb-bogo-badge">{{ bogo_text }}</span>
-          {% endif %}
+      {% if show_single_tiers %}
+        <div class="mb-sub-section-label">Choose your quantity</div>
+        <div class="mb-qty-selector">
+          <template x-for="(opt, i) in singleOptions" :key="'single-qty-' + i">
+            <div
+              class="mb-qty-option"
+              :class="{ 'mb-qty-option--selected': singleQty === i }"
+              @click="selectSingleQty(i)"
+            >
+              <div class="mb-qty-option__left">
+                <span class="mb-qty-option__text" x-text="opt.qty + (opt.qty === 1 ? ' bottle' : ' bottles')"></span>
+                <span class="mb-qty-option__discount" x-show="opt.discount" x-text="opt.discount + '% OFF'"></span>
+              </div>
+              <div class="mb-qty-option__right">
+                <span class="mb-qty-option__compare" x-show="opt.discount" x-text="formatMoney(opt.originalPerBottle)"></span>
+                <span class="mb-qty-option__price" x-text="formatMoney(opt.pricePerBottle)"></span>
+                <span class="mb-qty-option__per">/bottle</span>
+              </div>
+              <span class="mb-qty-option__best-value" x-show="opt.best">Best Value</span>
+            </div>
+          </template>
         </div>
-        <div class="mb-qty-card__pricing">
-          {% if product_resource.compare_at_price > product_resource.price %}
-            <span class="mb-price-old">{{ product_resource.compare_at_price | money }}</span>
-          {% endif %}
-          <span class="mb-price-new">{{ product_resource.price | money }}</span>
+      {% else %}
+        <div class="mb-qty-card mb-qty-card--selected">
+          <div class="mb-qty-card__header">
+            <span class="mb-qty-card__units">{{ single_units }} Units</span>
+            {% if bogo_text != blank %}
+              <span class="mb-bogo-badge">{{ bogo_text }}</span>
+            {% endif %}
+          </div>
+          <div class="mb-qty-card__pricing">
+            {% if product_resource.compare_at_price > product_resource.price %}
+              <span class="mb-price-old">{{ product_resource.compare_at_price | money }}</span>
+            {% endif %}
+            <span class="mb-price-new">{{ product_resource.price | money }}</span>
+          </div>
         </div>
-      </div>
+      {% endif %}
 
       {% if find_shade_url != blank %}
         <div class="mb-delivery-row mb-delivery-row--end">
@@ -98,26 +116,49 @@
       {% endif %}
 
       <div class="mb-shade-grid">
-        {% for i in (1..single_units) %}
-          <div class="mb-shade-row">
-            <div class="mb-shade-label">
-              <div>
-                <span>{% if single_units > 1 %}Shade {{ i }}:{% else %}Shade:{% endif %}</span>
-                <strong x-text="getVariantName(singleShades[{{ i | minus: 1 }}])"></strong>
+        {% if show_single_tiers %}
+          <template x-for="n in singleOptions[singleQty].qty" :key="'single-shade-' + n">
+            <div class="mb-shade-row mb-animate-in">
+              <div class="mb-shade-label">
+                <div>
+                  <span x-text="singleOptions[singleQty].qty > 1 ? 'Shade ' + n + ': ' : 'Shade: '"></span>
+                  <strong x-text="getVariantName(singleShades[n - 1] ?? 1)"></strong>
+                </div>
+              </div>
+              <div class="mb-swatches">
+                <template x-for="(variant, idx) in variants" :key="'single-sw-' + n + '-' + idx">
+                  <div
+                    class="mb-swatch"
+                    :class="{ 'mb-swatch--selected': (singleShades[n - 1] ?? 1) === idx }"
+                    :style="'background:' + variant.swatchColor"
+                    @click="setSingleShade(n - 1, idx)"
+                  ></div>
+                </template>
               </div>
             </div>
-            <div class="mb-swatches">
-              <template x-for="(variant, idx) in variants" :key="'single-{{ i }}-' + idx">
-                <div
-                  class="mb-swatch"
-                  :class="{ 'mb-swatch--selected': singleShades[{{ i | minus: 1 }}] === idx }"
-                  :style="'background:' + variant.swatchColor"
-                  @click="setSingleShade({{ i | minus: 1 }}, idx)"
-                ></div>
-              </template>
+          </template>
+        {% else %}
+          {% for i in (1..single_units) %}
+            <div class="mb-shade-row">
+              <div class="mb-shade-label">
+                <div>
+                  <span>{% if single_units > 1 %}Shade {{ i }}:{% else %}Shade:{% endif %}</span>
+                  <strong x-text="getVariantName(singleShades[{{ i | minus: 1 }}])"></strong>
+                </div>
+              </div>
+              <div class="mb-swatches">
+                <template x-for="(variant, idx) in variants" :key="'single-{{ i }}-' + idx">
+                  <div
+                    class="mb-swatch"
+                    :class="{ 'mb-swatch--selected': singleShades[{{ i | minus: 1 }}] === idx }"
+                    :style="'background:' + variant.swatchColor"
+                    @click="setSingleShade({{ i | minus: 1 }}, idx)"
+                  ></div>
+                </template>
+              </div>
             </div>
-          </div>
-        {% endfor %}
+          {% endfor %}
+        {% endif %}
       </div>
 
       <form action="{{ routes.cart_add_url }}" method="post" @submit.prevent="addToCartSingle()">
@@ -221,21 +262,21 @@
 
   </div>
 
-  <!-- Trust Badges (rotating) -->
+  <!-- Trust Badges (static, side by side) -->
   {% if trust_1 != blank or trust_2 != blank %}
     <div class="mb-trust-badges">
       {% if trust_1 != blank %}
-        <div class="mb-trust-badge" x-show="trustIdx === 0" x-transition:enter="mb-usp-enter" x-transition:enter-start="mb-usp-start" x-transition:enter-end="mb-usp-end" x-transition:leave="mb-usp-leave" x-transition:leave-start="mb-usp-end" x-transition:leave-end="mb-usp-start">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 6L9 17l-5-5"/>
+        <div class="mb-trust-badge">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
           </svg>
           {{ trust_1 }}
         </div>
       {% endif %}
       {% if trust_2 != blank %}
-        <div class="mb-trust-badge" x-show="trustIdx === 1" x-transition:enter="mb-usp-enter" x-transition:enter-start="mb-usp-start" x-transition:enter-end="mb-usp-end" x-transition:leave="mb-usp-leave" x-transition:leave-start="mb-usp-end" x-transition:leave-end="mb-usp-start">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 6L9 17l-5-5"/>
+        <div class="mb-trust-badge">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
           </svg>
           {{ trust_2 }}
         </div>
@@ -274,6 +315,25 @@
       {% endfor %}
     ];
 
+    const singleOptions = [
+      {% for i in (1..3) %}
+        {% assign qty_key = 'tier_' | append: i | append: '_qty' %}
+        {% assign discount_key = 'tier_' | append: i | append: '_single_discount' %}
+        {% assign best_key = 'tier_' | append: i | append: '_best' %}
+        {% if i <= tier_count %}
+        {
+          qty: {{ block.settings[qty_key] | default: i }},
+          discount: {{ block.settings[discount_key] | default: 0 }},
+          best: {{ block.settings[best_key] | default: false | json }},
+          pricePerBottle: {{ block.settings[discount_key] | default: 0 }} > 0
+            ? Math.round(basePrice * (1 - {{ block.settings[discount_key] | default: 0 }} / 100))
+            : basePrice,
+          originalPerBottle: {{ block.settings[discount_key] | default: 0 }} > 0 ? basePrice : 0
+        },
+        {% endif %}
+      {% endfor %}
+    ];
+
     const variants = productData.variants.map(v => ({
       id: v.id,
       title: v.title,
@@ -297,30 +357,27 @@
       {%- endif -%}
     {%- endfor -%}
 
+    const defaultShade = Math.min(1, variants.length - 1);
+
     return {
       tab: '{{ block.settings.default_tab | default: "single" }}',
       loading: false,
       variants,
       subOptions,
-      trustIdx: 0,
-
-      init() {
-        const trustCount = {{ trust_count }};
-        if (trustCount > 1) {
-          setInterval(() => { this.trustIdx = (this.trustIdx + 1) % trustCount; }, 5000);
-        }
-      },
+      singleOptions,
 
       formatMoney(cents) {
         return '$' + (cents / 100).toFixed(2).replace(/\.00$/, '');
       },
-      singleShades: Array.from({ length: {{ single_units }} }, (_, i) => Math.min(i, variants.length - 1)),
+      singleShades: Array.from({ length: 4 }, () => defaultShade),
+      singleQty: 0,
       subQty: 0,
-      subShades: [0, 1, 2, 3],
+      subShades: Array.from({ length: 4 }, () => defaultShade),
 
       switchTab(t) { this.tab = t; },
       getVariantName(index) { return this.variants[index]?.name || ''; },
       setSingleShade(index, value) { this.singleShades[index] = value; this.singleShades = [...this.singleShades]; },
+      selectSingleQty(i) { this.singleQty = i; },
       selectSubQty(i) { this.subQty = i; },
       setSubShade(index, value) { this.subShades[index] = value; this.subShades = [...this.subShades]; },
 
@@ -338,8 +395,10 @@
         if (this.loading) return;
         this.loading = true;
         try {
+          const useTiers = {{ show_single_tiers | json }};
+          const qty = useTiers ? this.singleOptions[this.singleQty].qty : {{ single_units }};
           const combined = {};
-          this.singleShades.forEach(idx => {
+          this.singleShades.slice(0, qty).forEach(idx => {
             const id = this.variants[idx].id;
             combined[id] = (combined[id] || 0) + 1;
           });
@@ -606,6 +665,17 @@
     opacity: .5;
     font-family: var(--swiss721BTLight), sans-serif;
   }
+  .mb-qty-option__discount {
+    display: inline-block;
+    background: var(--darkRedColor, rgb(163, 42, 60));
+    color: #fff;
+    font-family: var(--swiss721BTMedium), sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 3px 6px;
+    letter-spacing: 0.3px;
+    line-height: 1;
+  }
 
   /* Delivery Row */
   .mb-delivery-row {
@@ -616,7 +686,7 @@
   }
   .mb-delivery-row--end { justify-content: flex-end; }
   .mb-delivery-row .mb-find-shade {
-    font-size: 12px;
+    font-size: 16px;
   }
   .mb-delivery-note {
     font-size: 12px;
@@ -653,7 +723,7 @@
     font-weight: 500;
   }
   .mb-find-shade {
-    font-size: 16px;
+    font-size: 18px;
     color: var(--textPrimaryColor, #231c19);
     font-family: var(--swiss721BTMedium), sans-serif;
     text-decoration: none;
@@ -702,27 +772,22 @@
   .mb-add-to-cart:hover { opacity: .85; }
   .mb-add-to-cart:disabled { opacity: 0.5; cursor: not-allowed; }
 
-  /* Trust Badges (rotating) */
+  /* Trust Badges (static, side by side) */
   .mb-trust-badges {
     display: flex;
     justify-content: center;
-    position: relative;
-    min-height: 24px;
+    gap: 32px;
     margin-bottom: 16px;
   }
   .mb-trust-badge {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     font-size: 13px;
     color: var(--textPrimaryColor, #231c19);
     font-family: var(--swiss721BTLight), sans-serif;
   }
   .mb-trust-badge svg { flex-shrink: 0; }
-  .mb-usp-enter { transition: opacity 0.4s ease, transform 0.4s ease; }
-  .mb-usp-leave { transition: opacity 0.3s ease, transform 0.3s ease; position: absolute; }
-  .mb-usp-start { opacity: 0; transform: translateY(8px); }
-  .mb-usp-end { opacity: 1; transform: translateY(0); }
 
   /* Mobile */
   @media screen and (max-width: 1023px) {
@@ -735,12 +800,15 @@
     .mb-sub-section-label { font-size: 12px; }
     .mb-qty-option__text { font-size: 14px; }
     .mb-qty-option__price { font-size: 14px; }
-    .mb-shade-label, .mb-find-shade { font-size: 14px; }
+    .mb-shade-label { font-size: 14px; }
+    .mb-find-shade { font-size: 16px; }
     .mb-add-to-cart { font-size: 14px; }
     .mb-sub-benefit { font-size: 12px; }
     .mb-sub-benefits__grid { gap: 10px 16px; }
     .mb-sub-benefit__check { width: 14px; height: 14px; }
     .mb-trust-badge { font-size: 11px; }
+    .mb-trust-badges { gap: 16px; }
+    .mb-qty-option__discount { font-size: 9px; }
     .mb-qty-option__best-value { font-size: 8px; }
   }
 
