@@ -55,15 +55,21 @@
       "content": "Single Purchase"
     },
     {
+      "type": "checkbox",
+      "id": "show_single_tiers",
+      "label": "Show quantity tiers (instead of BOGO card)",
+      "default": false
+    },
+    {
       "type": "number",
       "id": "single_units",
-      "label": "Number of units (quantity multiplier)",
+      "label": "Number of units (quantity multiplier) — used when tiers are off",
       "default": 2
     },
     {
       "type": "text",
       "id": "bogo_badge_text",
-      "label": "Badge text",
+      "label": "Badge text — used when tiers are off",
       "default": "BOGO SALE"
     },
     {
@@ -101,8 +107,14 @@
     },
     {
       "type": "number",
+      "id": "tier_1_single_discount",
+      "label": "Tier 1 — Single Purchase Discount %",
+      "default": 0
+    },
+    {
+      "type": "number",
       "id": "tier_1_save",
-      "label": "Tier 1 — Save %",
+      "label": "Tier 1 — Subscribe Save %",
       "default": 15
     },
     {
@@ -134,8 +146,14 @@
     },
     {
       "type": "number",
+      "id": "tier_2_single_discount",
+      "label": "Tier 2 — Single Purchase Discount %",
+      "default": 0
+    },
+    {
+      "type": "number",
       "id": "tier_2_save",
-      "label": "Tier 2 — Save %",
+      "label": "Tier 2 — Subscribe Save %",
       "default": 24
     },
     {
@@ -167,8 +185,14 @@
     },
     {
       "type": "number",
+      "id": "tier_3_single_discount",
+      "label": "Tier 3 — Single Purchase Discount %",
+      "default": 0
+    },
+    {
+      "type": "number",
       "id": "tier_3_save",
-      "label": "Tier 3 — Save %",
+      "label": "Tier 3 — Subscribe Save %",
       "default": 32
     },
     {
