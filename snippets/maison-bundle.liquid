@@ -267,7 +267,7 @@
     <div class="mb-trust-badges">
       {% if trust_1 != blank %}
         <div class="mb-trust-badge">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
           </svg>
           {{ trust_1 }}
@@ -275,7 +275,7 @@
       {% endif %}
       {% if trust_2 != blank %}
         <div class="mb-trust-badge">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
           </svg>
           {{ trust_2 }}
@@ -787,7 +787,7 @@
     color: var(--textPrimaryColor, #231c19);
     font-family: var(--swiss721BTLight), sans-serif;
   }
-  .mb-trust-badge svg { flex-shrink: 0.1; }
+  .mb-trust-badge svg { flex-shrink: 0; }
 
   /* Mobile */
   @media screen and (max-width: 1023px) {
