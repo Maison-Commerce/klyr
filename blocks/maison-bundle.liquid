@@ -107,15 +107,15 @@
     },
     {
       "type": "number",
-      "id": "tier_1_single_discount",
-      "label": "Tier 1 — Single Purchase Discount %",
+      "id": "tier_1_free",
+      "label": "Tier 1 — Free bottles (from qty)",
       "default": 0
     },
     {
       "type": "number",
       "id": "tier_1_save",
-      "label": "Tier 1 — Subscribe Save %",
-      "default": 15
+      "label": "Tier 1 — Subscribe extra discount %",
+      "default": 10
     },
     {
       "type": "number",
@@ -135,6 +135,17 @@
       "label": "Tier 1 — Selling Plan ID"
     },
     {
+      "type": "text",
+      "id": "tier_1_attr_key",
+      "label": "Tier 1 — Hidden line item key",
+      "info": "Prefix with _ to hide from checkout/cart (e.g. _bundle_tier)"
+    },
+    {
+      "type": "text",
+      "id": "tier_1_attr_value",
+      "label": "Tier 1 — Hidden line item value"
+    },
+    {
       "type": "header",
       "content": "Tier 2"
     },
@@ -146,15 +157,15 @@
     },
     {
       "type": "number",
-      "id": "tier_2_single_discount",
-      "label": "Tier 2 — Single Purchase Discount %",
-      "default": 0
+      "id": "tier_2_free",
+      "label": "Tier 2 — Free bottles (from qty)",
+      "default": 1
     },
     {
       "type": "number",
       "id": "tier_2_save",
-      "label": "Tier 2 — Subscribe Save %",
-      "default": 24
+      "label": "Tier 2 — Subscribe extra discount %",
+      "default": 10
     },
     {
       "type": "number",
@@ -174,6 +185,17 @@
       "label": "Tier 2 — Selling Plan ID"
     },
     {
+      "type": "text",
+      "id": "tier_2_attr_key",
+      "label": "Tier 2 — Hidden line item key",
+      "info": "Prefix with _ to hide from checkout/cart (e.g. _bundle_tier)"
+    },
+    {
+      "type": "text",
+      "id": "tier_2_attr_value",
+      "label": "Tier 2 — Hidden line item value"
+    },
+    {
       "type": "header",
       "content": "Tier 3"
     },
@@ -185,15 +207,15 @@
     },
     {
       "type": "number",
-      "id": "tier_3_single_discount",
-      "label": "Tier 3 — Single Purchase Discount %",
-      "default": 0
+      "id": "tier_3_free",
+      "label": "Tier 3 — Free bottles (from qty)",
+      "default": 2
     },
     {
       "type": "number",
       "id": "tier_3_save",
-      "label": "Tier 3 — Subscribe Save %",
-      "default": 32
+      "label": "Tier 3 — Subscribe extra discount %",
+      "default": 10
     },
     {
       "type": "number",
@@ -213,6 +235,17 @@
       "label": "Tier 3 — Selling Plan ID"
     },
     {
+      "type": "text",
+      "id": "tier_3_attr_key",
+      "label": "Tier 3 — Hidden line item key",
+      "info": "Prefix with _ to hide from checkout/cart (e.g. _bundle_tier)"
+    },
+    {
+      "type": "text",
+      "id": "tier_3_attr_value",
+      "label": "Tier 3 — Hidden line item value"
+    },
+    {
       "type": "header",
       "content": "Shade Finder"
     },
@@ -223,19 +256,40 @@
     },
     {
       "type": "header",
-      "content": "Trust Badges"
+      "content": "Trust Badges (USPs)"
+    },
+    {
+      "type": "paragraph",
+      "content": "Each line is a stacked USP shown under the ATC button."
     },
     {
       "type": "text",
       "id": "trust_badge_1",
-      "label": "Trust badge 1",
+      "label": "USP 1",
       "default": "30-day money back guarantee"
     },
     {
       "type": "text",
       "id": "trust_badge_2",
-      "label": "Trust badge 2",
-      "default": "Free shipping from $75"
+      "label": "USP 2"
+    },
+    {
+      "type": "text",
+      "id": "trust_badge_3",
+      "label": "USP 3"
+    },
+    {
+      "type": "header",
+      "content": "Post-ATC Upsell"
+    },
+    {
+      "type": "paragraph",
+      "content": "Product opened in the quickview sidebar after a successful add to cart. Leave empty to just open the cart drawer."
+    },
+    {
+      "type": "product",
+      "id": "upsell_product",
+      "label": "Upsell product"
     }
   ],
   "presets": [
