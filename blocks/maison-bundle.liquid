@@ -1,11 +1,4 @@
-{% liquid
-  assign product_resource = closest.product
-  if request.visual_preview_mode and product_resource == blank
-    assign product_resource = collections.all.products.first
-  endif
-%}
-
-{% render 'maison-bundle', product_resource: product_resource, block: block, section: section %}
+{% render 'maison-bundle', product_resource: product, block: block, section: section %}
 
 {% schema %}
 {
