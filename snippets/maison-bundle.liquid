@@ -86,8 +86,8 @@
                 <span class="mb-qty-option__discount" x-show="opt.free > 0" x-text="opt.free + ' FREE'"></span>
               </div>
               <div class="mb-qty-option__right">
-                <span class="mb-qty-option__compare" x-show="opt.originalPerBottle > 0" x-text="formatMoney(opt.originalPerBottle)"></span>
-                <span class="mb-qty-option__price" x-text="formatMoney(opt.pricePerBottle)"></span>
+                <span class="mb-qty-option__compare" x-show="opt.originalPrice > 0" x-text="formatMoney(opt.originalPrice)"></span>
+                <span class="mb-qty-option__price" x-text="formatMoney(opt.price)"></span>
                 <span class="mb-qty-option__per">/bottle</span>
               </div>
               <span class="mb-qty-option__best-value" x-show="opt.best">Best Value</span>
@@ -210,8 +210,8 @@
               <span class="mb-qty-option__discount" x-show="opt.free === 0 && opt.save > 0" x-text="'-' + opt.save + '%'"></span>
             </div>
             <div class="mb-qty-option__right">
-              <span class="mb-qty-option__compare" x-text="formatMoney(opt.originalPerBottle)"></span>
-              <span class="mb-qty-option__price" x-text="formatMoney(opt.pricePerBottle)"></span>
+              <span class="mb-qty-option__compare" x-text="formatMoney(opt.originalPrice)"></span>
+              <span class="mb-qty-option__price" x-text="formatMoney(opt.price)"></span>
               <span class="mb-qty-option__per">/bottle</span>
             </div>
             <span class="mb-qty-option__best-value" x-show="opt.best">Best Value</span>
@@ -357,9 +357,12 @@
     const baseTiers = buildTiers();
 
     // Single purchase: BOGO math, no extra discount.
+    //   price        = what the customer actually pays (paidQty × basePrice)
+    //   originalPrice = what qty bottles would cost at full price (qty × basePrice)
     const singleOptions = baseTiers.map(t => {
       const paidQty = Math.max(t.qty - t.free, 0);
-      const total = paidQty * basePrice;
+      const price = paidQty * basePrice;
+      const originalPrice = t.qty * basePrice;
       const hasDiscount = t.free > 0;
       return {
         qty: t.qty,
@@ -368,9 +371,8 @@
         attrKey: t.attrKey,
         attrValue: t.attrValue,
         discount: hasDiscount ? Math.round((t.free / t.qty) * 100) : 0,
-        total,
-        pricePerBottle: t.qty > 0 ? Math.round(total / t.qty) : basePrice,
-        originalPerBottle: hasDiscount ? basePrice : 0
+        price,
+        originalPrice: hasDiscount ? originalPrice : 0
       };
     });
 
@@ -378,7 +380,8 @@
     const subOptions = baseTiers.map(t => {
       const paidQty = Math.max(t.qty - t.free, 0);
       const discountMultiplier = 1 - (t.subSave / 100);
-      const total = Math.round(paidQty * basePrice * discountMultiplier);
+      const price = Math.round(paidQty * basePrice * discountMultiplier);
+      const originalPrice = t.qty * basePrice;
       return {
         qty: t.qty,
         free: t.free,
@@ -388,9 +391,8 @@
         sellingPlan: t.sellingPlan,
         attrKey: t.attrKey,
         attrValue: t.attrValue,
-        total,
-        pricePerBottle: t.qty > 0 ? Math.round(total / t.qty) : basePrice,
-        originalPerBottle: basePrice
+        price,
+        originalPrice
       };
     });
 
