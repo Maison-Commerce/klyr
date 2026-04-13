@@ -35,6 +35,17 @@
   assign unit_plural = block.settings.unit_label_plural | default: 'bottles'
   assign per_label = block.settings.per_label | default: '/bottle'
   assign best_value_text = block.settings.best_value_text | default: 'Best Value'
+  assign save_badge_format = block.settings.save_badge_format | default: 'SAVE [percent]%' | replace: '[percent]', save_percent
+  assign choose_qty_label = block.settings.choose_qty_label | default: 'Choose your quantity'
+  assign units_label = block.settings.units_label | default: 'Units'
+  assign find_shade_text = block.settings.find_shade_text | default: 'Find your shade'
+  assign shade_label = block.settings.shade_label | default: 'Shade'
+  assign atc_button_text = block.settings.atc_button_text | default: 'ADD TO CART'
+  assign atc_loading_text = block.settings.atc_loading_text | default: 'ADDING...'
+  assign free_label = block.settings.free_label | default: 'FREE'
+  assign delivery_prefix = block.settings.delivery_prefix | default: 'Delivered every'
+  assign month_singular = block.settings.month_singular | default: 'month'
+  assign month_plural = block.settings.month_plural | default: 'months'
 -%}
 
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -72,7 +83,7 @@
       type="button"
     >
       {{ block.settings.subscribe_tab_label | default: 'Subscribe & Save' }}
-      <span class="mb-tab-save-badge">SAVE {{ save_percent }}%</span>
+      <span class="mb-tab-save-badge">{{ save_badge_format }}</span>
     </button>
   </div>
 
@@ -83,7 +94,7 @@
     <div class="mb-tab-panel" :class="{ 'mb-tab-panel--hidden': tab !== 'single' }">
 
       {% if show_single_tiers %}
-        <div class="mb-sub-section-label">Choose your quantity</div>
+        <div class="mb-sub-section-label">{{ choose_qty_label }}</div>
         <div class="mb-qty-selector">
           <template x-for="(opt, i) in singleOptions" :key="'single-qty-' + i">
             <div
@@ -93,7 +104,7 @@
             >
               <div class="mb-qty-option__left">
                 <span class="mb-qty-option__text" x-text="opt.qty + ' ' + (opt.qty === 1 ? unitSingular : unitPlural)"></span>
-                <span class="mb-qty-option__discount" x-show="opt.free > 0" x-text="opt.free + ' FREE'"></span>
+                <span class="mb-qty-option__discount" x-show="opt.free > 0" x-text="opt.free + ' ' + freeLabel"></span>
               </div>
               <div class="mb-qty-option__right">
                 <span class="mb-qty-option__compare" x-show="opt.originalPrice > 0" x-text="formatMoney(opt.originalPrice)"></span>
@@ -107,7 +118,7 @@
       {% else %}
         <div class="mb-qty-card mb-qty-card--selected">
           <div class="mb-qty-card__header">
-            <span class="mb-qty-card__units">{{ single_units }} Units</span>
+            <span class="mb-qty-card__units">{{ single_units }} {{ units_label }}</span>
             {% if bogo_text != blank %}
               <span class="mb-bogo-badge">{{ bogo_text }}</span>
             {% endif %}
@@ -123,7 +134,7 @@
 
       {% if find_shade_url != blank %}
         <div class="mb-delivery-row mb-delivery-row--end">
-          <a class="mb-find-shade" href="{{ find_shade_url }}">Find your shade</a>
+          <a class="mb-find-shade" href="{{ find_shade_url }}">{{ find_shade_text }}</a>
         </div>
       {% endif %}
 
@@ -133,7 +144,7 @@
             <div class="mb-shade-row mb-animate-in">
               <div class="mb-shade-label">
                 <div>
-                  <span x-text="singleOptions[singleQty].qty > 1 ? 'Shade ' + n + ': ' : 'Shade: '"></span>
+                  <span x-text="singleOptions[singleQty].qty > 1 ? shadeLabel + ' ' + n + ': ' : shadeLabel + ': '"></span>
                   <strong x-text="getVariantName(singleShades[n - 1] ?? 1)"></strong>
                 </div>
               </div>
@@ -154,7 +165,7 @@
             <div class="mb-shade-row">
               <div class="mb-shade-label">
                 <div>
-                  <span>{% if single_units > 1 %}Shade {{ i }}:{% else %}Shade:{% endif %}</span>
+                  <span>{% if single_units > 1 %}{{ shade_label }} {{ i }}:{% else %}{{ shade_label }}:{% endif %}</span>
                   <strong x-text="getVariantName(singleShades[{{ i | minus: 1 }}])"></strong>
                 </div>
               </div>
@@ -175,8 +186,8 @@
 
       <form action="{{ routes.cart_add_url }}" method="post" @submit.prevent="addToCartSingle()">
         <button type="submit" class="mb-add-to-cart" :disabled="loading">
-          <span x-show="!loading">ADD TO CART</span>
-          <span x-show="loading">ADDING...</span>
+          <span x-show="!loading">{{ atc_button_text }}</span>
+          <span x-show="loading">{{ atc_loading_text }}</span>
         </button>
       </form>
     </div>
@@ -232,7 +243,7 @@
         </div>
       {% endif %}
 
-      <div class="mb-sub-section-label">Choose your quantity</div>
+      <div class="mb-sub-section-label">{{ choose_qty_label }}</div>
       <div class="mb-qty-selector">
         <template x-for="(opt, i) in subOptions" :key="'sub-qty-' + i">
           <div
@@ -242,7 +253,7 @@
           >
             <div class="mb-qty-option__left">
               <span class="mb-qty-option__text" x-text="opt.qty + ' ' + (opt.qty === 1 ? unitSingular : unitPlural)"></span>
-              <span class="mb-qty-option__discount" x-show="opt.free > 0" x-text="opt.free + ' FREE'"></span>
+              <span class="mb-qty-option__discount" x-show="opt.free > 0" x-text="opt.free + ' ' + freeLabel"></span>
               <span class="mb-qty-option__discount" x-show="opt.free === 0 && opt.save > 0" x-text="'-' + opt.save + '%'"></span>
             </div>
             <div class="mb-qty-option__right">
@@ -261,10 +272,10 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
           </svg>
-          <span>Delivered every <strong x-text="subOptions[subQty].deliveryMonths + (subOptions[subQty].deliveryMonths === 1 ? ' month' : ' months')"></strong></span>
+          <span>{{ delivery_prefix }} <strong x-text="subOptions[subQty].deliveryMonths + (subOptions[subQty].deliveryMonths === 1 ? ' ' + monthSingular : ' ' + monthPlural)"></strong></span>
         </div>
         {% if find_shade_url != blank %}
-          <a class="mb-find-shade" href="{{ find_shade_url }}">Find your shade</a>
+          <a class="mb-find-shade" href="{{ find_shade_url }}">{{ find_shade_text }}</a>
         {% endif %}
       </div>
 
@@ -274,7 +285,7 @@
           <div class="mb-shade-row mb-animate-in">
             <div class="mb-shade-label">
               <div>
-                <span x-text="subOptions[subQty].qty > 1 ? 'Shade ' + n + ': ' : 'Shade: '"></span>
+                <span x-text="subOptions[subQty].qty > 1 ? shadeLabel + ' ' + n + ': ' : shadeLabel + ': '"></span>
                 <strong x-text="getVariantName(subShades[n - 1] ?? 0)"></strong>
               </div>
             </div>
@@ -294,8 +305,8 @@
 
       <form action="{{ routes.cart_add_url }}" method="post" @submit.prevent="addToCartSubscribe()">
         <button type="submit" class="mb-add-to-cart" :disabled="loading">
-          <span x-show="!loading">ADD TO CART</span>
-          <span x-show="loading">ADDING...</span>
+          <span x-show="!loading">{{ atc_button_text }}</span>
+          <span x-show="loading">{{ atc_loading_text }}</span>
         </button>
       </form>
     </div>
@@ -470,6 +481,10 @@
     const defaultShade = Math.min(1, variants.length - 1);
     const unitSingular = {{ unit_singular | json }};
     const unitPlural = {{ unit_plural | json }};
+    const freeLabel = {{ free_label | json }};
+    const shadeLabel = {{ shade_label | json }};
+    const monthSingular = {{ month_singular | json }};
+    const monthPlural = {{ month_plural | json }};
 
     return {
       tab: '{{ block.settings.default_tab | default: "single" }}',
