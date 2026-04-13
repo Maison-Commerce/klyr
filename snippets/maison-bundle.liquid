@@ -25,6 +25,16 @@
   assign tier_count = block.settings.tier_count | default: 3
   assign show_single_tiers = block.settings.show_single_tiers | default: false
   assign bundle_post_atc_upsell = block.settings.bundle_post_atc_upsell
+
+  assign sub_benefit_1 = block.settings.sub_benefit_1 | default: 'Save <strong>[save_percent]%</strong> on all deliveries' | replace: '[save_percent]', save_percent
+  assign sub_benefit_2 = block.settings.sub_benefit_2 | default: 'No commitment - modify or cancel anytime'
+  assign sub_benefit_3 = block.settings.sub_benefit_3 | default: 'Free shipping, always'
+  assign sub_benefit_4 = block.settings.sub_benefit_4 | default: 'Out of stock protection for consistent result'
+
+  assign unit_singular = block.settings.unit_label_singular | default: 'bottle'
+  assign unit_plural = block.settings.unit_label_plural | default: 'bottles'
+  assign per_label = block.settings.per_label | default: '/bottle'
+  assign best_value_text = block.settings.best_value_text | default: 'Best Value'
 -%}
 
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -82,15 +92,15 @@
               @click="selectSingleQty(i)"
             >
               <div class="mb-qty-option__left">
-                <span class="mb-qty-option__text" x-text="opt.qty + (opt.qty === 1 ? ' bottle' : ' bottles')"></span>
+                <span class="mb-qty-option__text" x-text="opt.qty + ' ' + (opt.qty === 1 ? unitSingular : unitPlural)"></span>
                 <span class="mb-qty-option__discount" x-show="opt.free > 0" x-text="opt.free + ' FREE'"></span>
               </div>
               <div class="mb-qty-option__right">
                 <span class="mb-qty-option__compare" x-show="opt.originalPrice > 0" x-text="formatMoney(opt.originalPrice)"></span>
                 <span class="mb-qty-option__price" x-text="formatMoney(opt.price)"></span>
-                <span class="mb-qty-option__per">/bottle</span>
+                <span class="mb-qty-option__per">{{ per_label }}</span>
               </div>
-              <span class="mb-qty-option__best-value" x-show="opt.best">Best Value</span>
+              <span class="mb-qty-option__best-value" x-show="opt.best">{{ best_value_text }}</span>
             </div>
           </template>
         </div>
@@ -175,26 +185,52 @@
     <div class="mb-tab-panel" :class="{ 'mb-tab-panel--hidden': tab !== 'subscribe' }">
 
       <!-- Subscribe Benefits -->
-      <div class="mb-sub-benefits">
-        <div class="mb-sub-benefits__grid">
-          <div class="mb-sub-benefit">
-            <svg class="mb-sub-benefit__check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.5 3.5L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <span>Save <strong>{{ save_percent }}%</strong> on all deliveries</span>
-          </div>
-          <div class="mb-sub-benefit">
-            <svg class="mb-sub-benefit__check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.5 3.5L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <span>No commitment - modify or cancel anytime</span>
-          </div>
-          <div class="mb-sub-benefit">
-            <svg class="mb-sub-benefit__check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.5 3.5L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <span>Free shipping, always</span>
-          </div>
-          <div class="mb-sub-benefit">
-            <svg class="mb-sub-benefit__check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.5 3.5L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <span>Out of stock protection for consistent result</span>
+      {% if sub_benefit_1 != blank or sub_benefit_2 != blank or sub_benefit_3 != blank or sub_benefit_4 != blank %}
+        <div class="mb-sub-benefits">
+          <div class="mb-sub-benefits__grid">
+            {% if sub_benefit_1 != blank %}
+              <div class="mb-sub-benefit">
+                {% if block.settings.sub_benefit_icon_1 %}
+                  <img class="mb-sub-benefit__check" src="{{ block.settings.sub_benefit_icon_1 | image_url: width: 32 }}" alt="" width="16" height="16" loading="lazy">
+                {% else %}
+                  <svg class="mb-sub-benefit__check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.5 3.5L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                {% endif %}
+                <span>{{ sub_benefit_1 }}</span>
+              </div>
+            {% endif %}
+            {% if sub_benefit_2 != blank %}
+              <div class="mb-sub-benefit">
+                {% if block.settings.sub_benefit_icon_2 %}
+                  <img class="mb-sub-benefit__check" src="{{ block.settings.sub_benefit_icon_2 | image_url: width: 32 }}" alt="" width="16" height="16" loading="lazy">
+                {% else %}
+                  <svg class="mb-sub-benefit__check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.5 3.5L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                {% endif %}
+                <span>{{ sub_benefit_2 }}</span>
+              </div>
+            {% endif %}
+            {% if sub_benefit_3 != blank %}
+              <div class="mb-sub-benefit">
+                {% if block.settings.sub_benefit_icon_3 %}
+                  <img class="mb-sub-benefit__check" src="{{ block.settings.sub_benefit_icon_3 | image_url: width: 32 }}" alt="" width="16" height="16" loading="lazy">
+                {% else %}
+                  <svg class="mb-sub-benefit__check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.5 3.5L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                {% endif %}
+                <span>{{ sub_benefit_3 }}</span>
+              </div>
+            {% endif %}
+            {% if sub_benefit_4 != blank %}
+              <div class="mb-sub-benefit">
+                {% if block.settings.sub_benefit_icon_4 %}
+                  <img class="mb-sub-benefit__check" src="{{ block.settings.sub_benefit_icon_4 | image_url: width: 32 }}" alt="" width="16" height="16" loading="lazy">
+                {% else %}
+                  <svg class="mb-sub-benefit__check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.5 3.5L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                {% endif %}
+                <span>{{ sub_benefit_4 }}</span>
+              </div>
+            {% endif %}
           </div>
         </div>
-      </div>
+      {% endif %}
 
       <div class="mb-sub-section-label">Choose your quantity</div>
       <div class="mb-qty-selector">
@@ -205,16 +241,16 @@
             @click="selectSubQty(i)"
           >
             <div class="mb-qty-option__left">
-              <span class="mb-qty-option__text" x-text="opt.qty + (opt.qty === 1 ? ' bottle' : ' bottles')"></span>
+              <span class="mb-qty-option__text" x-text="opt.qty + ' ' + (opt.qty === 1 ? unitSingular : unitPlural)"></span>
               <span class="mb-qty-option__discount" x-show="opt.free > 0" x-text="opt.free + ' FREE'"></span>
               <span class="mb-qty-option__discount" x-show="opt.free === 0 && opt.save > 0" x-text="'-' + opt.save + '%'"></span>
             </div>
             <div class="mb-qty-option__right">
               <span class="mb-qty-option__compare" x-text="formatMoney(opt.originalPrice)"></span>
               <span class="mb-qty-option__price" x-text="formatMoney(opt.price)"></span>
-              <span class="mb-qty-option__per">/bottle</span>
+              <span class="mb-qty-option__per">{{ per_label }}</span>
             </div>
-            <span class="mb-qty-option__best-value" x-show="opt.best">Best Value</span>
+            <span class="mb-qty-option__best-value" x-show="opt.best">{{ best_value_text }}</span>
           </div>
         </template>
       </div>
@@ -271,25 +307,37 @@
     <div class="mb-trust-badges">
       {% if trust_1 != blank %}
         <div class="mb-trust-badge">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
-          </svg>
+          {% if block.settings.trust_badge_icon_1 %}
+            <img class="mb-trust-badge__icon" src="{{ block.settings.trust_badge_icon_1 | image_url: width: 32 }}" alt="" width="16" height="16" loading="lazy">
+          {% else %}
+            <svg class="mb-trust-badge__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+            </svg>
+          {% endif %}
           {{ trust_1 }}
         </div>
       {% endif %}
       {% if trust_2 != blank %}
         <div class="mb-trust-badge">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 8.5l3.5 3.5L13 5"/>
-          </svg>
+          {% if block.settings.trust_badge_icon_2 %}
+            <img class="mb-trust-badge__icon" src="{{ block.settings.trust_badge_icon_2 | image_url: width: 32 }}" alt="" width="16" height="16" loading="lazy">
+          {% else %}
+            <svg class="mb-trust-badge__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 8.5l3.5 3.5L13 5"/>
+            </svg>
+          {% endif %}
           {{ trust_2 }}
         </div>
       {% endif %}
       {% if trust_3 != blank %}
         <div class="mb-trust-badge">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 8.5l3.5 3.5L13 5"/>
-          </svg>
+          {% if block.settings.trust_badge_icon_3 %}
+            <img class="mb-trust-badge__icon" src="{{ block.settings.trust_badge_icon_3 | image_url: width: 32 }}" alt="" width="16" height="16" loading="lazy">
+          {% else %}
+            <svg class="mb-trust-badge__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 8.5l3.5 3.5L13 5"/>
+            </svg>
+          {% endif %}
           {{ trust_3 }}
         </div>
       {% endif %}
@@ -420,6 +468,8 @@
     {%- endfor -%}
 
     const defaultShade = Math.min(1, variants.length - 1);
+    const unitSingular = {{ unit_singular | json }};
+    const unitPlural = {{ unit_plural | json }};
 
     return {
       tab: '{{ block.settings.default_tab | default: "single" }}',
@@ -427,6 +477,8 @@
       variants,
       subOptions,
       singleOptions,
+      unitSingular,
+      unitPlural,
 
       formatMoney(cents) {
         return '$' + (cents / 100).toFixed(2).replace(/\.00$/, '');
@@ -668,7 +720,7 @@
   }
   .mb-sub-benefit {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 8px;
     font-size: 14px;
     color: var(--textPrimaryColor, #231c19);
@@ -678,7 +730,8 @@
   .mb-sub-benefit__check {
     color: var(--textPrimaryColor, #231c19);
     flex-shrink: 0;
-    margin-top: 1px;
+    width: 16px;
+    height: 16px;
   }
   .mb-sub-benefit strong {
     font-family: var(--swiss721BTMedium), sans-serif;
@@ -893,7 +946,7 @@
   .mb-trust-badges {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 8px;
     margin-bottom: 16px;
   }
@@ -906,7 +959,7 @@
     font-family: var(--swiss721BTLight), sans-serif;
     line-height: 1.4;
   }
-  .mb-trust-badge svg { flex-shrink: 0; }
+  .mb-trust-badge__icon { flex-shrink: 0; width: 16px; height: 16px; }
 
   /* Mobile */
   @media screen and (max-width: 1023px) {
