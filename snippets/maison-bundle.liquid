@@ -103,8 +103,8 @@
               @click="selectSingleQty(i)"
             >
               <div class="mb-qty-option__left">
-                <span class="mb-qty-option__text" x-text="opt.qty + ' ' + (opt.qty === 1 ? unitSingular : unitPlural)"></span>
-                <span class="mb-qty-option__discount" x-show="opt.free > 0" x-text="opt.free + ' ' + freeLabel"></span>
+                <span class="mb-qty-option__text" x-text="opt.text || (opt.qty + ' ' + (opt.qty === 1 ? unitSingular : unitPlural))"></span>
+                <span class="mb-qty-option__discount" x-show="opt.discountText || opt.free > 0" x-text="opt.discountText || (opt.free + ' ' + freeLabel)"></span>
               </div>
               <div class="mb-qty-option__right">
                 <span class="mb-qty-option__compare" x-show="opt.originalPrice > 0" x-text="formatMoney(opt.originalPrice)"></span>
@@ -252,9 +252,9 @@
             @click="selectSubQty(i)"
           >
             <div class="mb-qty-option__left">
-              <span class="mb-qty-option__text" x-text="opt.qty + ' ' + (opt.qty === 1 ? unitSingular : unitPlural)"></span>
-              <span class="mb-qty-option__discount" x-show="opt.free > 0" x-text="opt.free + ' ' + freeLabel"></span>
-              <span class="mb-qty-option__discount" x-show="opt.free === 0 && opt.save > 0" x-text="'-' + opt.save + '%'"></span>
+              <span class="mb-qty-option__text" x-text="opt.text || (opt.qty + ' ' + (opt.qty === 1 ? unitSingular : unitPlural))"></span>
+              <span class="mb-qty-option__discount" x-show="opt.discountText || opt.free > 0" x-text="opt.discountText || (opt.free + ' ' + freeLabel)"></span>
+              <span class="mb-qty-option__discount" x-show="!opt.discountText && opt.free === 0 && opt.save > 0" x-text="'-' + opt.save + '%'"></span>
             </div>
             <div class="mb-qty-option__right">
               <span class="mb-qty-option__compare" x-text="formatMoney(opt.originalPrice)"></span>
@@ -396,6 +396,8 @@
           {% assign sp_key = 'tier_' | append: i | append: '_selling_plan' %}
           {% assign attr_key_key = 'tier_' | append: i | append: '_attr_key' %}
           {% assign attr_val_key = 'tier_' | append: i | append: '_attr_value' %}
+          {% assign text_key = 'tier_' | append: i | append: '_text' %}
+          {% assign discount_text_key = 'tier_' | append: i | append: '_discount_text' %}
           {% if i <= tier_count %}
           {
             qty: {{ block.settings[qty_key] | default: i }},
@@ -405,7 +407,9 @@
             deliveryMonths: {{ block.settings[months_key] | default: i }},
             sellingPlan: '{{ block.settings[sp_key] | default: "" }}' || null,
             attrKey: {{ block.settings[attr_key_key] | default: "" | json }},
-            attrValue: {{ block.settings[attr_val_key] | default: "" | json }}
+            attrValue: {{ block.settings[attr_val_key] | default: "" | json }},
+            text: {{ block.settings[text_key] | default: "" | json }},
+            discountText: {{ block.settings[discount_text_key] | default: "" | json }}
           },
           {% endif %}
         {% endfor %}
@@ -429,6 +433,8 @@
         best: t.best,
         attrKey: t.attrKey,
         attrValue: t.attrValue,
+        text: t.text,
+        discountText: t.discountText,
         discount: hasDiscount ? Math.round((t.free / t.qty) * 100) : 0,
         price,
         originalPrice: hasDiscount ? originalPrice : 0
@@ -446,6 +452,8 @@
         free: t.free,
         save: t.subSave,
         best: t.best,
+        text: t.text,
+        discountText: t.discountText,
         deliveryMonths: t.deliveryMonths,
         sellingPlan: t.sellingPlan,
         attrKey: t.attrKey,
