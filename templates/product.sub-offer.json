@@ -645,7 +645,7 @@
                 "tier_1_attr_key": "_bundle_tier",
                 "tier_1_attr_value": "true",
                 "tier_2_text": "2 Bottles",
-                "tier_2_discount_text": "BOGO",
+                "tier_2_discount_text": "BUY 1, GET 1 FREE",
                 "tier_2_qty": 2,
                 "tier_2_free": 1,
                 "tier_2_save": 10,
