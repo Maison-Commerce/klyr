@@ -26,10 +26,7 @@
   assign show_single_tiers = block.settings.show_single_tiers | default: false
   assign bundle_post_atc_upsell = block.settings.bundle_post_atc_upsell
 
-  assign sub_benefit_1 = block.settings.sub_benefit_1 | default: 'Save <strong>[save_percent]%</strong> on all deliveries' | replace: '[save_percent]', save_percent
-  assign sub_benefit_2 = block.settings.sub_benefit_2 | default: 'No commitment - modify or cancel anytime'
-  assign sub_benefit_3 = block.settings.sub_benefit_3 | default: 'Free shipping, always'
-  assign sub_benefit_4 = block.settings.sub_benefit_4 | default: 'Out of stock protection for consistent result'
+  
 
   assign unit_singular = block.settings.unit_label_singular | default: 'bottle'
   assign unit_plural = block.settings.unit_label_plural | default: 'bottles'
