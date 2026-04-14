@@ -948,7 +948,8 @@
     transition: border-color 0.2s ease;
   }
   .mb-swatch:hover { border-color: rgba(35, 28, 25, .25); }
-  .mb-swatch--selected { border: 1px solid var(--textPrimaryColor,rgba(35, 28, 25, 0.47)) !important; }
+  {% comment %} .mb-swatch--selected { border: 1px solid var(--textPrimaryColor,rgba(35, 28, 25, 0.47)) !important; } {% endcomment %}
+  .mb-swatch--selected { outline: 1px solid rgba(35, 28, 25, 0.4) !important; border: none !important; }
 
   /* Add to Cart */
   .mb-add-to-cart {
