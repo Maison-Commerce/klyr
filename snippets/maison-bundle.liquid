@@ -940,7 +940,7 @@
   .mb-find-shade:hover { opacity: .7; }
   .mb-swatches { display: flex; gap: 4px; flex-wrap: wrap; }
   .mb-swatch {
-    width: 28px; height: 28px; cursor: pointer;
+    width: 24px; height: 24px; cursor: pointer;
     padding: 4px;
     border: .5px solid transparent;
     background-clip: content-box;
@@ -948,7 +948,7 @@
     transition: border-color 0.2s ease;
   }
   .mb-swatch:hover { border-color: rgba(35, 28, 25, .25); }
-  .mb-swatch--selected { border: 1.5px solid var(--textPrimaryColor, #231c19) !important; }
+  .mb-swatch--selected { padding: 3px; border: .5px solid var(--textPrimaryColor,rgba(35, 28, 25, 0.47)) !important; }
 
   /* Add to Cart */
   .mb-add-to-cart {
