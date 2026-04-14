@@ -513,8 +513,8 @@
         return '$' + (cents / 100).toFixed(2).replace(/\.00$/, '');
       },
       singleShades: Array.from({ length: 4 }, () => defaultShade),
-      singleQty: 0,
-      subQty: 0,
+      singleQty: 1,
+      subQty: 1,
       subShades: Array.from({ length: 4 }, () => defaultShade),
 
       switchTab(t) { this.tab = t; },
