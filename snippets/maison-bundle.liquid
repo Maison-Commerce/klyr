@@ -109,7 +109,7 @@
               <div class="mb-qty-option__right">
                 <span class="mb-qty-option__compare" x-show="opt.originalPrice > 0" x-text="formatMoney(opt.originalPrice)"></span>
                 <span class="mb-qty-option__price" x-text="formatMoney(opt.price)"></span>
-                <span class="mb-qty-option__per">{{ per_label }}</span>
+                {% comment %} <span class="mb-qty-option__per">{{ per_label }}</span> {% endcomment %}
               </div>
               <span class="mb-qty-option__best-value" x-show="opt.best">{{ best_value_text }}</span>
             </div>
