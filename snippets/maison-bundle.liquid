@@ -253,8 +253,10 @@
           >
             <div class="mb-qty-option__left">
               <span class="mb-qty-option__text" x-text="opt.text || (opt.qty + ' ' + (opt.qty === 1 ? unitSingular : unitPlural))"></span>
-              <span class="mb-qty-option__discount" x-show="opt.discountText || opt.free > 0" x-text="opt.discountText || (opt.free + ' ' + freeLabel)"></span>
-              <span class="mb-qty-option__discount" x-show="!opt.discountText && opt.free === 0 && opt.save > 0" x-text="'-' + opt.save + '%'"></span>
+              {% comment %} <span class="mb-qty-option__discount" x-show="opt.discountText || opt.free > 0" x-text="opt.discountText || (opt.free + ' ' + freeLabel)"></span>
+              <span class="mb-qty-option__discount" x-show="!opt.discountText && opt.free === 0 && opt.save > 0" x-text="'-' + opt.save + '%'"></span> {% endcomment %}
+              <span class="mb-qty-option__discount" x-show="i > 0 && (opt.discountText || opt.free > 0)" x-text="opt.discountText || (opt.free + ' ' + freeLabel)"></span>
+              <span class="mb-qty-option__discount" x-show="i > 0 && (!opt.discountText && opt.free === 0 && opt.save > 0)" x-text="'-' + opt.save + '%'"></span>
             </div>
             <div class="mb-qty-option__right">
               <span class="mb-qty-option__compare" x-text="formatMoney(opt.originalPrice)"></span>
