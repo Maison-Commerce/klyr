@@ -580,7 +580,7 @@
                   "name": "Icon with Text",
                   "settings": {
                     "custom_icon": "shopify://shop_images/Dot_1.svg",
-                    "text": "Invisible coverage, natural look",
+                    "text": "Covers Redness, Acne & Dark Circles Instantly",
                     "align_center": true
                   },
                   "blocks": {}
@@ -590,7 +590,7 @@
                   "name": "Icon with Text",
                   "settings": {
                     "custom_icon": "shopify://shop_images/Dot_1.svg",
-                    "text": "Enriched with skin-improving ingredients",
+                    "text": "Sweat- and Rainproof during 24H+",
                     "align_center": true
                   },
                   "blocks": {}
@@ -600,7 +600,7 @@
                   "name": "Icon with Text",
                   "settings": {
                     "custom_icon": "shopify://shop_images/Dot_1.svg",
-                    "text": "Effortless application, made for men",
+                    "text": "Looks Like Real Skin, 100% Invisible",
                     "align_center": true
                   },
                   "blocks": {}
@@ -683,20 +683,6 @@
               },
               "blocks": {}
             },
-            "custom_promo_qy3Wq9": {
-              "type": "custom-promo",
-              "name": "Custom Promo Banner",
-              "settings": {
-                "banner_title": "SPRING OFFER | BOGO SALE  🌱",
-                "banner_subtitle": "<p>Add 2 to cart. 1 is free automatically.</p>",
-                "background_color": "#231c190f",
-                "title_color": "#231c19",
-                "subtitle_color": "#231c19",
-                "margin_top": 0,
-                "margin_bottom": 0
-              },
-              "blocks": {}
-            },
             "custom_bought_with_HLqpNP": {
               "type": "custom-bought-with",
               "name": "Custom Often Bought",
@@ -720,33 +706,316 @@
               },
               "blocks": {}
             },
-            "product_tabs_GtVbFa": {
-              "type": "product-tabs",
-              "name": "Product Tabs",
+            "accordion_8RHrCh": {
+              "type": "accordion",
+              "name": "t:names.accordion",
               "settings": {
-                "tab1_title": "",
-                "tab1_content": "",
-                "tab2_title": "Details",
-                "tab2_content": "{% if localization.language.iso_code == 'pt-PT' or localization.language.iso_code == 'pt-BR' %}\n  <p><strong>A forma de parecer mais fresco, mais nítido e mais confiante.</strong></p>\n  <p>Cobre instantaneamente olheiras, vermelhidão, acne e imperfeições; combinando perfeitamente com o seu tom de pele natural para que ninguém perceba que você está usando. Feito para a pele masculina, aplica-se em segundos, não tem peso e mantém você com a melhor aparência o dia todo.</p>\n{% else %}\n  <p><strong>An effortless upgrade to your face.</strong></p>\n  <p>Concealing Cream+ immediately covers dark circles, redness, and spots. It adapts to your skin tone, which means it covers blemishes without anyone noticing you're wearing anything.</p>\n{% endif %}",
-                "tab3_title": "How to Use",
-                "tab3_content": "{% if localization.language.iso_code == 'pt-PT' or localization.language.iso_code == 'pt-BR' %}\n  <p>Como usar o Concealing Cream+</p>\n  <ul>\n    <li>\n      <h5>1 Prepare sua pele</h5>\n      <span>Aplique seu hidratante ou creme facial habitual para criar uma base lisa.</span>\n    </li>\n    <li>\n      <h5>2 Aplique nas áreas alvo</h5>\n      <span>Dispense uma pequena quantidade e aplique em olheiras, vermelhidão, acne ou imperfeições.</span>\n    </li>\n    <li>\n      <h5>3 Misture perfeitamente</h5>\n      <span>Use as pontas dos dedos ou a <strong>Concealing Sponge+</strong> para misturar suavemente até ficar invisível.</span>\n    </li>\n    <li>\n      <h5>4 Adicione se necessário</h5>\n      <span>Adicione um pouco mais nas áreas problemáticas para cobertura extra sem perder o visual natural.</span>\n    </li>\n  </ul>\n{% else %}\n  <p>How to use Concealing Cream+</p>\n  <ul>\n    <li>\n      <h5>1 Prep your skin</h5>\n      <span>Apply moisturizer or <a href=\"https://klyrmen.com/products/daycream\"><strong><u>daycream</u>+</strong></a> to create a smooth base.</span>\n    </li>\n    <li>\n      <h5>2 Apply to target areas</h5>\n      <span>Dispense a small amount and dab onto dark circles, redness, acne, or blemishes.</span>\n    </li>\n    <li>\n      <h5>3 Blend seamlessly</h5>\n      <span>Use fingertips or the <a href=\"https://klyrmen.com/products/concealing-sponge\"><strong><u>Concealing Sponge+</u></strong></a> to gently blend until invisible.</span>\n    </li>\n    <li>\n      <h5>4 Build if needed</h5>\n      <span>Add a little more on problem spots for extra coverage without losing the natural look.</span>\n    </li>\n  </ul>\n{% endif %}",
-                "tab4_title": "Risk-Free Trial",
-                "tab4_content": "{% if localization.language.iso_code == 'pt-PT' or localization.language.iso_code == 'pt-BR' %}\n  <p>Oferecemos uma Garantia de Devolução do Dinheiro de 30 Dias no Concealing Cream+ para que você possa testá-lo sem nenhum risco. Se o tom não estiver certo, uma nova cor será enviada imediatamente ou você pode obter um reembolso total sem perguntas.</p>\n{% else %}\n  <p>We offer a 30-Day Money-Back Guarantee on Concealing Cream+ so you can test it without any risk. If the shade isn't right, a new color will be sent straight away or you can get a full refund with no questions asked.</p>\n{% endif %}",
-                "tab5_title": "Shipping",
-                "tab5_content": "{% if localization.language.iso_code == 'pt-PT' or localization.language.iso_code == 'pt-BR' %}\n  <p>Envio grátis a partir de {%- render 'shipping-threshold-loader'-%}.</p>\n  <p>Por favor, considere os seguintes prazos de envio:</p>\n  <ul>\n    <li>Envio padrão (4–7 dias úteis) {{ standard_rate_cents | money_with_currency }}</li>\n    <li>Envio expresso (3–6 dias úteis) {{ express_rate_cents | money_with_currency }}</li>\n  </ul>\n  <p>Tempo de processamento: 1 dia útil. Não serão cobradas taxas ou tarifas de importação adicionais.</p>\n{% else %}\n  <p>Free shipping from {%- render 'shipping-threshold-loader'-%}.</p>\n  <p>Please allow the following shipping times:</p>\n  <ul>\n    <li>Standard shipping (4–7 business days) {{ standard_rate_cents | money_with_currency }}</li>\n    <li>Express shipping (3–6 business days) {{ express_rate_cents | money_with_currency }}</li>\n  </ul>\n  <p>Processing time: 1 business day. No additional import duties or tariffs will be imposed.</p>\n{% endif %}",
-                "tab6_title": "Ingredients",
-                "tab6_content": "{% if localization.language.iso_code == 'pt-PT' or localization.language.iso_code == 'pt-BR' %}\n  <p>Ingredientes Principais no Concealing Cream+</p>\n  <ul>\n    <li>\n      <h5>Dimeticona</h5>\n      <span>Cria um acabamento suave e uniforme enquanto reduz a aparência de poros e linhas finas.</span>\n    </li>\n    <li>\n      <h5>Pigmentos Naturais</h5>\n      <span>Fornecem cobertura natural que se adapta ao tom de pele, uniformizando vermelhidão e imperfeições.</span>\n    </li>\n    <li>\n      <h5>Acetato de Tocoferila (Vitamina E)</h5>\n      <span>Oferece cuidado antioxidante e apoia a pele para uma sensação saudável e confortável.</span>\n    </li>\n  </ul>\n  <p>Lista completa de ingredientes:</p>\n  <p>\n  Water, Cyclopentasiloxane, Propylene Glycol, Ethylhexyl Palmitate, Isododecane, \n  Hydrogenated Polydecene, Butylene Glycol, Silica, Sorbitan Sesquioleate, Dimethicone, \n  Steareth-21, Chlorphenesin, Tocopheryl Acetate, Fragrance, o-Cymene-5-Alcohol, BHT. \n  Pode conter: Titanium Dioxide (CI 77891), Iron Oxides (CI 77491, CI 77492, CI 77499).\n  </p>\n{% else %}\n  <p>Key Ingredients in Concealing Cream+</p>\n  <ul>\n    <li>\n      <h5>Dimethicone</h5>\n      <span>Creates a smooth, even finish while reducing the look of pores and fine lines.</span>\n    </li>\n    <li>\n      <h5>Natural Pigments</h5>\n      <span>Provide natural coverage that adapts to skin tone, evening out redness and imperfections.</span>\n    </li>\n    <li>\n      <h5>Tocopheryl Acetate (Vitamin E)</h5>\n      <span>Delivers antioxidant care and supports skin for a healthy, comfortable feel.</span>\n    </li>\n  </ul>\n  <p>Full ingredient list:</p>\n  <p>\n  Water, Cyclopentasiloxane, Propylene Glycol, Ethylhexyl Palmitate, Isododecane, \n  Hydrogenated Polydecene, Butylene Glycol, Silica, Sorbitan Sesquioleate, Dimethicone, \n  Steareth-21, Chlorphenesin, Tocopheryl Acetate, Fragrance, o-Cymene-5-Alcohol, BHT. \n  May contain: Titanium Dioxide (CI 77891), Iron Oxides (CI 77491, CI 77492, CI 77499).\n  </p>\n{% endif %}"
+                "icon": "caret",
+                "dividers": true,
+                "type_preset": "h6",
+                "inherit_color_scheme": true,
+                "color_scheme": "",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
               },
-              "blocks": {}
+              "blocks": {
+                "accordion_row_HpfQnL": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "What is it?",
+                    "open_by_default": true,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_DCHRgK": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Concealing Cream+ is designed for men that instantly covers redness, acne and dark circles. Blends seamlessly into your skin for a natural, undetectable finish.</p>",
+                        "width": "100%",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "rte",
+                        "font": "var(--font-body--family)",
+                        "font_size": "1rem",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "color": "var(--color-foreground)",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_DCHRgK"
+                  ]
+                },
+                "accordion_row_93DkxC": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Will it look obvious?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_ciR34D": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>No. Klyr uses adaptive pigments that match your skin tone, making it invisible on the skin. It looks like your skin, just clearer.</p>",
+                        "width": "100%",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "rte",
+                        "font": "var(--font-body--family)",
+                        "font_size": "1rem",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "color": "var(--color-foreground)",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_ciR34D"
+                  ]
+                },
+                "accordion_row_DGzB7Q": {
+                  "type": "_accordion-row",
+                  "name": "t:names.accordion_row",
+                  "settings": {
+                    "heading": "How do I pick the right shade?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_kENJcL": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Take our quiz to find your ideal match <a href=\"#open-quiz-tools/perfect-product-finder/discover-your-perfect-shade\" title=\"#open-quiz-tools/perfect-product-finder/discover-your-perfect-shade\"><span style=\"text-decoration:underline\"><strong>Find my shade</strong></span></a></p><p>Klyr uses adaptive pigment technology that adjusts to your skin tone, so each shade covers a wider range. So you do not need to worry about picking the wrong color. </p>",
+                        "width": "100%",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "rte",
+                        "font": "var(--font-body--family)",
+                        "font_size": "1rem",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "color": "var(--color-foreground)",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_kENJcL"
+                  ]
+                },
+                "accordion_row_VmneqP": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "How to apply?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_WxrDkQ": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p><strong>1. Prep your skin</strong><br/>Apply moisturizer or DayCream+ to create a smooth, even base.</p><p><strong>2. Apply to target areas</strong><br/>Dispense a small amount and dab onto dark circles, redness, acne, or blemishes.</p><p><strong>3. Blend seamlessly</strong><br/>Use your fingertips or the Concealing Sponge+ to gently blend until it looks like real skin.</p><p><strong>4. Build if needed</strong><br/>Add a little more on problem areas for extra coverage, while keeping a natural finish.</p>",
+                        "width": "100%",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "rte",
+                        "font": "var(--font-body--family)",
+                        "font_size": "1rem",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "color": "var(--color-foreground)",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_WxrDkQ"
+                  ]
+                },
+                "accordion_row_iFehrh": {
+                  "type": "_accordion-row",
+                  "name": "t:names.accordion_row",
+                  "settings": {
+                    "heading": "Shipping & Returns",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "custom_liquid_WPWMhR": {
+                      "type": "custom-liquid",
+                      "name": "t:names.custom_liquid",
+                      "settings": {
+                        "custom_liquid": "<p>Free shipping from {%- render 'shipping-threshold-loader'-%}.</p>\n<br>"
+                      },
+                      "blocks": {}
+                    },
+                    "text_y4tNVh": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Please allow the following shipping times:</p><p>Standard shipping (4–7 business days)</p><p>Express shipping (3–6 business days)</p>",
+                        "width": "100%",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "rte",
+                        "font": "var(--font-body--family)",
+                        "font_size": "1rem",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "color": "var(--color-foreground)",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    },
+                    "text_YGxQ6F": {
+                      "type": "text",
+                      "name": "t:names.text",
+                      "settings": {
+                        "text": "<p><strong>Triple Guarantee:</strong></p><p>30-day money back<br/>Wrong shade? Free swap<br/>Lost package? Free replacement</p><p><strong>Returns:</strong> Email us for returns. Full refund at support@klyrmen.com</p>",
+                        "width": "fit-content",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "rte",
+                        "font": "var(--font-body--family)",
+                        "font_size": "1rem",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "color": "var(--color-foreground)",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 23,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "custom_liquid_WPWMhR",
+                    "text_y4tNVh",
+                    "text_YGxQ6F"
+                  ]
+                },
+                "accordion_row_jHYGG4": {
+                  "type": "_accordion-row",
+                  "name": "t:names.accordion_row",
+                  "settings": {
+                    "heading": "Ingredients",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_BVqgwc": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Water, Cyclopentasiloxane, Propylene Glycol, Ethylhexyl Palmitate, Isododecane, Hydrogenated Polydecene, Butylene Glycol, Silica, Sorbitan Sesquioleate, Dimethicone, Steareth-21, Chlorphenesin, Tocopheryl Acetate, Fragrance, o-Cymene-5-Alcohol, BHT. </p><p>NETTO CONT. 15ML / 0.5 FL OZ</p>",
+                        "width": "100%",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "rte",
+                        "font": "var(--font-body--family)",
+                        "font_size": "1rem",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "color": "var(--color-foreground)",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_BVqgwc"
+                  ]
+                }
+              },
+              "block_order": [
+                "accordion_row_HpfQnL",
+                "accordion_row_93DkxC",
+                "accordion_row_DGzB7Q",
+                "accordion_row_VmneqP",
+                "accordion_row_iFehrh",
+                "accordion_row_jHYGG4"
+              ]
             },
             "video_slider_gjkgTx": {
               "type": "_video-slider",
               "name": "Video Slider",
               "settings": {
                 "title": "LOVED BY 50.000+ HAPPY CUSTOMERS",
-                "video_1": "shopify://files/videos/H1_DAVID_UGC_KLYR.mp4",
-                "video_2": "shopify://files/videos/H2_KLYR_ACNE_UGC_SAM_V2.mp4",
-                "video_3": "shopify://files/videos/H3_GUIDO_DARK_CIRCLES_UGC.mp4"
+                "video_1": "shopify://files/videos/NO VO - Concealing Cream - Will it look obvious - Split face_@Roman Wallace_March Sprint 2_Invisible_Product-aware_Video_YoungMiddle-aged Men (25 - 50)_Editor Only.mp4",
+                "video_2": "shopify://files/videos/NO VO - Concealing Cream - How to get rid of redness - Sam - Overlay fast paced_@Roman Wallace_March Sprint 1_Redness_Problem-aware_Video_YoungMiddle-aged Men (25 - 50)_Editor Only.mp4",
+                "video_3": "shopify://files/videos/1cf8fd0c-a9e1-4672-b2f2-6cb8ed2ea8a3.mp4"
               },
               "blocks": {}
             },
@@ -803,9 +1072,8 @@
             "group_icgrde",
             "group_JGwT3D",
             "maison_bundle_bcYgcb",
-            "custom_promo_qy3Wq9",
             "custom_bought_with_HLqpNP",
-            "product_tabs_GtVbFa",
+            "accordion_8RHrCh",
             "video_slider_gjkgTx",
             "often_bought_with_Cerpb9",
             "text_aEtTtq"
