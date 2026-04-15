@@ -627,7 +627,7 @@
                 "default_tab": "subscribe",
                 "tier_count": 3,
                 "sub_benefit_1": "Save <strong>[save_percent]%</strong> on all deliveries",
-                "sub_benefit_2": "No commitment - modify or cancel anytime",
+                "sub_benefit_2": "<strong>No commitment</strong> - modify or cancel anytime",
                 "sub_benefit_3": "",
                 "sub_benefit_4": "",
                 "unit_label_singular": "bottle",
