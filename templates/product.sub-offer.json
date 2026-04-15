@@ -526,7 +526,7 @@
                   "settings": {
                     "show_tag": true,
                     "badge": "FOR MEN",
-                    "show_short_info": true,
+                    "show_short_info": false,
                     "subtitle": "15 ml | Conceals dark circles, redness, acne & blemishes"
                   },
                   "blocks": {}
