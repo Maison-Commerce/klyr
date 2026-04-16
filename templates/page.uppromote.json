@@ -12,13 +12,17 @@
     "main": {
       "type": "main-page",
       "blocks": {
-        "parcel_panel_app_BVH7YC": {
-          "type": "shopify://apps/parcelwill-parcel-panel/blocks/app/fc785c3f-90e0-4c98-a20c-7cde9ba5e4b5",
-          "settings": {}
+        "uppromote_affiliate_customer_referral_landing_WfytwY": {
+          "type": "shopify://apps/uppromote-affiliate/blocks/customer-referral-landing/64c32457-930d-4cb9-9641-e24c0d9cf1f4",
+          "settings": {
+            "section_corners": 0,
+            "section_top_margin": 20,
+            "section_bottom_margin": 20
+          }
         }
       },
       "block_order": [
-        "parcel_panel_app_BVH7YC"
+        "uppromote_affiliate_customer_referral_landing_WfytwY"
       ],
       "custom_css": [
         "body {font-family: var(--swiss721BTLight), sans-serif; font-size: inherit; font-weight: 400; color: var(--textPrimaryColor);}",
