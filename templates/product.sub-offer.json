@@ -624,7 +624,7 @@
                 "show_single_tiers": true,
                 "single_units": 2,
                 "bogo_badge_text": "BOGO SALE",
-                "default_tab": "single",
+                "default_tab": "subscribe",
                 "tier_count": 3,
                 "sub_benefit_1": "<strong>Save [save_percent]%</strong> on all deliveries",
                 "sub_benefit_2": "<strong>No commitment</strong> - modify or cancel anytime",
