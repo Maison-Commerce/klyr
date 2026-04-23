@@ -510,15 +510,8 @@
       monthPlural,
 
       formatMoney(cents) {
-  if (typeof Shopify !== 'undefined' && Shopify.formatMoney) {
-    return Shopify.formatMoney(cents, Shopify.money_format);
-  }
-  // Fallback: use the store's currency from the theme
-  const format = {{ shop.money_format | json }};
-  return format.replace('{{amount}}', (cents / 100).toFixed(2).replace(/\.00$/, ''))
-               .replace('{{amount_no_decimals}}', Math.round(cents / 100))
-               .replace('{{amount_with_comma_separator}}', (cents / 100).toFixed(2).replace('.', ','));
-},
+        return '$' + (cents / 100).toFixed(2).replace(/\.00$/, '');
+      },
       singleShades: Array.from({ length: 4 }, () => defaultShade),
       singleQty: 1,
       subQty: 1,
