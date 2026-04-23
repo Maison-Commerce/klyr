@@ -510,20 +510,8 @@
       monthPlural,
 
       formatMoney(cents) {
-  const amount = cents / 100;
-  const format = {{ shop.money_format | json }};
-  const rounded = Math.round(amount);
-  const withDecimals = amount.toFixed(2).replace('.', ',');
-  const withDecimalsDot = amount.toFixed(2);
-  const open = '{{';
-  const close = '}}';
-
-  return format
-    .replace(new RegExp(open + 'amount_with_comma_separator' + close, 'g'), withDecimals)
-    .replace(new RegExp(open + 'amount_no_decimals_with_comma_separator' + close, 'g'), rounded)
-    .replace(new RegExp(open + 'amount_no_decimals' + close, 'g'), rounded)
-    .replace(new RegExp(open + 'amount' + close, 'g'), withDecimalsDot);
-},
+        return '$' + (cents / 100).toFixed(2).replace(/\.00$/, '');
+      },
       singleShades: Array.from({ length: 4 }, () => defaultShade),
       singleQty: 1,
       subQty: 1,
