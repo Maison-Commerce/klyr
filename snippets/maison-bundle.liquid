@@ -512,11 +512,13 @@
       formatMoney(cents) {
   const amount = cents / 100;
   const format = {{ shop.money_format | json }};
-  const formatted = amount.toFixed(2).replace('.', ',');
-  return format.split('{{amount_with_comma_separator}}').join(formatted)
-               .split('{{amount_no_decimals_with_comma_separator}}').join(Math.round(amount))
-               .split('{{amount_no_decimals}}').join(Math.round(amount))
-               .split('{{amount}}').join(amount.toFixed(2));
+  const hasDecimals = amount % 1 !== 0;
+  const formatted = hasDecimals 
+    ? amount.toFixed(2).replace('.', ',')
+    : Math.round(amount).toString();
+  const key = 'amount_with_comma_separator';
+  const placeholder = '{' + '{' + key + '}' + '}';
+  return format.replace(placeholder, formatted);
 },
       singleShades: Array.from({ length: 4 }, () => defaultShade),
       singleQty: 1,
