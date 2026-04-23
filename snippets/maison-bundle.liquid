@@ -513,12 +513,17 @@
   const amount = cents / 100;
   const format = {{ shop.money_format | json }};
   const hasDecimals = amount % 1 !== 0;
-  const formatted = hasDecimals 
+  const formattedDecimal = amount.toFixed(2);
+  const formattedComma = hasDecimals 
     ? amount.toFixed(2).replace('.', ',')
     : Math.round(amount).toString();
-  const key = 'amount_with_comma_separator';
-  const placeholder = '{' + '{' + key + '}' + '}';
-  return format.replace(placeholder, formatted);
+  const formattedNoDecimal = Math.round(amount).toString();
+
+  return format
+    .replace('{' + '{amount_with_comma_separator}' + '}', formattedComma)
+    .replace('{' + '{amount_no_decimals_with_comma_separator}' + '}', formattedNoDecimal)
+    .replace('{' + '{amount_no_decimals}' + '}', formattedNoDecimal)
+    .replace('{' + '{amount}' + '}', formattedDecimal);
 },
       singleShades: Array.from({ length: 4 }, () => defaultShade),
       singleQty: 1,
