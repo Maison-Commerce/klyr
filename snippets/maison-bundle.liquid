@@ -515,12 +515,14 @@
   const rounded = Math.round(amount);
   const withDecimals = amount.toFixed(2).replace('.', ',');
   const withDecimalsDot = amount.toFixed(2);
-  
+  const open = '{{';
+  const close = '}}';
+
   return format
-    .replace(/{{\s*amount_with_comma_separator\s*}}/g, withDecimals)
-    .replace(/{{\s*amount_no_decimals_with_comma_separator\s*}}/g, rounded)
-    .replace(/{{\s*amount_no_decimals\s*}}/g, rounded)
-    .replace(/{{\s*amount\s*}}/g, withDecimalsDot);
+    .replace(new RegExp(open + 'amount_with_comma_separator' + close, 'g'), withDecimals)
+    .replace(new RegExp(open + 'amount_no_decimals_with_comma_separator' + close, 'g'), rounded)
+    .replace(new RegExp(open + 'amount_no_decimals' + close, 'g'), rounded)
+    .replace(new RegExp(open + 'amount' + close, 'g'), withDecimalsDot);
 },
       singleShades: Array.from({ length: 4 }, () => defaultShade),
       singleQty: 1,
