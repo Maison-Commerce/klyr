@@ -512,8 +512,8 @@
       formatMoney(cents) {
   const amount = cents / 100;
   const format = {{ shop.money_format | json }};
-  const hasDecimals = amount % 1 !== 0;
-  const formattedDecimal = amount.toFixed(2);
+  const hasDecimals = (cents % 100) !== 0;
+  const formattedDecimal = hasDecimals ? amount.toFixed(2) : Math.round(amount).toString();
   const formattedComma = hasDecimals 
     ? amount.toFixed(2).replace('.', ',')
     : Math.round(amount).toString();
