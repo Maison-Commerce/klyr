@@ -510,14 +510,11 @@
       monthPlural,
 
       formatMoney(cents) {
+  console.log('currency:', {{ shop.currency | json }});
+  console.log('locale:', '{{ shop.locale }}');
+  console.log('money_format:', {{ shop.money_format | json }});
   const amount = cents / 100;
-  const currency = {{ shop.currency | json }};
-  return new Intl.NumberFormat('{{ shop.locale }}', {
-    style: 'currency',
-    currency: currency,
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 2
-  }).format(amount);
+  return amount.toFixed(2);
 },
       singleShades: Array.from({ length: 4 }, () => defaultShade),
       singleQty: 1,
