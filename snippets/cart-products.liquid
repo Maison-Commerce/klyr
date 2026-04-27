@@ -1019,9 +1019,9 @@
                       {%- endfor -%}
                     </dl>
 
-                    {% if item.selling_plan_allocation %}
+                    {% comment %} {% if item.selling_plan_allocation %}
                       <p>{{ item.selling_plan_allocation.selling_plan.name }}</p>
-                    {% endif %}
+                    {% endif %} {% endcomment %}
                   {%- endif -%}
 
                   {% if item.line_level_discount_allocations.size > 0 %}
