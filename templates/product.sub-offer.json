@@ -158,8 +158,7 @@
               "type": "custom-review-stars",
               "name": "Custom Review Stars",
               "settings": {
-                "avg_rating": "4.6",
-                "total_rating": "1.397"
+                "jm_style": ""
               },
               "blocks": {}
             },
@@ -476,8 +475,7 @@
               "type": "custom-review-stars",
               "name": "Custom Review Stars",
               "settings": {
-                "avg_rating": "Rated 4.8 out of 5",
-                "total_rating": "645 reviews"
+                "jm_style": ""
               },
               "blocks": {}
             },
@@ -1381,35 +1379,21 @@
         "show_more_label": "show more"
       }
     },
-    "17593203199812c643": {
+    "blocks_VkPyiR": {
       "type": "_blocks",
       "blocks": {
-        "loox_reviews_loox_card_carousel_section_VqXXUP": {
-          "type": "shopify://apps/loox-reviews/blocks/loox-card-carousel-section/5c3b337f-fd14-4df5-b1d6-80ec13e6e28e",
+        "judge_me_reviews_review_widget_Mnckzj": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
           "settings": {
-            "maxWidth": 1100,
-            "borderRadius": 0,
-            "itemsPerView": 5,
-            "mobileItemsPerView": 1,
-            "maxNumberOfCharacters": 100,
-            "imageRatio": "1.25",
-            "reviewerNameColor": "#231d19",
-            "textColor": "#403731",
-            "itemBackgroundColor": "#ffffff",
-            "starsColor": "",
-            "starsBackgroundColor": "#ffffff",
-            "arrows_backgroundColor": "#ffffff",
-            "arrows_iconColor": "#9a9a9a",
-            "shadow": "offset-light",
-            "border_active": false,
-            "border_width": 2,
-            "border_color": "#000000",
-            "productIds": "concealing-cream"
+            "review_data": "real_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
           }
         }
       },
       "block_order": [
-        "loox_reviews_loox_card_carousel_section_VqXXUP"
+        "judge_me_reviews_review_widget_Mnckzj"
       ],
       "settings": {
         "content_direction": "column",
@@ -1417,7 +1401,7 @@
         "horizontal_alignment": "flex-start",
         "vertical_alignment": "center",
         "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "center",
+        "horizontal_alignment_flex_direction_column": "flex-start",
         "vertical_alignment_flex_direction_column": "center",
         "gap": 12,
         "section_width": "page-width",
@@ -1435,8 +1419,8 @@
         "overlay_color": "#00000026",
         "overlay_style": "solid",
         "gradient_direction": "to top",
-        "padding-block-start": 48,
-        "padding-block-end": 48
+        "padding-block-start": 60,
+        "padding-block-end": 60
       }
     },
     "new_product_faq_nq96kP": {
@@ -1766,7 +1750,7 @@
     "new_how_to_use_c343RG",
     "new_before_after_B69phb",
     "new_review_grid_76XyAi",
-    "17593203199812c643",
+    "blocks_VkPyiR",
     "new_product_faq_nq96kP",
     "new_product_recomm_8AcAmw",
     "17593172305c006ed4",
