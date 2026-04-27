@@ -138,7 +138,7 @@
     <circle cx="12" cy="12" r="10"/>
     <line x1="12" y1="8" x2="12" y2="8" stroke-width="2.5"/>
     <line x1="12" y1="12" x2="12" y2="16"/>
-  </svg>{{ find_shade_text }}</a>
+  </svg><span style="padding-top: 2px;">{{ find_shade_text }}</span></a>
         </div>
       {% endif %}
 
@@ -279,7 +279,7 @@
     <circle cx="12" cy="12" r="10"/>
     <line x1="12" y1="8" x2="12" y2="8" stroke-width="2.5"/>
     <line x1="12" y1="12" x2="12" y2="16"/>
-  </svg>{{ find_shade_text }}</a>
+  </svg><span style="padding-top: 2px;">{{ find_shade_text }}</span></a>
         {% endif %}
         <div class="mb-delivery-note">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -960,9 +960,6 @@
 }
 .mb-find-shade::before { display: none; } /* remove old underline pseudo */
 .mb-find-shade:hover { opacity: .7; border-color: var(--textPrimaryColor, #231c19); }
-
-.mb-find-shade #Text {
-margin-bottom: -2px;}
 
   .mb-swatches { display: flex; gap: 4px; flex-wrap: wrap; }
   .mb-swatch {
