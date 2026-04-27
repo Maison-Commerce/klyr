@@ -90,6 +90,12 @@
 </div>
 
 {% stylesheet %}
+  /* Hide Loox rating widget — replaced by Judge.me preview badge */
+  .product-information [class*="loox-rating"],
+  .product-information .loox-rating {
+    display: none !important;
+  }
+
   .product-information {
     gap: var(--gap) 0;
   }
