@@ -271,7 +271,11 @@
       <!-- Delivery Note + Find Your Shade -->
       <div class="mb-delivery-row">
         {% if find_shade_url != blank %}
-          <a class="mb-find-shade" href="{{ find_shade_url }}">{{ find_shade_text }}</a>
+          <a class="mb-find-shade" href="{{ find_shade_url }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <line x1="12" y1="8" x2="12" y2="8" stroke-width="2.5"/>
+    <line x1="12" y1="12" x2="12" y2="16"/>
+  </svg>{{ find_shade_text }}</a>
         {% endif %}
         <div class="mb-delivery-note">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -934,7 +938,7 @@
     font-family: var(--swiss721BTMedium), sans-serif;
     font-weight: 500;
   }
-  
+
   .mb-find-shade {
   display: inline-flex;
   align-items: center;
