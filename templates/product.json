@@ -158,8 +158,7 @@
               "type": "custom-review-stars",
               "name": "Custom Review Stars",
               "settings": {
-                "avg_rating": "4.6",
-                "total_rating": "1.397"
+                "jm_style": ""
               },
               "blocks": {}
             },
@@ -477,8 +476,7 @@
               "name": "Custom Review Stars",
               "disabled": true,
               "settings": {
-                "avg_rating": "Rated 4.8 out of 5",
-                "total_rating": "645 reviews"
+                "jm_style": ""
               },
               "blocks": {}
             },
@@ -486,8 +484,7 @@
               "type": "custom-review-stars",
               "name": "Custom Review Stars",
               "settings": {
-                "avg_rating": "Rated 4.8 out of 5",
-                "total_rating": "645 reviews"
+                "jm_style": ""
               },
               "blocks": {}
             },
@@ -2013,22 +2010,18 @@
     "17593172305c006ed4": {
       "type": "_blocks",
       "blocks": {
-        "loox_reviews_loox_dynamic_section_KY8VM7": {
-          "type": "shopify://apps/loox-reviews/blocks/loox-dynamic-section/5c3b337f-fd14-4df5-b1d6-80ec13e6e28e",
+        "judge_me_reviews_review_widget_HgTAfD": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
           "settings": {
-            "reviews_to_display": "",
-            "default_tab": "automatic",
-            "only_photos": false,
-            "aggregated": false,
-            "limit": 7,
-            "hide_thumbnails": false,
-            "maxwidth": 1080,
-            "is_sample": true
+            "review_data": "real_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
           }
         }
       },
       "block_order": [
-        "loox_reviews_loox_dynamic_section_KY8VM7"
+        "judge_me_reviews_review_widget_HgTAfD"
       ],
       "settings": {
         "content_direction": "column",
