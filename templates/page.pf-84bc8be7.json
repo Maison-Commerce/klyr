@@ -1,12 +1,66 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "pf-84bc8be7": {
       "type": "pf-84bc8be7",
-      "settings": {}
+      "settings": {
+        "pf_2d788fcf_value": "The Concealing Cream+ is ideal for anyone who wants to instantly improve their appearance. Whether you have an important appointment or occasionally suffer from an unexpected pimple or rough skin, Concealing Cream+ is for you. This product is designed to adapt to your skin tone, making it seamless and invisible to others. So if you are looking for a fast and effective solution to skin imperfections, Concealing Cream+ is the perfect choice for you.",
+        "pf_8102be25_value": "No, the Concealing Cream+ is designed with an undetectable finish. It works on the skin and is not visible to others.<br><br>Thanks to our adaptive shade technology, it perfectly matches your skin tone, keeping you looking natural.",
+        "pf_b2b40d75_value": "Sure, in addition to hiding imperfections, our Concealing Cream+ contains natural ingredients known for their positive effects on the skin. These can help reduce breakouts and promote healthier skin in the long run.",
+        "pf_9f18d917_value": "Engineered for men’s skin. No layers. No shine. No one will notice you’re wearing it.",
+        "pf_d2496e49_value": "*Tested on 50 men aged 25&nbsp;to 55&nbsp;years&nbsp;over a period of 1 month.",
+        "pf_aa023fb6_value": "Many men struggle with skin imperfections that affect their confidence. ",
+        "pf_06f7dda4_value": "The Concealing Cream+ lasts 3&nbsp;to 6 months with normal use.",
+        "pf_84304b26_value": "That they suffer less from acne and red skin in the long term.",
+        "pf_9194f630_label": "Does the Concealing Cream+ help my skin in the long run?",
+        "pf_0beac6eb_value": "Designed for men, approved by dermathologist&nbsp;",
+        "pf_fa18251c_value": "WHY KLYR IS DIFFERENT FROM TRADITIONAL MAKE-UP",
+        "pf_33c7d5b8_value": "Instantly covers redness, spots, and rosacea.",
+        "pf_3f7cd0a6_value": "That the product is not visible to others.",
+        "pf_8dfb52bb_value": "<b><first-sel>Made for men</first-sel></b>",
+        "pf_054ad4fc_label": "How long does the Concealing Cream+ last?",
+        "pf_9e5a8bac_label": "Can other see that I’m wearing something?",
+        "pf_d469fa5b_value": "Thousands of Men Are Using KLYR Every Day",
+        "pf_cb3707b8_value": "That redness and acne are well covered.",
+        "pf_0c7e6fa8_value": "COSMETICS THAT HELP YOUR SKIN OVERTIME",
+        "pf_34f92ae5_label": "How do I know if this is right for me?",
+        "pf_4458df02_value": "<b>Doesn't adapt and noticeable</b>",
+        "pf_8afb53dd_value": "GET RID OF RED CHEEKS IN SECONDS",
+        "pf_49977e81_value": "WHY CHOOSE CONCEALING CREAM?",
+        "pf_99aa3ea7_value": "100% Vegan and Cruelty Free",
+        "pf_3857623c_value": "Natural and invisible look",
+        "pf_db64a43d_value": "<b>Microplastics&nbsp;</b>",
+        "pf_4c7daa52_value": "NEW YEARS SALE | 1+1 FREE",
+        "pf_b8ebfe4e_value": "<b>Adapts to skintone</b>",
+        "pf_eee5a494_value": "<b>Invisible coverage</b>",
+        "pf_2dd9e125_value": "Dermatologically Tested",
+        "pf_0febb635_value": "TRY NOW WITH 1+1 FREE",
+        "pf_1d313562_value": "TRY NOW WITH 1+1 FREE",
+        "pf_32a7d4cf_value": "TRY NOW WITH 1+1 FREE",
+        "pf_6be1d90c_value": "<b>Made for women</b>",
+        "pf_993c96f0_value": "TRY NOW WITH 1+1 FREE",
+        "pf_e1b1178d_value": "<b>Skin-improving</b>",
+        "pf_d5395004_value": "Designed by Experts",
+        "pf_24077985_value": "<b>Thick layer</b>",
+        "pf_848b9da5_value": "CONCEALING CREAM+",
+        "pf_8b9486fe_value": "REGULAR MAKE-UP",
+        "pf_072974e5_value": "98% AGREE",
+        "pf_1319699a_value": "88% AGREE",
+        "pf_f5ee2800_value": "94% AGREE",
+        "pf_7cefa91c_value": "KLYR",
+        "pf_c85faf3a_value": "FAQ"
+      }
     }
   },
   "order": [
     "pf-84bc8be7"
-  ],
-  "layout": "theme.pagefly"
+  ]
 }

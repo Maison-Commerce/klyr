@@ -1,12 +1,63 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "pf-59b9d69f": {
       "type": "pf-59b9d69f",
-      "settings": {}
+      "settings": {
+        "pf_945ef8f3_value": "We get it. You’ve already spent hundreds, maybe even thousands of euros on treatments that promised results but ended up disappointing you.<br><br>That’s why you get a full 30 days to try. No vague conditions. No annoying questions. If it doesn’t work for you, just let us know and you get your money back, simple as that.",
+        "pf_c419e9ad_value": "\"I was always the guy with the red cheeks. It gets better from time to time but it's almost always there.. I was a bit skeptical using klyr since I'm not very into cosmetics. However, I must say this really does what they say, my girlfriend had no idea I how I fixed my red cheecks haha. Very happy!\"&nbsp;",
+        "pf_34b9dbe2_value": "\"I'm 55 and I've struggled with redness and uneven skintone since I can remember. I've tried so many things like serums, skincare diets etc. However, these circles seem to be there whatever I do. I've been using Klyr now for about 6 weeks and I feel good again on moments I really need this.\" ",
+        "pf_47df6db2_value": "\"I've had massive acne and pimples since I was 13. Tried a bunch of stuff but nothing works. Been using Klyr for a few weeks now and honestly it's not visible that I wear something PLUS my skin just looks calmer and the breakouts aren’t as crazy anymore. Pretty happy with it so far.\"",
+        "pf_7683d520_value": "Concealing Cream+ is for anyone who wants to instantly look fresher. Whether you’ve got an important meeting or a sudden breakout, it adapts to your skin tone for a seamless, invisible finish. If you want a fast, effective fix for skin imperfections, this is it.",
+        "pf_d6bfbd3d_value": "No, the Concealing Cream+ is designed with an undetectable finish. It works on the skin and is not visible to others.<br><br>Thanks to our adaptive shade technology, it perfectly matches your skin tone, keeping you looking natural.",
+        "pf_da564ae4_value": "\"With a young kid at home, dark circles became my permanent look. I just always looked tired, even on good days.. Klyr&nbsp;has changed that completeley it brightens my under eyes without looking like I’m wearing anything.\"",
+        "pf_69b45b1b_value": "Sure, in addition to hiding imperfections, our Concealing Cream+ contains natural ingredients known for their positive effects on the skin. These can help reduce breakouts and promote healthier skin in the long run.",
+        "pf_c2d7b48b_value": "Dark circles, redness and breakouts can drag you down. This concealing cream smooths them out instantly and blends in so well that your skin looks natural, only clearer.<br>",
+        "pf_9b32fa35_value": "Men’s skin is thicker and often irritated by shaving. That is why this cream is lightweight, long-lasting and created to fit a simple male routine.<br>",
+        "pf_28469ce7_value": "More than cover-up, it cares for your skin. With Vitamin E and calming agents, it protects, soothes and keeps your complexion balanced.<br>",
+        "pf_91a7ee47_value": "More than cover-up, it cares for your skin. With Vitamin E and calming agents, it protects, soothes and keeps your complexion balanced.<br>",
+        "pf_5a4eb61d_value": "Pigments adjust to your own tone so the finish is seamless. Indoors or outdoors, it looks like bare skin, just healthier.<br>",
+        "pf_4e11c496_value": "\"Breakouts come and go, this is a lifesaver for me if I have stuff to do where I need to look presentable\"",
+        "pf_3ac30b35_value": "\"I've had uneven skintone and redness since I can remember. Tried a bunch of stuff but nothing...\"",
+        "pf_301c3186_value": "The Concealing Cream+ lasts 3&nbsp;to 6 months with normal use.",
+        "pf_0e5c6b95_value": "\"IT'S BASICALLY INVISIBLE AND I FEEL MORE CONFIDENT THAN EVER\"",
+        "pf_596c5c75_value": "DON't JUST TAKE OUR WORD FOR IT, SEE WHAT OTHERS ARE SAYING",
+        "pf_fdb33275_value": "1. IT COVERS REDNESS, DARK CIRCLES AND EVENS OUT SKINTONE",
+        "pf_0ff433d0_label": "Does the Concealing Cream+ help my skin in the long run?",
+        "pf_41ae2846_value": "5. IT'S SUPER EASY TO APPLY AND FEELS GOOD ON YOUR SKIN",
+        "pf_74185a4e_value": "3. IT ADAPTS TO SKINTONE MAKING IT INVISIBLE FOR OTHERS",
+        "pf_c33a1494_value": "<strong>TRY IT RISK FREE FOR 30 DAYS</strong>",
+        "pf_4efc462c_label": "How long does the Concealing Cream+ last?",
+        "pf_52d81033_label": "Can other see that I’m wearing something?",
+        "pf_da2391a7_value": "4. MADE WITH SKIN-IMPROVING INGREDIENTS",
+        "pf_c3615035_label": "How do I know if this is right for me?",
+        "pf_b3611167_value": "LAST WEEK | BUY ONE, GET ONE FREE",
+        "pf_e3164fa7_value": "<strong>Logan (Age 35)</strong>",
+        "pf_5a6bdddc_value": "<strong>Evan (Age 37)</strong>",
+        "pf_98ee9b32_value": "2. IT'S DESIGNED FOR MEN&nbsp;",
+        "pf_ba858065_value": "<strong>Thom (Age 27)</strong>",
+        "pf_ce9e89eb_value": "<strong>Paul (Age 55)</strong>",
+        "pf_51de53fa_value": "30-Day Money-Back Guarantee",
+        "pf_1bd3611f_value": "BUY ONE, GET ONE FREE",
+        "pf_26f385cd_value": "Buy One, Get One Free",
+        "pf_f92eaa27_value": "CONCEALING CREAM+",
+        "pf_9696c489_value": "Damein (age 27)",
+        "pf_07c66b26_value": "NEW YEARS SALE",
+        "pf_350065ae_value": "Paul (age 55)",
+        "pf_cdf71352_value": "GET THIS DEAL",
+        "pf_27b36080_value": "FAQ"
+      }
     }
   },
   "order": [
     "pf-59b9d69f"
-  ],
-  "layout": "theme.pagefly"
+  ]
 }
